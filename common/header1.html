@@ -1,0 +1,62 @@
+<div id="header_main" class="header_main">
+	<div class="w1200 dis_flex aic ju_b">
+		<a class="top_logo dis_flex aic" href="index.html">
+			<img class="" src="img/logo1.png">
+		</a>
+		<div class="h_main_m">
+			<div class="h_search dis_flex ais">
+				<input class="flex_1 h_search_int" type="text" placeholder="请输入商品名称" v-model="search_key" />
+				<div class="h_search_btn flex_0 dis_flex aic ju_c"><i class="iconfont icon-sousuo"></i>搜索</div>
+			</div>
+			<div class="h_main_m_key dis_flex fww">
+				<span v-for="(item,index) in h_main_m_key" @click="search_fuc(item)">{{item}}</span>
+			</div>
+		</div>
+		<div class="h_main_r dis_flex aic ">
+			<div class="header_usertx bg_div">
+				<div style="background-image: url(img/logo_min.png);"></div>
+			</div>
+			<div>
+				<div class="top_hyy">欢迎您访问筑采管家~</div>
+				<div class="dis_flex">
+					<a class="top_login dis_flex aic ju_c" href="login.html?type=1">登录</a>
+					<a class="top_login1 dis_flex aic ju_c" href="login.html?type=-1">快速注册</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var vm_header1 = new Vue({
+		el: '#header_main',
+		data: {
+			h_main_m_key:[
+				'电线',
+				'电线版',
+				'户外砖',
+				'地砖',
+				'瓷片',
+				'大板',
+				'仿古砖'
+			],
+			search_key:'',
+			
+		},
+		created: function() {
+			
+			// that=this
+			// if(getCookie('logintoken')){
+			// 	that.token = getCookie('logintoken')
+			// 	// userMsg = JSON.parse(getCookie('userMsg'))
+			// }
+			
+		},
+		methods: {
+			search_fuc:function(item) {
+				console.log(item)
+				this.search_key=item
+			},
+			
+		}
+	})
+</script>

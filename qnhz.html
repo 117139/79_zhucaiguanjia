@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+	</head>
+	<body>
+		<div class="">
+			<!-- header -->
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+
+			<include src="./common/header_header.html"></include>
+			<div v-cloak id="body" class="w100 bgf">
+				<div class="w1200">
+					<div class="swiper-container swiper_hz">
+						<div class="swiper-button-prev swiper-button-prev2"></div>
+						<div class="swiper-button-next swiper-button-next2"></div>
+						<div class="swiper-wrapper">
+							<div class="swiper-slide" v-for="(item,index) in banner">
+								<img src="img/qnhz_index_03.jpg" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="hz_index_tabs dis_flex ais ju_a">
+						<div class="dis_flex aic ju_a" :class="hz_type==0?'cur':''" @click="hz_xz(0)">服务方</div>
+						<div class="dis_flex aic ju_a" :class="hz_type==1?'cur':''" @click="hz_xz(1)">需求方</div>
+					</div>
+					<div class="qnhz_bg bg_div">
+						<div class="dis_flex aic ju_b" style="background-image: url(img/images/qnhz_index_07.jpg);">
+							<div v-if="hz_type==0" class="qnhz_tip"><span>服务方</span>筑采管家，为您提供更多资源放心找人，找合作，找项目</div>
+							<div v-else class="qnhz_tip"><span>我是需求方</span>筑采管家，为您提供优质合作伙伴</div>
+							<div class="hz_li dis_flex aic ju_b cpointer">
+								<i class="iconfont icon-xiangmu"></i>
+								<span>发布</span>
+								<i class="iconfont icon-gengduo1"></i>
+							</div>
+						</div>
+					</div>
+					<div class="w1200 dis_flex ais">
+						<div class="main_L   flex_0" style="margin-right: 10px;">
+							<div class="main_L_z">
+								<div class="bg_div" :class="{'cur':banner_index==index}" v-for="(item,index) in banner"
+									@click="setswiper(index)">
+									<div :style="'background-image: url('+item.fm+');'"></div>
+								</div>
+							</div>
+						</div>
+						<div class="main_R flex_1">
+							<table class="hz_table">
+								<thead>
+									<tr style="height: 50px;">
+										<th>发布方</th>
+										<th>服务项目</th>
+										<th></th>
+										<th>项目分类</th>
+										<th>服务区域</th>
+										<th v-if="hz_type==0">合作时间</th>
+										<th v-if="hz_type==1">紧急程度</th>
+										<th>
+											<div class="cpointer" onclick="time_px_fuc()">发布时间<i class="icon-shaixuanpaixu iconfont"></i>
+											</div>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="(item,index) in 10">
+										<td>
+											<div>四川服务</div>
+										</td>
+										<td>
+											<div class="oh2 table_hz_xm">四川省南充市四川香雪建筑项目（二期）</div>
+										</td>
+										<td>
+											<div class="hz_table_bqs">
+												<div>经验丰富</div>
+												<div>靠谱团队</div>
+												<div>平台推荐</div>
+												<div>经验丰富</div>
+											</div>
+										</td>
+										<td>
+											<div>施工建设</div>
+										</td>
+										<td>
+											<div>电子电器通信</div>
+										</td>
+										<td>
+											<div v-if="hz_type==0" style="color: #FF1F1F;">随时</div>
+											<div v-if="hz_type==1" style="color: #FF1F1F;">加急</div>
+										</td>
+										<td>
+											<div>2020-12-18</div>
+										</td>
+									</tr>
+								</tbody>
+
+							</table>
+							<div class="list_page tac">
+								<div class="m-style M-box2"></div>
+							</div>
+						</div>
+					</div>
+					<div class="w1200">
+						<div class="vip_zzfw dis_flex aic ju_c">会员增值服务</div>
+						<div class="fwb_box">
+							<img src="img/images/qnhz_index_11.jpg">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+			<include src="./common/footer.html"></include>
+
+		</div>
+		<script>
+			var mySwiper
+			$(function() {
+				mySwiper = new Swiper('.swiper_hz', {
+					autoplay: true,//可选选项，自动滑动
+					loop:true,
+					navigation: {
+						nextEl: '.swiper-button-next2',
+						prevEl: '.swiper-button-prev2',
+					},
+				})
+				$('.M-box2').pagination({
+					totalData: 100,
+					showData: 10,
+					coping: true,
+					// mode: 'fixed',
+					// homePage: '首页',
+					// endPage: '末页',
+					prevContent: '上页',
+					nextContent: '下页',
+					callback: function(api) {
+						//console.log(api.getCurrent())
+						var page = api.getCurrent()
+						// getdatalist(that,type,cityid,cityid1,page,pagesize)
+					}
+				});
+			})
+
+			var that
+			var vm = new Vue({
+				el: '#body',
+				data: {
+
+					banner: [{
+							fm: 'img/index_xbanner_06.jpg',
+							banner: 'img/index_banner_03.jpg'
+						},
+						{
+							fm: 'img/index_xbanner_09.jpg',
+							banner: 'img/index_xbanner_09.jpg',
+						},
+						{
+							fm: 'img/index_xbanner_11.jpg',
+							banner: 'img/index_xbanner_11.jpg',
+						},
+					],
+					banner_index: 0,
+					hz_type: 0,
+					time_px:0
+				},
+				created: function() {
+
+					that = this
+					// if(getCookie('logintoken')){
+					// 	that.token = getCookie('logintoken')
+					// 	// userMsg = JSON.parse(getCookie('userMsg'))
+					// }
+
+				},
+				methods: {
+					hz_xz(num) {
+						that.hz_type = num
+					},
+					setswiper: function(index) {
+						console.log(index)
+						that.banner_index = index
+						// mySwiper.swipeTo(index, 1000, false)
+					},
+					getgimg: function(img) {
+						var img1 = img.split("^")
+						// console.log(img1[0])
+						return img1[0]
+					},
+					//奢华甄选
+					getshdata: function() {
+						var that = this
+						var datas = {
+							apipage: 'travel',
+							op: 'travel_data_list',
+							type: 3,
+							keyword: 'shzx'
+						}
+						$.ajax({
+							type: "GET",
+							url: IPurl,
+							data: datas,
+							success: function(res) {
+								// console.log(res);
+								if (typeof(res) == 'string') {
+									res = JSON.parse(res)
+								}
+								if (res.error == 0) {
+									var resultd = res.list
+									that.shdata = resultd
+
+								} else {
+									layer.msg('获取数据失败')
+								}
+
+							},
+							error: function(err) {
+								layer.msg('获取数据失败')
+								console.log(err)
+							}
+						})
+					},
+					formatter: function(value) {
+						if (!value) {
+							return value
+						}
+						if (value >= 10000 && value < 10000000) {
+							value = (value / 10000).toFixed(1) + "万";
+						} else if (value >= 10000000) {
+							value = (value / 10000000).toFixed(1) + "千万";
+						}
+						return value;
+					},
+
+				}
+			})
+			function time_px_fuc(){
+				if(vm.time_px){
+					vm.time_px=0
+				}else{
+					vm.time_px=1
+				}
+				console.log(vm.time_px)
+			}
+		</script>
+	</body>
+</html>

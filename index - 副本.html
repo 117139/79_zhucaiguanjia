@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div v-cloak id="body" class="">
+			<!-- header -->
+			<div class="header_top">
+				<!-- <div class="w1200 header_top_main dis_flex aic ju_b">
+					<div>筑采管家AHUCAIGU.COM</div>
+					<div class="dis_flex aic">
+						<div>你好，<a class="login_header" href="login.html?type=1">请登录</a></div>
+						<span class="sg_header"></span>
+						<a class="a_header" href="login.html?type=-1">免费注册</a>
+						<span class="sg_header"></span>
+						<a class="a_header" href="">我的筑采</a>
+						<span class="sg_header"></span>
+						<a class="a_header dis_flex aic" href=""><img src="img/header_tel.png" alt="">400-0650-2828</a>
+						<span class="sg_header"></span>
+						<a class="a_header" href="">关于我们</a>
+						<span class="sg_header"></span>
+						<a class="a_header" href="">手机筑采</a>
+						<span class="sg_header"></span>
+						<a class="a_header" href="">官方微信</a>
+					</div>
+				</div> -->
+			</div>
+			<include src="./common/header.html"></include>
+			<include src="./common/header1.html"></include>
+			<div class="header_main">
+				<div class="w1200 dis_flex aic ju_b">
+					<a class="top_logo dis_flex aic" href="index.html">
+						<img class="" src="img/logo1.png" >
+					</a>
+					<div class="h_main_m">
+						<div class="h_search dis_flex ais">
+							<input class="flex_1 h_search_int" type="text" placeholder="请输入商品名称" v-model="search_key" />
+							<div class="h_search_btn flex_0 dis_flex aic ju_c"><i class="iconfont icon-sousuo"></i>搜索</div>
+						</div>
+						<div  class="h_main_m_key dis_flex fww">
+							<span v-for="(item,index) in h_main_m_key" @click="search_fuc(item)">{{item}}</span>
+						</div>
+					</div>
+					<div class="h_main_r dis_flex aic ">
+						<div class="header_usertx bg_div">
+							<div style="background-image: url(img/logo_min.png);"></div>
+						</div>
+						<div>
+							<div class="top_hyy">欢迎您访问筑采管家~</div>
+							<div class="dis_flex">
+								<a class="top_login dis_flex aic ju_c" href="login.html?type=1">登录</a>
+								<a class="top_login1 dis_flex aic ju_c" href="login.html?type=-1">快速注册</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- header -->
+			<div class="html_main_header bgf">
+				<div class="w1200 dis_flex ais">
+					<div class="main_L flex_0">
+						<div class="main_L_tit dis_flex aic ju_c">服务分类</div>
+					</div>
+					<div class="main_R main_R_tit flex_1 dis_flex ais ju_a">
+						<a class="cur" href="index.html">首页</a>
+						<a href="cjcg.html">场景采购</a>
+						<a href="qnhz.html">圈内合作</a>
+						<a href="ppzq.html">品牌专区</a>
+						<a href="zncg.html">智能采购</a>
+						<a href="cshhr.html">城市合伙人</a>
+						<a href="lxwm.html">联系我们</a>
+					</div>
+				</div>
+			</div>
+			<div class="html_main">
+				<div class="w1200 dis_flex ais">
+					<div class="main_L   flex_0">
+						<!-- <div class="main_L_z swiper-container">
+							<div class="swiper-wrapper ">
+							  <div class="swiper-slide" v-for="(item,index) in banner" >
+									<div class="bg_div">
+										<div  :style="'background-image: url('+item.fm+');'"></div>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<div class="main_L_z">
+							<div class="bg_div" :class="{'cur':banner_index==index}" v-for="(item,index) in banner" @click="setswiper(index)">
+								<div  :style="'background-image: url('+item.fm+');'"></div>
+							</div>
+						</div>
+					</div>
+					<div class="main_R flex_1 dis_flex ais ju_b">
+						<a href="" class="bg_div index_baner">
+							<div :style="'background-image: url('+banner[banner_index].banner+');'"></div>
+						</a>
+						<div class="main_R_list">
+							<div class="main_list_tit dis_flex aic ju_b">
+								<img class="main_list_tit_img" src="img/zyzx.png" >
+								<a href="">更多<i class="iconfont icon-next-m"></i></a>
+							</div>
+							<div class="w100">
+								<a class="dis_flex aic main_li" href="" v-for="(item,index) in 18" title="港口钢材1折优惠，还不还不还不还不还不">
+									<span class="main_li_icon dis_flex aic ju_c flex_0">资讯</span>
+									<span class="oh1">港口钢材1折优惠，还不还不还不还不还不...</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 圈内合作 -->
+				<div class="w1200">
+					<div class="i_qnhz">
+						<div class="i_qnhz_tit dis_flex aic">
+							<div class="dis_flex aib"><span>圈内合作</span>筑采为您服务</div>
+						</div>
+						<div class="dis_flex aic ju_b">
+							<a href="" class="hz_type bg_div">
+								<div class="hz_type_1" style="background-image: url(img/qnhz_bg_15.jpg);">
+									<div class="hz_type_tit">
+										<span>我是服务方</span>筑采管家，为您提供更多资源放心找人，找合作，找项目
+									</div>
+									<div class="hz_type_hg"></div>
+									<div class="dis_flex aic fww">
+										<div class="hz_li">
+											<i class="iconfont icon-xiangmu"></i>
+											<span>找项目</span>
+											<i class="iconfont icon-gengduo1"></i>
+										</div>
+										<div class="hz_li">
+											<i class="iconfont icon-zhaoren"></i>
+											<span>找人</span>
+											<i class="iconfont icon-gengduo1"></i>
+										</div>
+										<div class="hz_li">
+											<i class="iconfont icon-hezuo"></i>
+											<span>找合作</span>
+											<i class="iconfont icon-gengduo1"></i>
+										</div>
+									</div>
+								</div>
+							</a>
+							<a href="" class="hz_type bg_div">
+								<div class="hz_type_1" style="background-image: url(img/qnhz_bg_15.jpg);">
+									<div class="hz_type_tit">
+										<span>我是需求方</span>筑采管家，为您提供优质合作伙伴
+									</div>
+									<div class="hz_type_hg"></div>
+									<div class="dis_flex aic fww">
+										<div class="hz_li">
+											<i class="iconfont icon-xiangmu"></i>
+											<span>提供项目</span>
+											<i class="iconfont icon-gengduo1"></i>
+										</div>
+										<div class="hz_li">
+											<i class="iconfont icon-zhaoren"></i>
+											<span>提供人</span>
+											<i class="iconfont icon-gengduo1"></i>
+										</div>
+										<div class="hz_li">
+											<i class="iconfont icon-hezuo"></i>
+											<span>提供合作</span>
+											<i class="iconfont icon-gengduo1"></i>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+					
+						<div class="i_qnhz">
+							<div class="i_qnhz_tit dis_flex aic ju_b">
+								<div class="dis_flex aib"><span>场景采购</span>产品拥有场景</div>
+								<a href="" class="dis_flex aic c6">更多场景<i class="iconfont icon-gengduo1"></i></a>
+							</div>
+							<div class="dis_flex aic ju_b">
+								<a href="" class="cjcg_li bg_div bg_div_hover" v-for="(item,index) in cjcg">
+									<div :style="'background-image: url('+item.img+ ');'">
+										<div class="cjcg_tit">{{item.title}}</div>
+									</div>
+								</a>
+							</div>
+						</div>
+				</div>
+			</div>
+			
+			
+			<div class="html_main">
+				<div class="w1200 dis_flex aic ju_b footer_1">
+					<div class="sg_footer"></div>
+					<div class="footer_tip"><img src="img/footer_1.png" >品类丰富  一站购齐</div>
+					<div class="sg_footer"></div>
+					<div class="footer_tip"><img src="img/footer_2.png" >10年经验  精准采购</div>
+					<div class="sg_footer"></div>
+					<div class="footer_tip"><img src="img/footer_3.png" >价格透明  公道放心</div>
+					<div class="sg_footer"></div>
+					<div class="footer_tip"><img src="img/footer_4.png" >后顾无忧  反应迅速</div>
+					<div class="sg_footer"></div>
+				</div>
+			</div>
+			
+			<include src="./common/footer.html"></include>
+			<!-- <div class="html_footer">
+				<div class="w1200 dis_flex ais ju_b footer_2">
+					<div class="footer_21 flex_0">
+						<a class="b_logo dis_flex aic" href="index.html">
+							<img class="" src="img/logo1.png" >
+						</a>
+						<div class="dis_flex">
+							<div class="footer_ewm dis_flex_c aic">
+								<img src="img/footer_ewm.png" >
+								<span>手机筑采</span>
+							</div>
+							<div class="footer_ewm dis_flex_c aic">
+								<img src="img/footer_ewm.png" >
+								<span>官方微信</span>
+							</div>
+						</div>
+					</div>
+					<div class="footer_22 dis_flex ais ju_b flex_1">
+						<div>
+							<div class="footer_url_tit dis_flex aic"><img src="img/footer_url1.png" >新手指南</div>
+							<a  class="footer_url_li" href="about.html">关于我们</a>
+							<a  class="footer_url_li" href="about.html">隐私协议</a>
+							<a  class="footer_url_li" href="about.html">常见问题</a>
+							<a  class="footer_url_li" href="about.html">会员介绍</a>
+						</div>
+						<div>
+							<div class="footer_url_tit dis_flex aic"><img src="img/footer_url2.png" >特色服务</div>
+							<a  class="footer_url_li" href="about.html">快速下单</a>
+						</div>
+						<div>
+							<div class="footer_url_tit dis_flex aic"><img src="img/footer_url2.png" >支付方式</div>
+							<a  class="footer_url_li" href="about.html">发票说明</a>
+							<a  class="footer_url_li" href="about.html">在线支付</a>
+						</div>
+						<div>
+							<div class="footer_url_tit dis_flex aic"><img src="img/footer_url2.png" >售后服务</div>
+							<a  class="footer_url_li" href="about.html">发票说明</a>
+							<a  class="footer_url_li" href="about.html">售后政策</a>
+							<a  class="footer_url_li" href="about.html">取消订单</a>
+						</div>
+						<div>
+							<div class="footer_url_tit dis_flex aic"><img src="img/footer_url2.png" >联系我们</div>
+							<a  class="footer_url_li" href="###">业务咨询：051871-85080</a>
+							<a  class="footer_url_li" href="###">售后服务：051871-85080</a>
+							<a  class="footer_url_li" href="###">邮箱：051871-85080</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="html_footer2">
+				<div class="w1200">
+					<div class="footer_yl">
+						<a href="" v-for="(item,index) in 20">阿里巴巴集团</a>
+					</div>
+					<div>京公网安备 11011502003418号 | 京ICP备18043280号-1 | Copyright 2002-201</div>
+					<div><img class="footer_jh" src="img/footer_jh.png" >北京筑采有限公司版权所有</div>
+				</div>
+			</div> -->
+		</div>
+		<script>
+			// var mySwiper
+			/*$(function(){
+				mySwiper = new Swiper('.main_L_z',{
+					mode : 'vertical',
+					slidesPerView : 3,
+					loop : true,
+					autoplay: 3000,
+					onSlideChangeEnd: function(swiper){
+						// alert('事件触发了;');
+						// console.log(swiper)
+						// console.log(swiper.activeLoopIndex)
+						vm.banner_index=swiper.activeLoopIndex
+					},
+					onSlideClick:function(swiper) {
+						console.log(swiper)
+						console.log(swiper.clickedSlideIndex)
+						// mySwiper.swipeTo(swiper.clickedSlideIndex, 1000, true);
+						// vm.banner_index=swiper.clickedSlideIndex
+					}
+				}); 
+			}) */
+			
+			var that
+			var vm = new Vue({
+				el: '#body',
+				data: {
+					h_main_m_key:[
+						'电线',
+						'电线版',
+						'户外砖',
+						'地砖',
+						'瓷片',
+						'大板',
+						'仿古砖'
+					],
+					search_key:'',
+					banner:[
+						{
+							fm:'img/index_xbanner_06.jpg',
+							banner:'img/index_banner_03.jpg'
+						},
+						{
+							fm:'img/index_xbanner_09.jpg',
+							banner:'img/index_xbanner_09.jpg',
+						},
+						{
+							fm:'img/index_xbanner_11.jpg',
+							banner:'img/index_xbanner_11.jpg',
+						},
+					],
+					banner_index:0,
+					cjcg:[
+						{
+							title:'空调通风',
+							img:'img/index_cjcg_18.jpg'
+						},
+						{
+							title:'土建',
+							img:'img/index_cjcg_20.jpg'
+						},
+						{
+							title:'消防',
+							img:'img/index_cjcg_22.jpg'
+						},
+						{
+							title:'市政园林',
+							img:'img/index_cjcg_24.jpg'
+						},
+						{
+							title:'装饰装修',
+							img:'img/index_cjcg_26.jpg'
+						},
+						{
+							title:'水电',
+							img:'img/index_cjcg_28.jpg'
+						},
+					]
+				},
+				created: function() {
+					
+					that=this
+					// if(getCookie('logintoken')){
+					// 	that.token = getCookie('logintoken')
+					// 	// userMsg = JSON.parse(getCookie('userMsg'))
+					// }
+					
+				},
+				methods: {
+					search_fuc:function(item) {
+						console.log(item)
+						that.search_key=item
+					},
+					setswiper:function(index){
+						console.log(index)
+						that.banner_index=index
+						// mySwiper.swipeTo(index, 1000, false)
+					},
+					getgimg:function(img) {
+						var img1 = img.split("^")
+						// console.log(img1[0])
+						return img1[0]
+					},
+					//奢华甄选
+					getshdata:function(){
+						var that=this
+						var datas={
+							apipage:'travel',
+							op:'travel_data_list',
+							type:3,
+							keyword:'shzx'
+						}
+						$.ajax({
+							type: "GET",
+							url: IPurl,
+							data: datas,
+							success: function(res) {
+								// console.log(res);
+								if(typeof(res)=='string'){
+									res=JSON.parse(res)
+								}
+								if (res.error == 0) {
+									var resultd = res.list
+									that.shdata = resultd
+									
+								} else {
+									layer.msg('获取数据失败')
+								}
+						
+							},
+							error: function(err) {
+								layer.msg('获取数据失败')
+								console.log(err)
+							}
+						})
+					},
+					formatter:function(value) {
+					    if(!value){
+					    	return value
+					    }
+					    if (value >= 10000 && value < 10000000) {
+					      value = (value / 10000).toFixed(1) + "万";
+					    } else if (value >= 10000000) {
+					      value = (value / 10000000).toFixed(1) + "千万";
+					    }
+					    return value;
+					},
+					
+				}
+			})
+			
+		</script>
+	</body>
+</html>
