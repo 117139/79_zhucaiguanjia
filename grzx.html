@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+	</head>
+	<body>
+		<div  class="">
+			<!-- header -->
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				 <!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+			<!-- header -->
+			
+			<include src="./common/header_header.html"></include>
+			<div v-cloak id="body" class="html_main">
+				<div class="w1200 dis_flex aift ju_b pt10">
+					<div class="my_l_box">
+						<div class="my_l_list_tit dis_flex aic"><i class="iconfont icon-RectangleCopy"></i>采购中心</div>
+						<div class="my_l_list">
+							<div class="my_l_li dis_flex aic" :class="my_cur==0?'cur':''" @click="my_cur_fuc(0)">我的订单</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==1?'cur':''" @click="my_cur_fuc(1)">我的询价</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==2?'cur':''" @click="my_cur_fuc(2)">我的收藏</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==3?'cur':''" @click="my_cur_fuc(3)">我的购物车</div>
+						</div>
+						<div class="my_l_list_tit dis_flex aic"><i class="iconfont icon-hezuo1"></i>圈内合作</div>
+						<div class="my_l_list">
+							<div class="my_l_li dis_flex aic" :class="my_cur==10?'cur':''" @click="my_cur_fuc(10)">我的需求</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==11?'cur':''" @click="my_cur_fuc(11)">我的服务</div>
+						</div>
+						<div class="my_l_list_tit dis_flex aic"><i class="iconfont icon-shouhou"></i>售后服务</div>
+						<div class="my_l_list">
+							<div class="my_l_li dis_flex aic" :class="my_cur==20?'cur':''" @click="my_cur_fuc(20)">退货服务</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==21?'cur':''" @click="my_cur_fuc(21)">意见反馈</div>
+						</div>
+						<div class="my_l_list_tit dis_flex aic"><i class="iconfont icon-zichan1"></i>资产中心</div>
+						<div class="my_l_list">
+							<div class="my_l_li dis_flex aic" :class="my_cur==30?'cur':''" @click="my_cur_fuc(30)">发票管理</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==31?'cur':''" @click="my_cur_fuc(31)">我的积分</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==32?'cur':''" @click="my_cur_fuc(32)">我的优惠券</div>
+						</div>
+						<div class="my_l_list_tit dis_flex aic"><i class="iconfont icon-xitong"></i>系统设置</div>
+						<div class="my_l_list">
+							<div class="my_l_li dis_flex aic" :class="my_cur==40?'cur':''" @click="my_cur_fuc(40)">我的账户</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==41?'cur':''" @click="my_cur_fuc(41)">地址管理</div>
+							<div class="my_l_li dis_flex aic " :class="my_cur==42?'cur':''" @click="my_cur_fuc(42)">账户安全</div>
+						</div>
+					</div>
+					<div class="my_r_box">
+						<div class="my_r_tit dis_flex ais">
+							<div class="my_r_tit_tab dis_flex aic ju_c"  :class="my_r_cur==0?'cur':''" @click="my_r_cur_fuc(0)">全部订单</div>
+							<div class="my_r_tit_tab dis_flex aic ju_c"  :class="my_r_cur==1?'cur':''" @click="my_r_cur_fuc(1)">待付款</div>
+							<div class="my_r_tit_tab dis_flex aic ju_c"  :class="my_r_cur==2?'cur':''" @click="my_r_cur_fuc(2)">待发货</div>
+							<div class="my_r_tit_tab dis_flex aic ju_c"  :class="my_r_cur==3?'cur':''" @click="my_r_cur_fuc(3)">已收货</div>
+						</div>
+						<div class="my_r_msgbox">
+							<div class="my_search dis_flex aic">
+								<div class="my_search_d1 dis_flex ais">
+									<input type="text" placeholder="订单号/商品名称">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+		
+			
+			<include src="./common/footer_f.html"></include>
+			<include src="./common/footer.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/footer.html"></include> -->
+			
+		</div>
+		<script>
+			// var mySwiper
+			$(function(){
+				$('.M-box2').pagination({
+						totalData:100,
+						showData:10,
+						coping: true,
+						// mode: 'fixed',
+						// homePage: '首页',
+						// endPage: '末页',
+						prevContent: '上页',
+						nextContent: '下页',
+						callback: function (api) {
+							//console.log(api.getCurrent())
+							var page=api.getCurrent()
+							// getdatalist(that,type,cityid,cityid1,page,pagesize)
+						}
+				}); 
+			})
+			
+			var that
+			var vm = new Vue({
+				el: '#body',
+				data: {
+					
+					my_cur:0,
+					my_r_cur:0
+				},
+				created: function() {
+					
+					that=this
+					// if(getCookie('logintoken')){
+					// 	that.token = getCookie('logintoken')
+					// 	// userMsg = JSON.parse(getCookie('userMsg'))
+					// }
+					
+				},
+				methods: {
+					my_cur_fuc:function(item) {
+						that.my_cur=item
+					},
+					my_r_cur_fuc:function(item) {
+						that.my_r_cur=item
+					},
+					getgimg:function(img) {
+						var img1 = img.split("^")
+						// console.log(img1[0])
+						return img1[0]
+					},
+					//奢华甄选
+					getshdata:function(){
+						var that=this
+						var datas={
+							apipage:'travel',
+							op:'travel_data_list',
+							type:3,
+							keyword:'shzx'
+						}
+						$.ajax({
+							type: "GET",
+							url: IPurl,
+							data: datas,
+							success: function(res) {
+								// console.log(res);
+								if(typeof(res)=='string'){
+									res=JSON.parse(res)
+								}
+								if (res.error == 0) {
+									var resultd = res.list
+									that.shdata = resultd
+									
+								} else {
+									layer.msg('获取数据失败')
+								}
+						
+							},
+							error: function(err) {
+								layer.msg('获取数据失败')
+								console.log(err)
+							}
+						})
+					},
+					formatter:function(value) {
+					    if(!value){
+					    	return value
+					    }
+					    if (value >= 10000 && value < 10000000) {
+					      value = (value / 10000).toFixed(1) + "万";
+					    } else if (value >= 10000000) {
+					      value = (value / 10000000).toFixed(1) + "千万";
+					    }
+					    return value;
+					},
+					
+				}
+			})
+			
+		</script>
+	</body>
+</html>
