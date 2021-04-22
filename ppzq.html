@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+	</head>
+	<body>
+		<div  v-cloak id="body" class="">
+			<!-- header -->
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				 <!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<include src="./common/header_header.html"></include>
+			<div class="html_main">
+				<div class="w1200">
+					<div class="swiper-container swiper_hz1">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide" v-for="(item,index) in 3">
+								<img src="img/ppzq_03.jpg" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="w100 bgf">
+						<div class="dis_flex aic ppzkq">
+							<span class="dis_flex aic ju_c">折</span>品牌折扣专区
+						</div>
+						<div class="dis_flex aic fww">
+							<div  class="zk_goods_li_box" v-for="(item,index) in 6">
+								<div class="zk_goods_li">
+									<div class="zk_goods_img bg_div">
+										<div style="background-image: url(img/zkgoods_07.jpg);"></div>
+									</div>
+									<div class="zkzk_box bg_div">
+										<div class="dis_flex aic ju_c" style="background-image: url(img/images/zkzk_11.jpg);">
+											活动低至5折
+										</div>
+									</div>
+									<div class="oh2 zk_goods_name">西门子SIEMENS 插座防 溅盒远景系列景系列景系列 5TG06666666</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="w1200">
+					
+					<div class="xz_tit dis_flex aic ju_b">
+						<div><a href="index.html">首页</a>＞<a href="#">场景采购</a></div>
+						<a class="">共145件相关商品</a>
+						<!-- ＞<a href="#" style="color: #EB5F33;">咨讯详情</a> -->
+					</div>
+					<div class="dis_flex aic fww">
+						<div class="yxz_box dis_flex aic" v-if="cj_xz.length>0" @click="xq_xz_fuc(0)">
+							<div class="yxz_box_text oh1">场景分类:
+								<span v-for="(item,index) in cj_xz">{{item.title}}{{index!=cj_xz.length-1?',':''}}</span>
+							</div><i class="iconfont icon-cuowu"></i>
+						</div>
+						<div class="yxz_box dis_flex aic" v-if="pp_xz.length>0" @click="xq_xz_fuc(1)">
+							<div class="yxz_box_text oh1">品牌分类:
+								<span v-for="(item,index) in pp_xz">{{item.title}}{{index!=pp_xz.length-1?',':''}}</span>
+							</div> <i class="iconfont icon-cuowu"></i>
+						</div>
+						<div class="yxz_box dis_flex aic" v-if="xm_xz.length>0" @click="xq_xz_fuc(2)">
+							<div class="yxz_box_text oh1">项目分类:
+								<span v-for="(item,index) in xm_xz">{{item.title}}{{index!=xm_xz.length-1?',':''}}</span>
+							</div> <i class="iconfont icon-cuowu"></i>
+						</div>
+						<div class="yxz_box dis_flex aic" v-if="jg_xz.length>0" @click="xq_xz_fuc(3)">
+							<div class="yxz_box_text oh1">价格:
+								<span v-for="(item,index) in jg_xz">{{item.title}}{{index!=jg_xz.length-1?',':''}}</span>
+							</div> <i class="iconfont icon-cuowu"></i>
+						</div>
+						<div  v-if="cj_xz.length>0 ||pp_xz.length>0||xm_xz.length>0||jg_xz.length>0" class="xq_all_btn" @click="xq_xz_fuc(-1)">清除筛选</div>
+					</div>
+					<div v-if="cj_xz.length==0" class="cg_boxs">
+						<div class="cg_box dis_flex ais">
+							<div class="cg_xz_l flex_0">
+								<div class="cg_xz_l_li">场景分类:</div>
+							</div>
+							<div class="cg_xz_r flex_1">
+								<div class="dis_flex ju_b aic mb20">
+									<div></div>
+									<div class="dis_flex aic">
+										<div v-if="cj_kg==true" @click="cj_kg=false" class="cg_xz_btn dis_flex aic ju_c">收起<i class="iconfont icon-xiaosanjiaoup"></i></div>
+										<div v-if="cj_kg==false" @click="cj_kg=true" class="cg_xz_btn dis_flex aic ju_c">更多<i class="iconfont icon-xiaosanjiaodown"></i></div>
+										<div onclick="more_fuc(0,0)" class="cg_xz_btn dis_flex aic ju_c">多选<i class="iconfont icon-jia"></i></div>
+									</div>
+								</div>
+								<div class="dis_flex fww dx_xz_list" :style="cj_kg==false?'height:40px;overflow:hidden':''">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in cj_list" @click="xz_fuc(0,item)">
+										<span v-if="cj_more==true" class="dx_xz_li_box dis_flex aic ">
+											<i v-if="item.active" class="iconfont icon-duigou cEE0913" ></i>
+										</span>
+										<div class="oh1" style="width: 5em;">{{item.title}}</div>
+									</div>
+								</div>
+								<div v-if="cj_more==true" class="dis_flex aic ju_c cgxz_btns">
+									<div class="cgxz_btn dis_flex aic ju_c cpointer" @click="xz_dx_fuc(0)">确定</div>
+									<div class="cgxz_btn1 dis_flex aic ju_c cpointer"onclick="more_fuc(0,1)">取消</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="cg_boxs" style="margin-top: 20px;">
+						<div  v-if="pp_xz.length==0" class="cg_box dis_flex ais">
+							<div class="cg_xz_l flex_0">
+								<div class="cg_xz_l_li">品牌分类:</div>
+							</div>
+							<div class="cg_xz_r flex_1">
+								<div class="dis_flex ju_b aic mb20">
+									<div class="dis_flex aic ">
+										<div class="cgxz_btn dis_flex aic ju_c">所有品牌</div>
+										<div class="cg_pp_list">
+											<span>A</span>
+											<span>B</span>
+											<span>C</span>
+											<span>D</span>
+											<span>E</span>
+											<span>F</span>
+											<span>G</span>
+											<span>H</span>
+											<span>I</span>
+											<span>J</span>
+											<span>K</span>
+											<span>L</span>
+											<span>M</span>
+											<span>N</span>
+										</div>
+									</div>
+									<div class="dis_flex aic">
+										<div v-if="pp_kg==true" @click="pp_kg=false" class="cg_xz_btn dis_flex aic ju_c">收起<i class="iconfont icon-xiaosanjiaoup"></i></div>
+										<div v-if="pp_kg==false" @click="pp_kg=true" class="cg_xz_btn dis_flex aic ju_c">更多<i class="iconfont icon-xiaosanjiaodown"></i></div>
+										<div onclick="more_fuc(1,0)" class="cg_xz_btn dis_flex aic ju_c">多选<i class="iconfont icon-jia"></i></div>
+									</div>
+								</div>
+								<div class="dis_flex fww dx_xz_list" :style="pp_kg==false?'height:40px;overflow:hidden':''">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in pp_list" @click="xz_fuc(1,item)">
+										<span v-if="pp_more==true" class="dx_xz_li_box dis_flex aic ">
+											<i v-if="item.active" class="iconfont icon-duigou cEE0913" ></i>
+										</span>
+										<div class="oh1" style="width: 5em;">{{item.title}}</div>
+									</div>
+								</div>
+								<div v-if="pp_more==true" class="dis_flex aic ju_c cgxz_btns">
+									<div class="cgxz_btn dis_flex aic ju_c cpointer" @click="xz_dx_fuc(1)">确定</div>
+									<div class="cgxz_btn1 dis_flex aic ju_c cpointer" onclick="more_fuc(1,1)">取消</div>
+								</div>
+							</div>
+						</div>
+						<div  v-if="xm_xz.length==0" class="cg_box dis_flex ais">
+							<div class="cg_xz_l flex_0">
+								<div class="cg_xz_l_li">项目分类:</div>
+							</div>
+							<div class="cg_xz_r flex_1 bt1">
+								
+								<div class="dis_flex fww dx_xz_list">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in xm_list"  @click="xz_fuc(2,item)">
+										<!-- <span class="dx_xz_li_box dis_flex aic "></span> -->
+										<div class="oh1" style="width: 5em;">{{item.title}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div  v-if="jg_xz.length==0" class="cg_box dis_flex ais">
+							<div class="cg_xz_l flex_0">
+								<div class="cg_xz_l_li">价格:</div>
+							</div>
+							<div class="cg_xz_r flex_1 bt1">
+								
+								<div class="dis_flex dx_xz_list">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in jg_list"  @click="xz_fuc(3,item)">
+										<!-- <span class="dx_xz_li_box dis_flex aic "></span> -->
+										<div class="oh1 w100" >{{item.title}}</div>
+									</div>
+									<div class="flex_1" style="min-width: 100px;"></div>
+									<div class="dis_flex aic">
+										<input class="cg_pg_min" type="number" placeholder="￥最低价">
+										<span>-</span>
+										<input class="cg_pg_min" type="number" placeholder="￥最高价">
+										<div class="cg_pg_btn dis_flex aic ju_c">确定</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="cg_jg_sx dis_flex aic ju_b">
+						<div class="dis_flex aic ">
+							<div class="dis_flex aic cg_jg_px" @click="jg_px_fuc(0)">价格:
+								<img v-if="jg_px==0" src="img/paixu_jiang.png" >
+								<img v-else src="img/paixu_sheng.png" >
+							</div>
+							<div class="cg_jg_sx_sg">|</div>
+							<div class="dx_xz_li dis_flex aic" style="min-width: 0;" @click="jg_px_fuc(1)">
+								<span class="dx_xz_li_box dis_flex aic ">
+									<i v-if="jg_cx==1" class="iconfont icon-duigou cEE0913" ></i>
+								</span>有促销
+							</div>
+							
+							<div class="cg_jg_sx_sg">|</div>
+							<div class="dx_xz_li dis_flex aic" style="min-width: 0;"  @click="jg_px_fuc(2)">
+								<span class="dx_xz_li_box dis_flex aic ">
+									<i v-if="jg_kc==1" class="iconfont icon-duigou cEE0913" ></i>
+								</span>有库存
+							</div>
+						</div>
+						
+						<div class="dis_flex aic ">
+							<div class="jg_px_num">共145件相关商品</div>
+							<div class="jg_px_page">
+								<i class="icon-prev iconfont cpointer" @click="set_page(0)"></i>
+								<span>{{page}}</span>
+								<i class="icon-next-m iconfont cpointer" @click="set_page(1)"></i>
+								<span>1/125页</span>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="goods_list dis_flex fww">
+						<div class="goods_li" v-for="(item,index) in 10">
+							<div class="goods_li_img bg_div bg_div_hover">
+								<div style="background-image: url(./img/cjcg_img_03.jpg);"></div>
+							</div>
+							<div class="goods_li_msg">
+								<div class="w100 oh1 goods_li_name" title="绥化不锈钢阀门厂家-din15不锈钢">绥化不锈钢阀门厂家-din15不锈钢绥化不锈钢阀门厂家-din15不锈钢</div>
+								<div class="goods_li_pp dis_flex aic">西门子品牌<img src="img/ppsj_19.jpg" ></div>
+								<div class="goods_li_jg">￥<span>60.00</span>元</div>
+							</div>
+						</div>
+					</div>
+					<div class="list_page tac dis_flex">
+						<div class="flex_1"></div>
+							<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
+						<div class="flex_1"></div>
+						<!-- <div class="m-style M-box2"></div> -->
+					</div>
+				</div>
+			</div>
+			
+			
+		
+			
+			<include src="./common/footer_f.html"></include>
+			<include src="./common/footer.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/footer.html"></include> -->
+			
+		</div>
+<script>
+		var mySwiper
+		$(function(){
+			mySwiper = new Swiper('.swiper_hz1', {
+				autoplay: true,
+				loop:true
+			})
+			
+			
+		})
+		
+		var that
+		var vm = new Vue({
+			el: '#body',
+			data: {
+				banner:[1,1,1],
+				cj_list: [],    //场景分类
+				cj_kg:false,
+				cj_more:false,
+				cj_xz:[],
+				pp_list: [],   //品牌分类
+				pp_kg:false,
+				pp_more:false,
+				pp_xz:[],
+				
+				xm_list:[],    //项目分类
+				xm_xz:[],
+				jg_list:[],       //价格分类
+				jg_xz:[],
+				
+				jg_px:0, // 排序 0 降序  1升
+				jg_cx:0, //促销
+				jg_kc:0,  // 库存
+				
+				
+				page:1,
+				
+			},
+			created: function() {
+				
+				that=this
+				that.cj_list=cj_list
+				that.pp_list=pp_list
+				that.xm_list=xm_list
+				that.jg_list=jg_list
+				console.log('cj_list')
+				// if(getCookie('logintoken')){
+				// 	that.token = getCookie('logintoken')
+				// 	// userMsg = JSON.parse(getCookie('userMsg'))
+				// }
+				header_cur=1
+			},
+			mounted:function(){
+				header_cur=1
+			},
+			methods: {
+				set_page:function(num){
+					if(num==0){
+						if(this.page>1){
+							this.page--
+						}
+					}else{
+						this.page++
+					}
+				},
+				xz_fuc:function(num,item) {
+					console.log(item)
+					if(num==0){
+						if(that.cj_more){
+							if(!item.active){
+								Vue.set(item,'active',true)
+							}else{
+								Vue.set(item,'active',false)
+							}
+						}else{
+							that.cj_xz=[]
+							that.cj_xz.push(item)
+						}
+					}
+					if(num==1){
+						if(that.pp_more){
+							if(!item.active){
+								Vue.set(item,'active',true)
+							}else{
+								Vue.set(item,'active',false)
+							}
+						}else{
+							that.pp_xz=[]
+							that.pp_xz.push(item)
+						}
+					}
+					if(num==2){
+						that.xm_xz=[]
+						that.xm_xz.push(item)
+					}
+					if(num==3){
+						that.jg_xz=[]
+						that.jg_xz.push(item)
+					}
+				},
+				xz_dx_fuc(num){
+					if(num==0){
+						that.cj_xz=[]
+						for(var i=0;i<that.cj_list.length;i++){
+							if(that.cj_list[i].active){
+								that.cj_xz.push(that.cj_list[i])
+								Vue.set(that.cj_list[i],'active',false)
+							}
+						}
+					}
+					if(num==1){
+						that.pp_xz=[]
+						for(var i=0;i<that.pp_list.length;i++){
+							if(that.pp_list[i].active){
+								that.pp_xz.push(that.pp_list[i])
+								Vue.set(that.pp_list[i],'active',false)
+							}
+						}
+					}
+				},
+				xq_xz_fuc:function(num) {
+					if(num==-1){
+						that.cj_xz=[]
+						that.pp_xz=[]
+						that.xm_xz=[]
+						that.jg_xz=[]
+					}
+					if(num==0){
+						that.cj_xz=[]
+					}
+					if(num==1){
+						that.pp_xz=[]
+					}
+					if(num==2){
+						that.xm_xz=[]
+					}
+					if(num==3){
+						that.jg_xz=[]
+						
+					}
+				},
+				jg_px_fuc:function(type){
+					// console.log(index)
+					if(type==0){
+						if(that.jg_px==1){
+							that.jg_px=0
+						}else{
+							that.jg_px=1
+						}
+					}
+					if(type==1){
+						if(that.jg_cx==1){
+							that.jg_cx=0
+						}else{
+							that.jg_cx=1
+						}
+					}
+					if(type==2){
+						if(that.jg_kc==1){
+							that.jg_kc=0
+						}else{
+							that.jg_kc=1
+						}
+					}
+					
+				},
+				getgimg:function(img) {
+					var img1 = img.split("^")
+					// console.log(img1[0])
+					return img1[0]
+				},
+				//奢华甄选
+				getshdata:function(){
+					var that=this
+					var datas={
+						apipage:'travel',
+						op:'travel_data_list',
+						type:3,
+						keyword:'shzx'
+					}
+					$.ajax({
+						type: "GET",
+						url: IPurl,
+						data: datas,
+						success: function(res) {
+							// console.log(res);
+							if(typeof(res)=='string'){
+								res=JSON.parse(res)
+							}
+							if (res.error == 0) {
+								var resultd = res.list
+								that.shdata = resultd
+								
+							} else {
+								layer.msg('获取数据失败')
+							}
+					
+						},
+						error: function(err) {
+							layer.msg('获取数据失败')
+							console.log(err)
+						}
+					})
+				},
+				formatter:function(value) {
+						if(!value){
+							return value
+						}
+						if (value >= 10000 && value < 10000000) {
+							value = (value / 10000).toFixed(1) + "万";
+						} else if (value >= 10000000) {
+							value = (value / 10000000).toFixed(1) + "千万";
+						}
+						return value;
+				},
+				
+			}
+		})
+		function more_fuc(num,num1){
+			if(num==0){
+				if(num1==0){
+					vm.cj_more=true
+					vm.cj_kg=true
+				}else{
+					vm.cj_more=false
+					vm.cj_kg=false
+				}
+			}
+			if(num==1){
+				if(num1==0){
+					vm.pp_more=true
+					vm.pp_kg=true
+				}else{
+					vm.pp_more=false
+					vm.pp_kg=false
+				}
+			}
+		}
+</script>
+	</body>
+</html>
