@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			*,
+			ul,
+			li,
+			p {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				outline: none;
+			} 
+
+			#zncgContent_ct {
+				background-color: #f7f7f7;
+				padding-bottom: 50px;
+			}
+
+			.zncgbgImg_ct {
+				width: 1235px;
+				height: 237px;
+				margin: 0 auto;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.zncgbgImg_ct>img {
+				max-width: 100%;
+				max-height: 100%;
+			}
+
+			.xjbtitle_ct {
+				height: 24px;
+				border-left: 3px solid #eb5f33;
+				margin: 24px auto;
+				padding-left: 10px;
+				font-size: 20px;
+				line-height: 24px;
+				font-weight: bold;
+			}
+
+			.tabBox_ct {
+				padding: 23px 0 130px;
+				background-color: #fff;
+				border-radius: 10px;
+				font-size: 12px;
+			}
+
+			.tabs_ct input,
+			.tabs_ct select,
+			.tabs_ct textarea {
+				height: 40px;
+				border: 1px solid #d3d3d3;
+				font-size: 12px;
+				padding: 0 20px;
+				resize: none;
+			}
+
+			.tabs_ct textarea {
+				width: 784px;
+				height: 90px;
+				padding: 20px 15px;
+			}
+
+			.tabs_ct select {
+				color: #999999;
+			}
+
+			.tabs_ct>div>span:first-of-type {
+				display: block;
+				width: 105px;
+				text-align: right;
+				padding-right: 10px;
+			}
+
+			.shd_ct,
+			.gsxmm_ct,
+			.lxr {
+				align-items: center;
+				margin-bottom: 22px;
+			}
+
+			.lxr {
+				margin-bottom: 29px;
+			}
+
+			.shd_ct select,
+			.gsxmm_ct input {
+				width: 650px;
+			}
+
+			.lxr input,
+			.lxr select {
+				width: 270px;
+			}
+
+			.lxr>span:nth-of-type(2) {
+				padding: 0 28px 0 16px;
+			}
+
+			.lxr>span:nth-of-type(3) {
+				padding: 0 24px 0 28px;
+			}
+
+			.cgfs {
+				margin: 25px 0 28px 0;
+			}
+
+			.cgfs>span:nth-child(3) {
+				margin: 0 0 0 28px;
+			}
+
+			.cgfs>a {
+				color: #94b4e9;
+			}
+
+			.cgfs>a>img {
+				max-width: 15px;
+				max-height: 15px;
+				vertical-align: middle;
+				margin-right: 10px;
+			}
+
+			.cgfs>a:first-of-type {
+				margin: 0 24px 0 17px;
+			}
+
+			.cgfs>a:last-of-type>img {
+				transform: rotate(180deg);
+			}
+
+			.cgfs>a>span {
+				vertical-align: middle;
+			}
+
+			.scrollBox {
+				width: 1170px;
+				margin: 0 auto;
+				max-height: 379px;
+				overflow-y: auto;
+				margin-top: -1px;
+				padding-right: 5px;
+				box-sizing: border-box;
+			}
+
+			.table_ct {
+				width: 1170px;
+				margin: 0 auto;
+				border: none;
+			}
+
+			.table_ct2 {
+				width: 1165px;
+			}
+
+			.thead_ct {
+				background-color: #f5f5f5;
+			}
+
+			tr>th:nth-child(1),
+			tr>td:nth-child(1),
+			tr>th:nth-child(4),
+			tr>td:nth-child(4) {
+				width: 100px;
+			}
+
+			tr>th:nth-child(2),
+			tr>td:nth-child(2),
+			tr>th:nth-child(3),
+			tr>td:nth-child(3) {
+				width: 208px;
+			}
+
+			tr>th:nth-child(5),
+			tr>td:nth-child(5) {
+				width: 110px;
+			}
+
+			tr>th:nth-child(6),
+			tr>td:nth-child(6) {
+				width: 115px;
+			}
+
+			tr>th:nth-child(7),
+			tr>td:nth-child(7) {
+				width: 80px;
+			}
+
+			tr>th:nth-child(8),
+			tr>td:nth-child(8) {
+				width: 250px;
+			}
+
+			.thead_ct>tr {
+				height: 40px;
+			}
+
+			tr,
+			th {
+				border: 1px solid #dedede;
+				text-align: center;
+			}
+
+			td {
+				border: none;
+			}
+
+			.tbody_ct>tr {
+				height: 75px;
+			}
+
+			.tbody_ct>tr>td:first-of-type span {
+				position: relative;
+				top: -2px;
+				margin-left: 12px;
+			}
+
+			.spbm>input {
+				width: 180px;
+				height: 26px;
+				border: 1px solid #d5d5d5;
+				padding: 0 10px;
+			}
+
+			.spmc>img {
+				max-width: 44px;
+				max-height: 44px;
+				background-color: red;
+				vertical-align: middle;
+				border: 1px solid #d4d4d4;
+			}
+
+			.spmc>span {
+				vertical-align: middle;
+				margin-left: 10px;
+			}
+
+			.sl>input {
+				width: 50px;
+				height: 30px;
+				border: 1px solid #d5d5d5;
+				text-align: center;
+			}
+
+			.cz>button {
+				width: 50px;
+				height: 28px;
+				background-color: #fff;
+				border: 1px solid #d5d5d5;
+				border-radius: 3px;
+				vertical-align: middle;
+			}
+
+			.cz>img {
+				max-width: 20px;
+				max-height: 20px;
+				background-color: red;
+				vertical-align: middle;
+				margin-left: 24px;
+			}
+
+			.dj {
+				color: #ff876a;
+			}
+
+			.tabBottom_ct {
+				width: 1170px;
+				height: 57px;
+				margin: 0 auto;
+				background-color: #e5e5e5;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			::-webkit-scrollbar {
+				width: 5px;
+			}
+
+			.xbtns_ct {
+				width: 110px;
+				height: 22px;
+				background-color: #ffffff;
+				border: none;
+			}
+
+			.botmL_ct input {
+				margin: 0 10px 0 35px;
+			}
+
+			.botmL_ct span {
+				position: relative;
+				margin-top: -2px;
+				margin-right: 43px;
+			}
+
+			.botmL_ct>button:last-child {
+				margin-left: 20px;
+			}
+
+			.botmR_ct button {
+				width: 182px;
+				height: 57px;
+				border: none;
+				background-color: #ff4400;
+				margin-left: -3px;
+				color: #fff;
+			}
+
+			.botmR_ct>button:first-of-type {
+				background-color: #ef1f1f;
+				margin-left: 70px;
+			}
+
+			.botmR_ct span {
+				color: #666666;
+			}
+
+			.botmR_ct>span:last-of-type {
+				color: #eb5f33;
+				font-size: 16px;
+			}
+		</style>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="">
+
+			<div class="w100" style="height: 187px;">
+				<div class="header_top">
+					<include src="./common/header.html"></include>
+					<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+				</div>
+				<include src="./common/header1.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+				<!-- header -->
+			
+				<include src="./common/header_header.html"></include>
+			</div>
+
+			<!-- 中间内容部分 -->
+			<div id="zncgContent_ct">
+				<!-- <div class="zncgbgImg_ct flex">
+					<img src="img/zncgbg.jpg">
+				</div> -->
+				<div class="w1200">
+					<div class="swiper-container swiper_hz1">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide" v-for="(item,index) in 3">
+								<img src="img/ppzq_03.jpg" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="xjbtitle_ct w1200">
+					<span>询价表</span>
+				</div>
+				<div class="w1200 tabBox_ct">
+					<div class="tabs_ct">
+						<div class="gsxmm_ct flex ">
+							<span class="cpointer">收货地 : </span>
+							<input  @click="open_tk()" class="cpointer" type="text" placeholder="请选择收货地" v-model="sh_add" readonly="">
+							<!-- <select name="">
+								<option value="" disabled selected hidden>请输入收货地址</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+							</select> -->
+						</div>
+						<div class="gsxmm_ct flex">
+							<span>公司/项目名 : </span>
+							<input type="text" placeholder="请输入公司/项目名称">
+						</div>
+						<div class="lxr flex">
+							<span>联系人 : </span>
+							<input type="text" placeholder="请输入联系人姓名">
+							<span>联系电话 : </span>
+							<input type="text" placeholder="请输入联系人电话">
+							<span>到货时间 : </span>
+							<select name="">
+								<option value="0">正常订单</option>
+								<option value="1">加急订单</option>
+								<option value="2">及时配送订单</option>
+							</select>
+						</div>
+						<div class="flex">
+							<span>其他说明 : </span>
+							<textarea rows="" cols="" placeholder="请输入其他说明内容"></textarea>
+						</div>
+						<div class="cgfs flex">
+							<span>采购方式 : </span>
+							<span>1.直接录入，型号/产品/品牌，可以直接匹配到相应产品</span>
+							<span>2.下载模板，填写好后上传即可</span>
+							<a href="">
+								<img src="img/down.jpg" alt="">
+								<span>下载模板</span>
+							</a>
+							<a href="">
+								<img src="img/down.jpg" alt="">
+								<span>上传清单 ( 表格 ) </span>
+							</a>
+						</div>
+					</div>
+					<table class="table_ct" border="" cellspacing="" cellpadding="">
+						<thead class="thead_ct">
+							<tr>
+								<th>序号</th>
+								<th>商品编码</th>
+								<th>商品名称</th>
+								<th>库存</th>
+								<th>单价</th>
+								<th>数量</th>
+								<th>小计</th>
+								<th></th>
+							</tr>
+						</thead>
+					</table>
+					<div class="scrollBox">
+						<table class="table_ct" :class="{table_ct2:datalist.length>5}" border="" cellspacing=""
+							cellpadding="">
+							<tbody class="tbody_ct">
+								<tr v-for="item in datalist">
+									<td>
+										<input  class="cpointer" type="checkbox" name="" id="" value="" />
+										<span>1</span>
+									</td>
+									<td class="spbm">
+										<input type="" name="" id="" value="" placeholder="请输入商品编码" />
+									</td>
+									<td class="spmc">
+										<img src="img/goods.jpg">
+										<span>神牛 刨奔</span>
+									</td>
+									<td>
+										<span>库存充足</span>
+									</td>
+									<td class="dj">
+										<span>￥8.30</span>
+									</td>
+									<td class="sl">
+										<input type="" name="" id="" value="1" />
+									</td>
+									<td>
+										<span>￥8.30</span>
+									</td>
+									<td class="cz">
+										<button class="cpointer">删除</button>
+										<img  class="cpointer" src="img/gwc.jpg">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="tabBottom_ct flex">
+						<div class="botmL_ct">
+							<label  class="cpointer">
+								<input type="checkbox" name="" id="" value="" />
+								<span>全选</span>
+							</label>
+							<button  class="cpointer" class="xbtns_ct">删除选中商品</button>
+							<button  class="cpointer" class="xbtns_ct">继续添加商品</button>
+						</div>
+						<div class="botmR_ct">
+							<span>已选商品</span>
+							<span> : ￥0.00</span>
+							<button  class="cpointer">提交询价</button>
+							<button  class="cpointer">加入购物车</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<include src="./common/footer.html"></include>
+		</div>
+		<script type="text/javascript">
+			var mySwiper
+			$(function(){
+				mySwiper = new Swiper('.swiper_hz1', {
+					autoplay: false,
+					loop:false
+				})
+				
+				
+			})
+			var app = new Vue({
+				el: '#zncgContent_ct',
+				data: {
+					datalist: [{},
+						{},
+						{},
+						{},
+						{},
+						{},
+					],
+					
+					sh_add:'北京市北京东城区1号大院'
+				},
+				methods:{
+					open_tk:function(id){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '编辑收货地址',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['400px', '400px'],
+						  content: './add_new.html?type=3&id='+id //iframe的url
+						})
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

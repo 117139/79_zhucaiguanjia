@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			.menus{
+				width: 1200px;
+				justify-content: space-between;
+				margin: 0 auto;
+				padding: 92px 0 55px 0;
+			}
+			.menu{
+				flex: 1;
+				height: 34px;
+				border-left: #CCCCCC dashed 1px;
+				align-items: center;
+				justify-content: center;
+			}
+			.menu:last-of-type{
+				border-right: #CCCCCC dashed 1px;
+			}
+			.menu img{
+				max-width: 60px;
+				max-height: 60px;
+			}
+			.menu span{
+				font-size: 16pxs;
+				color: #797979;
+				padding-left: 14px;
+			}
+			
+			/* *,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;color: #000000;} */
+			*,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;}
+			#qnhzCot_ct{
+				background-color: #f7f7f7; 
+			}
+			.smallNav_ct{
+				height: 58px;
+				font-size: 12px;
+				align-items: center;
+			}
+			.smallNav_ct img{
+				margin: 0 3px;
+			}
+			.snActive_ct{
+				color: #eb5f33;
+			}
+			.qnhzLeft_ct{
+				width: 815px;
+			}
+			.qnhzLeft_ct>div{
+				background-color: #fff;
+				padding: 44px 28px;
+			}
+			.qnhzLeft_ct>div:last-of-type{
+				background-color: #fff;
+				padding: 20px 28px 57px 28px;
+			}
+			.qnhzRight_ct{
+				width: 372px;
+				padding: 28px 12px 18px;
+				background-color: #fff;
+				height: 100%;
+			}
+			.qnhzRight_ct>div{
+				margin-bottom: 16px;
+			}
+			.leTo_ct{
+				margin-bottom: 12px;
+			}
+			.otop_ct{
+				font-size: 28px;
+				color: #333333;
+			}
+			.lxrNum_ct{
+				font-size: 12px;
+				margin-left: 13px;
+				color: #999999;
+			}
+			.otop_ct>span:last-of-type{
+				float: right;
+				color: #ff552e;
+			}
+			.ocent_ct{
+				font-size: 12px;
+				margin: 48px 0;
+				height: 23px;
+				line-height: 23px;
+			}
+			.leTo_ct>button{
+				width: 280px;
+				height: 52px;
+				background-color: #ff552e;
+				color: #fff;
+				font-size: 19px;
+				border: none;
+			}
+			.ocent_ct img{
+				max-width: 12px;
+				max-height: 12px;
+				margin-right: 5px;
+			}
+			.ocent_ct button{
+				width: 67px;
+				height: 23px;
+				border-radius: 100px;
+				border: none;
+				background-color: #eeeeee;
+				margin: 0 5px 0 13px;
+			}
+			.rTit_ct{
+				font: 20px;
+				align-items: center;
+				font-weight: bold;
+			}
+			.rTit_ct img{
+				max-width: 19px;
+				max-height: 22px;
+				margin-right: 12px;
+			}
+			.tjgzLists_ct{
+				width: 345px;
+				height: 126px;
+				background-color: #f5f6fc;
+				margin-left: 3px;
+				padding: 26px 15px 20px 22px;
+				align-items: center;
+			}
+			.rlcoont_ct{
+				flex-direction: column;
+			}
+			.rlcoont_ct span{
+				font-size: 12px;
+			}
+			.rlcoont_ct span:nth-child(1){
+				font-size: 17px;
+				color: #333333;
+			}
+			.rlcoont_ct span:nth-child(2){
+				color: #7e7f80;
+				margin: 20px 0;
+			}
+			.rlcoont_ct span:nth-child(3){
+				color: #ff552e;
+			}
+			.rrbox_ct{
+				width: 120px;
+				height: 44px;
+				border: 1px solid #ff552e;
+				text-align: center;
+				line-height: 44px;
+			}
+			.rrbox_ct span{
+				font-size: 17px;
+				color: #ff6c4c;
+			}
+			.leBo_ct>h6{
+				font-size: 20px;
+				margin-bottom: 30px;
+			}
+			.sgjy_ct{
+				margin-bottom: 18px;
+			}
+			.sgjy_ct span{
+				font-size: 12px;
+				color: #333333;
+			}
+			.sgjyImgs_ct,.tdjsImg_ct{
+				margin-top: 25px;
+			}
+			.sgjyImgs_ct img{
+				max-width: 131px;
+				max-height: 131px;
+				margin: 0 10px;
+			}
+			.tdjsImg_ct{
+				max-width: 767px;
+				max-height: 165px;
+				line-height: 165px;
+				text-align: center;
+			}
+			.zwjstme_ct{
+				font-size: 12px;
+				color: #333333;
+			}
+			.zwjstme_ct span{
+				color: #999999;
+			}
+			.xmjs_ct{
+				padding: 16px 70px;
+			}
+			.xmjs_ct p{
+				font-size: 12px;
+				color: #999999;
+			}
+			.fwxmtel_ct{
+				padding-left: 30px;
+			}
+			[v-cloak]{
+			    display:none !important;
+			}
+		</style>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		
+		<div class="w100" style="height: 187px;">
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+		
+		
+			<!-- header -->
+		
+			<include src="./common/header_header.html"></include>
+		</div>
+		<!-- 中间内容部分 -->
+		<div id="qnhzCot_ct" v-cloak>
+			
+			<!-- <button style="width: 100px;height: 40px;margin: 0 auto;" @click="vip">会员/非会员</button> -->
+			<div class="w1200">
+				<div class="smallNav_ct flex">
+					<a class="c9" href="index.html">首页</a>
+					<img src="img/jiantou.jpg" alt="">
+					<a class="c9" href="qnhz.html?header_cur=2">圈内合作</a>
+					<img src="img/jiantou.jpg" alt="">
+					<a href="" class="snActive_ct">详情页</a>
+				</div>
+				<div class="w1200 flex ju_b">
+					<div class="qnhzLeft_ct">
+						<div class="leTo_ct">
+							<div class="otop_ct">
+								<span>{{isVip?'服务项目':'拆出项目服务'}}</span>
+								<span class="lxrNum_ct" v-show="!isVip">347人联系</span>
+								<span>{{isVip?'预发布':'面议'}}</span>
+							</div>
+							<div class="flex ju_b ocent_ct">
+								<div>
+									<img src="img/qnhzdw.jpg" >
+									<span>北京-朝阳-大屯 北京朝阳大屯亚运村</span>
+									<span class="fwxmtel_ct" v-show="isVip">联系电话 : 178625123512</span>
+								</div>
+								<div>
+									<button><img src="img/qnhz_sc.jpg" alt="">收藏</button>
+									<button><img src="img/qnhz_jb.jpg" alt="">举报</button>
+								</div>
+							</div>
+							<button>合作洽谈</button>
+						</div>
+						<div class="leBo_ct">
+							<h6>{{isVip?'自我介绍':'职位描述'}}</h6>
+							<div class="zwjstme_ct" v-show="isVip">
+								<p>招募截止时间<span> : 2020.020.20</span></p>
+								<p>项目交付时间<span> : 2020.2020.20</span></p>
+							</div>
+							<div class="sgjy_ct" v-show="isVip">
+								<span>项目资质</span>
+								<div class="sgjyImgs_ct">
+									<img src="img/qnhzgc1.jpg" alt="">
+									<img src="img/qnhzgc1.jpg" alt="">
+									<img src="img/qnhzgc2.jpg" alt="">
+									<img src="img/qnhzgc2.jpg" alt="">
+									<img src="img/qnhzgc2.jpg" alt="">
+									<img src="img/qnhzgc2.jpg" alt="">
+									<img src="img/qnhzgc2.jpg" alt="">
+								</div>
+							</div>
+							<div class="sgjy_ct" v-show="!isVip">
+								<span>施工经验</span>
+								<div class="sgjyImgs_ct">
+									<img src="img/qnhzgc1.jpg" alt="">
+									<img src="img/qnhzgc2.jpg" alt="">
+								</div>
+							</div>
+							<div class="sgjy_ct" v-show="!isVip">
+								<span>团队介绍</span>
+								<div class="tdjsImg_ct">
+									<a href="kthy.html?header_cur=2">
+										<img src="img/vipCont.jpg " >
+									</a>
+									
+								</div>
+							</div>
+							<div class="sgjy_ct" v-show="isVip">
+								<span>项目介绍 : </span>
+								<div class="xmjs_ct">
+									<p>即日起招募北京区域拆除人员，有经验者优先。</p>
+									<p>【平台承诺】</p>
+									<p>一、就近派单，月入数万。二、踏实肯干，沟通良好。三、完活验收，现金结账。</p>
+									<p>【报名微信】微信沟通(电话不接)zzzz19940420</p>
+									<p>ysf3325834249</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="qnhzRight_ct">
+						<div class="rTit_ct flex">
+							<img src="img/qnhz_bq.jpg" >
+							<span>{{isVip?'推荐项目':'推荐工作'}}</span>
+						</div>
+						<div class="tjgzLists_ct flex ju_b" v-for="item in 3">
+							<div class="flex rlcoont_ct">
+								<span>搬砖工服务项目</span>
+								<span>朝阳区-大望路</span>
+								<span>面议</span>
+							</div>
+							<div class="rrbox_ct">
+								<span>合作洽谈</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<include src="./common/footer_f.html"></include>
+		<include src="./common/footer.html"></include>
+		
+		
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#qnhzCot_ct',
+				data: {
+					isVip: false
+				},
+				methods:{
+					vip(){
+						this.isVip = !this.isVip
+						console.log(this.isVip)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

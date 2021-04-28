@@ -1,0 +1,272 @@
+<div id="myzhaq">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-yijianfankui"></i>发票管理
+		</div>
+		<div v-if="xq_kg==true" class="yjfk_back" @click="xq_kg=false">返回上一级</div>
+	</div>
+	<div v-if="xq_kg==false" class="my_r_msgbox">
+		<form>
+	
+			<div class="order_list_tit bgf3 dis_flex ais">
+				<div class="tac fp_list_td1 dis_flex aic ju_c">订单详情</div>
+				<div class="tac fp_list_td2 dis_flex aic ju_c">发票类型</div>
+				<div class="tac fp_list_td3 dis_flex aic ju_c">状态</div>
+				<div class="tac fp_list_td4 dis_flex aic ju_c">操作</div>
+			</div>
+			<div class="order_li_box" v-for="(item,index) in order_list">
+				<div class="order_li_tit dis_flex aic ju_b">
+					<div class="dis_flex aic">
+						<div class="dx_xz_li dis_flex aic" @click="order_xz_fuc(index,item)">
+							<!-- <span class="dx_xz_li_box dis_flex aic ">
+								<i v-if="item.active" class="iconfont icon-duigou cEE0913"></i>
+							</span> -->
+							2020-023-19
+						</div>
+						<div class="order_li_id">订单号：123458401265490132</div>
+					</div>
+					<div class="dis_flex aic order_li_del">
+						<i @click="order_del(index,item)" class="iconfont icon-shanchukaobei"></i>
+					</div>
+				</div>
+				<table class=" order_table">
+					<tr v-for="(item1,index1) in item.goods">
+						<td class="fp_list_td1" rowspan="1">
+							<div class="dis_flex aic">
+								<div class="order_li_img bg_div">
+									<div style="background-image: url(img/cjcg_img_03.jpg);"></div>
+								</div>
+								<div class="order_li_msg">
+									<div class="order_li_msg_name">绥化不锈钢阀门厂家-din15不锈钢</div>
+									<div class="order_li_msg_gg">规格：3A/0.45KW</div>
+								</div>
+							</div>
+						</td>
+						<td class="fp_list_td2" rowspan="1">电子发票</td>
+						<td class="fp_list_td3" rowspan="1">
+							<div v-if="index==0" style="color: #4FA930;">已开票</div>
+							<div v-else style="color: #D43939;">未开票</div>
+						</td>
+						<td class="fp_list_td4" rowspan="1"> 
+							<a @click="see_fp_fuc(item)" href="javascript:;" v-if="index==0" style="color:#3DB8FF;">查看详情</a>
+							<a v-else class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer m0a"  @click="open_tk(0)">申请补开</a>
+						</td>
+						
+					</tr>
+				</table>
+			</div>
+	
+			<div class="list_page tac dis_flex">
+				<!-- <div class="flex_1"></div>
+					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
+				<div class="flex_1"></div> -->
+				<div class="m-style M-box2"></div>
+			</div>
+		</form>
+	
+	</div>
+	<div v-else  class="my_r_msgbox">
+		<table class="fp_table">
+			<thead>
+				<tr>
+					<th style="width: 200px;">订单信息</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						订单状态
+					</td>
+					<td>
+						已完成
+					</td>
+				</tr>
+				<tr>
+					<td>
+						订单编号
+					</td>
+					<td>
+						133251251211212
+					</td>
+				</tr>
+				<tr>
+					<td>
+						下单时间
+					</td>
+					<td>
+						2020.02.03
+					</td>
+				</tr>
+				<tr>
+					<td>
+						发票类型
+					</td>
+					<td>
+						电子普通发票
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="fp_table">
+			<thead>
+				<tr>
+					<th style="width: 200px;">发票信息</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						发票状态
+					</td>
+					<td>
+						已开票
+					</td>
+				</tr>
+				<tr>
+					<td>
+						发票内容
+					</td>
+					<td>
+						发票内容
+					</td>
+				</tr>
+				<tr>
+					<td>
+						发票抬头
+					</td>
+					<td>
+						个人
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="dis_flex aic down_fp">
+			<a href="javascript:;" @click="downLoad('发票','https://img2.baidu.com/it/u=111713540,615806613&fm=26&fmt=auto&gp=0.jpg')"><i class="iconfont icon-xiazai"></i>查看发票</a>
+		</div>
+	</div>
+</div>
+<script>
+	// 意见反馈
+	
+	$(function(){
+		
+		
+		
+	})
+	var layer_pwd,layer_tel
+	var vm_myzhaq = new Vue({
+			el: '#myzhaq',
+			data: {
+				order_list:[
+					{
+						goods:[1]
+					},
+					{
+						goods:[1]
+					},
+					{
+						goods:[1]
+					},
+				],
+				xq_kg:false
+			},
+			created: function() {
+				console.log('vm_myzhaq')
+				
+			},
+			mounted:function(){
+				$('.M-box3').pagination({
+						totalData:100,
+						showData:10,
+						coping: true,
+						// mode: 'fixed',
+						// homePage: '首页',
+						// endPage: '末页',
+						prevContent: '上页',
+						nextContent: '下页',
+						callback: function (api) {
+							//console.log(api.getCurrent())
+							var page=api.getCurrent()
+							// getdatalist(that,type,cityid,cityid1,page,pagesize)
+						}
+				});
+				
+				
+			},
+			methods: {
+				downLoad: function(downloadName, url) {
+					var _this=this
+				    const tag = document.createElement('a');
+				    // 此属性的值就是下载时图片的名称，注意，名称中不能有半角点，否则下载时后缀名会错误
+				    tag.setAttribute('download', downloadName.replace(/\./g, '。'));
+				
+				    const image = new Image();
+				    // 设置 image 的 url, 添加时间戳，防止浏览器缓存图片
+				    image.src = url + '?time=' + new Date().getTime();
+				    //重要，设置 crossOrigin 属性，否则图片跨域会报错
+				    image.setAttribute('crossOrigin', 'Anonymous');
+				    // 图片未加载完成时操作会报错
+				    image.onload = () => {
+				        tag.href = _this.getImageDataURL(image);
+				        tag.click();
+				    };
+				},
+				getImageDataURL: function(image) {
+					// 创建画布
+					const canvas = document.createElement('canvas');
+					canvas.width = image.width;
+					canvas.height = image.height;
+					const ctx = canvas.getContext('2d');
+					// 以图片为背景剪裁画布
+					ctx.drawImage(image, 0, 0, image.width, image.height);
+					// 获取图片后缀名
+					const extension = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase();
+					// 某些图片 url 可能没有后缀名，默认是 png
+					return canvas.toDataURL('image/' + extension, 1);
+				},
+				see_fp_fuc: function(item){
+					this.xq_kg=true
+				},
+				order_del: function(num, item) {
+					//询问框
+				
+					layer.confirm('是否删除该订单？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						layer.msg('操作成功');
+					}, function() {
+				
+					});
+				},
+				open_tk(num){
+					//页面层
+					if(num==0){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '发布服务',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['600px', '400px'],
+						  content: './tk_sq_kb.html' //iframe的url
+						}); 
+					}else{
+						layer_tel=layer.open({
+						  type: 2,
+						  title: '修改手机号',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '300px'],
+						  content: './set_tel.html' //iframe的url
+						}); 
+					}
+					
+				},
+				
+				
+				
+			}
+		})
+</script>

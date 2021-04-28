@@ -1,0 +1,249 @@
+<div  id="myyjfk" class="w100">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-tuihuo"></i>退货服务
+		</div>
+		<div v-if="yjfk_fabu==true" class="yjfk_back" @click="yjfk_fabu=false">返回上一级</div>
+	</div>
+	<div v-if="yjfk_fabu==false" class="w100">
+		<div class="my_r_tit dis_flex ais">
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==0?'cur':''" @click="tab_yjfk_fuc(0)">申请取消/退货</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==1?'cur':''" @click="tab_yjfk_fuc(1)">取消/拒收/退货记录</div>
+		</div>
+		<form>
+			<div class="my_search dis_flex aic">
+				<div class="yjfk_xz_name">搜索关键词：</div>
+				<div class="my_search dis_flex aic">
+					<div class="my_search_d1 dis_flex ais ju_b">
+						<input class="my_search_d1_int" type="text" placeholder="订单号/商品名称">
+						
+						<select  class=" my_search_d1_select" v-model="select_id">
+						  <option v-for="(item,index) in select_arr" :value="item.id">{{item.name}}</option>
+						</select>
+					</div>
+					<!-- <div class="my_search_btn dis_flex aic ju_c">搜索</div> -->
+					
+				</div>
+				<div class="yjfk_xz_name">下单时间：</div>
+				<!-- <select class="yjfk_wt_list" @change="yjfk_wenti" v-model="wenti_list_id">
+					<option v-for="(item,index) in wenti_list" :value="item.id">{{item.name}}</option>
+				</select> -->
+				<input type="text" id="test1" class="yjfk_wt_list cpointer" v-model="order_time" readonly="" placeholder="请选择时间">
+				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c" @click="search()">搜索</div>
+				<!-- <div class="my_search_btn my_search_btn2 dis_flex aic ju_c">重置</div> -->
+			</div>
+			
+			<div class="order_list_box">
+				
+				<div class="order_li_box" v-for="(item,index) in order_list">
+					<div class="order_li_tit dis_flex aic ju_b">
+						<div class="dis_flex aic">
+							<div class="dx_xz_li dis_flex aic" @click="order_xz_fuc(index,item)">
+								<!-- <span class="dx_xz_li_box dis_flex aic ">
+									<i v-if="item.active" class="iconfont icon-duigou cEE0913"></i>
+								</span> -->
+								2020-023-19
+							</div>
+							<div class="order_li_id">订单号：123458401265490132</div>
+						</div>
+						<div class="dis_flex aic order_li_del">
+							<i @click="order_del(index,item)" class="iconfont icon-shanchukaobei"></i>
+						</div>
+					</div>
+					<table class=" order_table">
+						<tr v-if="index1==0" v-for="(item1,index1) in item.goods">
+							<td class="order_list_td1" rowspan="1">
+								<div class="dis_flex aic">
+									<div class="order_li_img bg_div">
+										<div style="background-image: url(img/cjcg_img_03.jpg);"></div>
+									</div>
+									<div class="order_li_msg">
+										<div class="order_li_msg_name">绥化不锈钢阀门厂家-din15不锈钢</div>
+										<div class="order_li_msg_gg">规格：3A/0.45KW</div>
+									</div>
+								</div>
+							</td>
+							<td class="order_list_td2" rowspan="1">￥677.00</td>
+							<td class="order_list_td3" rowspan="1">1</td>
+							<td class="order_list_td4" rowspan="1">
+								微信支付</td>
+							<td class="order_list_td5" rowspan="1">
+								￥677.00</td>
+							<td class="order_list_td6" rowspan="1">
+								<div v-if="tab_yjfk_id==0" class="dis_flex_c aic ju_a">
+									<a v-if="item.pay==1" class="order_li_cz" href="">申请退货</a>
+									<a v-if="item.pay==2" class="order_li_cz" href="">取消申请</a>
+								</div>
+								<div v-if="tab_yjfk_id==1" class="dis_flex_c aic ju_a">
+									<a v-if="item.pay==1" class="order_li_cz" href="javascript:;" style="color: #D43939;">申请失败</a>
+									<a v-if="item.pay==2" class="order_li_cz" href="javascript:;">申请成功</a>
+									<a v-if="item.pay==2" class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer"  @click="open_tk(0)">填写单号</a>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="dis_flex_c aic ju_c yjfk_null_box">
+					<div class="yjfk_null bg_div">
+						<div style="background-image: url(./img/thfw_null.png);"></div>
+					</div>
+					<div>您还没有商品</div>
+					<!-- <div @click="yjfk_fabu=true" class="go_yjfk_btn dis_flex aic ju_c">意见反馈</div> -->
+				</div>
+				
+			</div>
+			
+			<div class="list_page tac dis_flex">
+				<div class="m-style M-box2"></div>
+			</div>
+		</form>
+	</div>	
+</div>
+
+<script>
+	console.log(111)
+	// 意见反馈
+	
+	$(function(){
+		//此处演示关闭
+		setTimeout(function(){
+		  layer.closeAll('loading');
+		}, 300);
+		
+		// //执行一个laydate实例
+		
+		
+		// $('.M-box2').pagination({
+		// 		totalData:100,
+		// 		showData:10,
+		// 		coping: true,
+		// 		// mode: 'fixed',
+		// 		// homePage: '首页',
+		// 		// endPage: '末页',
+		// 		prevContent: '上页',
+		// 		nextContent: '下页',
+		// 		callback: function (api) {
+		// 			//console.log(api.getCurrent())
+		// 			var page=api.getCurrent()
+		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
+		// 		}
+		// }); 
+		
+		
+	})
+	
+	var vm_myyjfk = new Vue({
+			el: '#myyjfk',
+			data: {
+			
+				tab_yjfk_id:0,
+				select_arr:[
+					{
+						name:'按商品',
+						id:1
+					},
+					{
+						name:'按订单号',
+						id:2
+					},
+				],
+				select_id:1,
+				
+				status_list_id:'',
+				yjfk_text:'',
+				yjfk_list:[1,1,],
+				yjfk_fabu:false,
+				fb_type:1,
+				fb_content:'',
+				yjfk_img:[],
+				yjfk_fb_user:'',
+				yjfk_fb_tel:'',
+				
+				
+				order_time:'',
+				order_list: [{
+						goods: [1, 1],
+						pay: 1
+					},
+					{
+						goods: [1],
+						pay: 2
+					},
+					{
+						goods: [1, 1, 1],
+						pay: 1
+					},
+					{
+						goods: [1, 1],
+						pay: 2
+					},
+				],
+			},
+			created: function() {
+				console.log('vm_mythfw')
+			
+			},
+			mounted:function(){
+				var _this=this
+				laydate.render({
+				  elem: '#test1' //指定元素
+					// ,range: true
+					 ,change: function(value, date, endDate){
+					    console.log(value); //得到日期生成的值，如：2017-08-18
+					    console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+					    console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+					  }
+					,done: function(value, date, endDate){
+					    console.log(value); //得到日期生成的值，如：2017-08-18
+					    console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+					    console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+							_this.order_time=value
+					  }
+				});
+			},
+			methods: {
+				order_del: function(num, item) {
+					//询问框
+				
+					layer.confirm('是否删除该订单？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						layer.msg('操作成功');
+					}, function() {
+				
+					});
+				},
+				search(){
+					console.log(this.order_time)
+				},
+				tab_yjfk_fuc(num){
+					this.tab_yjfk_id=num
+				},
+				open_tk(num){
+					//页面层
+					if(num==0){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '填写单号',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['400px', '300px'],
+						  content: './add_o_id.html' //iframe的url
+						}); 
+					}else{
+						layer_tel=layer.open({
+						  type: 2,
+						  title: '修改手机号',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '300px'],
+						  content: './set_tel.html' //iframe的url
+						}); 
+					}
+					
+				}
+				
+				
+			}
+		})
+</script>

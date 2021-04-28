@@ -1,0 +1,84 @@
+<div  id="myzhaq" class="w100">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-gerenxinxi"></i>账户安全
+		</div>
+	</div>
+	<div class="w100">
+		<div class="dis_flex aic zhaq_lv">
+			账号安全级别：
+			<div class="dis_flex aic zhaq_lv_img">
+				<span style="background: #71BDE1;"></span>
+				<span style="background: #569BCB;"></span>
+				<span style="background: #1471b2;"></span>
+			</div>
+			<div class="c9">一般</div>
+		</div>
+		<div class="dis_flex aic zhaq_li">
+			<i class="iconfont icon-denglumima"></i>
+			<div class="zhaq_li_name">登录密码</div>
+			<div class="zhaq_li_msg flex_1">互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</div>
+			<div class="zhaq_li_cz" @click="open_tk(0)">修改</div>
+		</div>
+		<div class="dis_flex aic zhaq_li">
+			<i class="iconfont icon-shoujihao"></i>
+			<div class="zhaq_li_name">手机验证</div>
+			<div class="zhaq_li_msg flex_1" style="color: #555;">您验证的手机：175418251，若丢失，请立即更换</div>
+			<div class="zhaq_li_cz" @click="open_tk(1)">修改</div>
+		</div>
+		
+	</div>
+	
+</div>
+	
+	
+<script>
+	// 意见反馈
+	
+	$(function(){
+		
+		
+		
+	})
+	var layer_pwd,layer_tel
+	var vm_myzhaq = new Vue({
+			el: '#myzhaq',
+			data: {
+			
+			},
+			created: function() {
+				console.log('vm_myzhaq')
+			
+			},
+			methods: {
+				open_tk(num){
+					//页面层
+					if(num==0){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '修改密码',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['580px', '380px'],
+						  content: './set_pwd.html' //iframe的url
+						}); 
+					}else{
+						layer_tel=layer.open({
+						  type: 2,
+						  title: '修改手机号',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '300px'],
+						  content: './set_tel.html' //iframe的url
+						}); 
+					}
+					
+				},
+				tab_yjfk_fuc:function(item) {
+					console.log(item)
+					this.tab_yjfk_id=item
+				}
+				
+			}
+		})
+</script>

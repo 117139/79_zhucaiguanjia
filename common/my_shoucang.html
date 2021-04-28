@@ -1,0 +1,101 @@
+<div  id="myyjfk" class="w100">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-shoucang1"></i>我的收藏
+		</div>
+		<!-- <div v-if="yjfk_fabu==true" class="yjfk_back" @click="yjfk_fabu=false">返回上一级</div> -->
+	</div>
+	<div class="w100">
+		<div class="my_r_tit dis_flex ais">
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==0?'cur':''" @click="tab_yjfk_fuc(0)">全部商品</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==1?'cur':''" @click="tab_yjfk_fuc(1)">降价3个</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==2?'cur':''" @click="tab_yjfk_fuc(2)">失效0个</div>
+		</div>
+		
+		<div class="my_fw_list">
+			<div class="my_fw_li dis_flex ju_b ais" v-for="(item,index) in my_fw_list">
+				<div class="sc_img flex_0 bg_div bg_div_hover">
+					<div style="background-image: url(./img/cjcg_img_05.jpg);"></div>
+				</div>
+				<div class="flex_1 dis_flex_c ju_b">
+					<div class="sc_li_name">DCA 电锤不调速Z1C-FF-26 750W</div>
+					<div class="sc_li_pri">￥381.00</div>
+				</div>
+				<div class="dis_flex_c aic ju_c flex_0">
+					<div class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer"  @click="add_car(item)">加入购物车</div>
+					<div class="sc_li_cz_btn dis_flex aic ju_c cpointer"  @click="un_sc_fuc(item)">移除</div>
+				</div>
+			</div>
+		</div>
+		<div class="list_page tac dis_flex">
+			
+			<div class="m-style M-box3_sc"></div>
+		</div>
+	</div>	
+</div>
+	
+	
+<script>
+	console.log(111)
+	// 意见反馈
+	
+	$(function(){
+		
+		
+		$('.M-box3_sc').pagination({
+				totalData:100,
+				showData:10,
+				coping: true,
+				// mode: 'fixed',
+				// homePage: '首页',
+				// endPage: '末页',
+				prevContent: '上页',
+				nextContent: '下页',
+				callback: function (api) {
+					//console.log(api.getCurrent())
+					var page=api.getCurrent()
+					// getdatalist(that,type,cityid,cityid1,page,pagesize)
+				}
+		}); 
+		
+		
+	})
+	
+	var vm_myyjfk = new Vue({
+			el: '#myyjfk',
+			data: {
+			
+				tab_yjfk_id:0,
+				my_fw_list:[
+					{},
+					{},
+					{},
+				]
+			},
+			created: function() {
+				console.log('vm_myyjfk')
+			
+			},
+			methods: {
+				add_car:function(){
+					layer.msg('操作成功')
+				},
+				un_sc_fuc:function(){
+					
+					layer.confirm('是否移除该商品？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						layer.msg('移除成功')
+					}, function() {
+									
+					});
+				},
+			
+				tab_yjfk_fuc:function(item) {
+					console.log(item)
+					this.tab_yjfk_id=item
+				}
+				
+			}
+		})
+</script>

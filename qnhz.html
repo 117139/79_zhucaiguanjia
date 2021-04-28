@@ -21,14 +21,19 @@
 	</head>
 	<body>
 		<div class="">
-			<!-- header -->
-			<div class="header_top">
-				<include src="./common/header.html"></include>
-				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			<div class="w100" style="height: 187px;">
+				<div class="header_top">
+					<include src="./common/header.html"></include>
+					<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+				</div>
+				<include src="./common/header1.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+				<!-- header -->
+			
+				<include src="./common/header_header.html"></include>
 			</div>
-			<include src="./common/header1.html"></include>
-
-			<include src="./common/header_header.html"></include>
 			<div v-cloak id="body" class="w100 bgf">
 				<div class="w1200">
 					<div class="swiper-container swiper_hz">
@@ -82,7 +87,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="(item,index) in 10">
+									<tr class="cpointer" v-for="(item,index) in 10" onclick="jump('qnhz_xq.html?header_cur=2&id='+1)" >
 										<td>
 											<div>四川服务</div>
 										</td>

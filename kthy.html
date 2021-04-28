@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			.menus{
+				justify-content: space-between;
+				padding: 92px 0 55px 0;
+			}
+			.menu{
+				flex: 1;
+				height: 34px;
+				border-left: #CCCCCC dashed 1px;
+				align-items: center;
+				justify-content: center;
+			}
+			.menu:last-of-type{
+				border-right: #CCCCCC dashed 1px;
+			}
+			.menu img{
+				max-width: 60px;
+				max-height: 60px;
+			}
+			.menu span{
+				font-size: 16pxs;
+				color: #797979;
+				padding-left: 14px;
+			}
+			/* *,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;color: #000000;} */
+			*,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;}
+			#qnhzCot_ct{
+				background-color: #f7f7f7; 
+			}
+			.smallNav_ct{
+				height: 58px;
+				font-size: 12px;
+				align-items: center;
+			}
+			.smallNav_ct img{
+				margin: 0 3px;
+			}
+			.snActive_ct{
+				color: #eb5f33;
+			}
+			[v-cloak]{
+			    display:none !important;
+			}
+			
+			.hybox{
+				width: 1302px;
+				margin: 0 auto;
+				background-color: #fff;
+				border-radius: 16px;
+				padding-bottom: 100px;
+				box-shadow: 5px 0px 5px -5px #9a9a9a,-5px 5px 5px -5px #9a9a9a;
+				
+			}
+			.hyTop_ct{
+				width: 1302px;
+				height: 740px;
+				background-image: url(img/hybgimg.png);
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-position: center center;
+			}
+			.head_img_ct{
+				width: 1302px;
+				height:  162px;
+				background-image: url(img/hyhead.png);
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-position: center center;
+			}
+			.hyTop_ct>div:nth-child(2),.hyTop_ct>div:nth-child(3){
+				text-align: center;
+			}
+			.hyTop_ct>div:nth-child(2){
+				margin-top: 40px;
+				font-size: 30px;
+				font-weight: bold;
+				color: #5F3804;
+			}
+			.hyTop_ct>div:nth-child(3){
+				margin-top: 30px;
+				font-size: 24px;
+				font-weight: 500;
+				color: #6C4819;
+			}
+			.hyTop_ct>div:nth-child(4){
+				margin-top: 25px;
+			}
+			.hyimg_ct{
+				flex-direction: column;
+				margin-left: 295px;
+			}
+			.hyimg_ct>div:first-of-type>img{
+				max-width: 100px;
+				max-height: 73px;
+			}
+			.hyimg_ct>div:last-of-type>img{
+				max-width: 29px;
+				max-height: 29px;
+			}
+			.hyimg_ct2{
+				margin-left: 0;
+				margin-right: 195px;
+			}
+			.pore_ct{
+				position: relative;
+				margin-top: 20px;
+			}
+			.hyqyxh_ct{
+				position: absolute;
+				left: 10px;
+				font-size: 16px;
+				font-weight: 400;
+				color: #FFFFFF;
+			}
+			.pore_ct>span:first-of-type{
+				font-size: 24px;
+				font-weight: 500;
+				color: #32210B;
+			}
+			.pore_ct>img{
+				margin-right: 20px;
+			}
+			.tcxz_ct{
+				width: 870px;
+				margin: 0 auto;
+				background-color: #fff; 
+				margin-top: -158px;
+			}
+			.tcxz_ct>p{
+				font-size: 16px;
+				font-weight: bold;
+				color: #333333;
+			}
+			.tcxz_ct>div{
+				margin-top: 42px;
+			}
+			.czbox_ct{
+				width: 218px;
+				height: 208px;
+				border: 2px solid #ededed;
+				border-radius: 5px;
+				position: relative;
+				flex-direction: column;
+			}
+			.czbs_ct{
+				width: 87px;
+				position: absolute;
+				top: -12px;
+				left: -2px;
+			}
+			.czbs_ct>img{
+				max-width: 87px;
+				max-height: 26px;
+			}
+			.czbs_ct>span{
+				font-size: 19px;
+				font-weight: 500;
+				color: #D8AA69;
+				position: absolute;
+			}
+			.czbox_ct>div:nth-child(2){
+				font-size: 23px;
+				font-weight: bold;
+				color: #6C6452;
+				margin-top: 20px;
+			}
+			.czbox_ct>div:nth-child(3){
+				font-size: 21px;
+				color: #D5AE56;
+			}
+			.czbox_ct>div:nth-child(3)>span{
+				font-size: 28px;
+				font-weight: 500;
+				color: #D5AE56;
+			}
+			.czbox_ct>div:nth-child(4){
+				font-size: 16px;
+				font-weight: 500;
+				color: #666666;
+			}
+			.zfxbox_ct{
+				width: 855px;
+				height: 338px;
+				border: 1px dashed #E5E5E5;
+			}
+			.zffs{
+				background-color: #fff;
+				width: 870px;
+				margin: 56px auto 0;
+			}
+			.zffs>p{
+				font-size: 16px;
+				font-weight: bold;
+				color: #333333;
+				margin-bottom: 28px;
+			}
+			.tcactice{
+				background-color: #fef8e8;
+				border-color: #c0a76a;
+			}
+			.zfxbox_ct>ul{
+				background: #F2F2F2;
+				width: 172px;
+				height: 338px;
+			}
+			.zfxbox_ct>ul>li{
+				height: 74px;
+				cursor: pointer;
+			}
+			.liactive{
+				background: #FFFFFF;
+			}
+			.zfxbox_ct>ul>li>img{
+				max-width: 33px;
+				max-height: 33px;
+				margin: 0 12px 0 15px;
+			}
+			.zfxbox_ct>ul>li>span{
+				font-size: 16px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.zffscon_ct{
+				width: 682px;
+			}
+			.zffscon_ct>div:first-of-type{
+				width: 378px;
+			}
+			.zffscon_ct>div:first-of-type>div{
+				width: 173px;
+				height: 173px;
+				background: #FFFFFF;
+				border: 1px solid #4AAF1A;
+				margin: 62px 0 0 131px;
+			}
+			.zffscon_ct>div:first-of-type>p{
+				font-size: 16px;
+				font-weight: 400;
+				color: #333333;
+				margin-top: 27px;
+				margin-left: 118px;
+			}
+			.yfje_ct{
+				height: 167px;
+				border-left: 1px solid #999999;
+				margin-top: 86px;
+			}
+			.yfje_ct p{
+				margin: 49px 0 0 93px;
+				font-size: 16px;
+				color: #333333;
+			}
+			.yfje_ct p:last-of-type{
+				margin-top: 15px;
+			}
+			.yfje_ct p:last-of-type>span{
+				font-size: 36px;
+				color: #D8A152;
+				font-weight: 500;
+			}
+			
+		</style>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head> 
+	<body>
+		<div class="w100" style="height: 187px;">
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+		
+		
+			<!-- header -->
+		
+			<include src="./common/header_header.html"></include>
+		</div>
+		<!-- 中间内容部分 -->
+		<div id="qnhzCot_ct" v-cloak>
+			<div class="smallNav_ct w1200 flex">
+				<a class="c9" href="index.html">首页</a>
+				<img src="img/jiantou.jpg" alt="">
+				<a class="c9" href="qnhz.html?header_cur=2">圈内合作</a>
+				<img src="img/jiantou.jpg" alt="">
+				<a href="" class="snActive_ct">详情页</a>
+			</div>
+			
+			<div class="hybox">
+				<div class="hyTop_ct">
+					<div class="head_img_ct"></div>
+					<div>筑采会员尊享权益</div>
+					<div>筑采会员花小钱办大事</div>
+					<div class="flex ju_b">
+						<div class="hyimg_ct flex aic">
+							<div>
+								<img src="img/hysf.png" >
+							</div>
+							<div class="pore_ct flex aic">
+								<img src="img/yuan01.png" >
+								<span>身份尊贵</span>
+								<span class="hyqyxh_ct">1</span>
+							</div>
+						</div>
+						<div class="hyimg_ct hyimg_ct2 flex aic">
+							<div>
+								<img src="img/hyzy.png" >
+							</div>
+							<div class="pore_ct flex aic ju_c">
+								<img src="img/yuan01.png" >
+								<span>会员享受更多免费资源</span>
+								<span class="hyqyxh_ct">2</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="tcxz_ct">
+					<p>套餐选择</p>
+					<div class="tcbox_ct flex ju_b">
+						<div class="czbox_ct flex aic ju_a"
+						@click="taocan = 'by'"
+						:class="{tcactice:taocan=='by'}">
+							<div class="czbs_ct flex aic ju_c">
+								<img src="img/hycz.png" >
+								<span>超值</span>
+							</div>
+							<div>包月</div>
+							<div>￥<span>50</span></div>
+							<div>1月充值50</div>
+						</div>
+						<div class="czbox_ct flex aic ju_a"
+						@click="taocan = 'jd'"
+						:class="{tcactice:taocan=='jd'}">
+							<div class="czbs_ct flex aic ju_c">
+								<img src="img/hycz.png" >
+								<span>超值</span>
+							</div>
+							<div>季度</div>
+							<div>￥<span>618</span></div>
+							<div>季度充值618</div>
+						</div>
+						<div class="czbox_ct flex aic ju_a"
+						@click="taocan = 'bn'"
+						:class="{tcactice:taocan=='bn'}">
+							<div class="czbs_ct flex aic ju_c">
+								<img src="img/hycz.png" >
+								<span>超值</span>
+							</div>
+							<div>包年</div>
+							<div>￥<span>1198</span></div>
+							<div>1年充值1198</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="zffs">
+					<p>支付方式</p>
+					<div class="zfxbox_ct flex">
+						<ul>
+							<li class="flex aic liactive">
+								<img src="img/hywxzf.png" >
+								<span>微信扫码</span>
+							</li>
+						</ul>
+						<div class="zffscon_ct flex">
+							<div>
+								<div class="flex aic ju_c">
+									<img src="img/hywxsm.png" >
+								</div>
+								<p>请打开微信扫描上方二维码</p>
+							</div>
+							<div class="yfje_ct">
+								<p>应付金额</p>
+								<p><span>{{taocan=='by'?'50':(taocan=='jd'?'618':'1198')}}</span>元</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<include src="./common/footer_f.html"></include>
+			<include src="./common/footer.html"></include>
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#qnhzCot_ct',
+				data: {
+					taocan: 'jd'
+				},
+				methods:{
+				}
+			})
+		</script>
+	</body>
+</html>

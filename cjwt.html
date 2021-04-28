@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			*,
+			ul,
+			li {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+
+			#app_ct {
+				background-color: #f7f7f7;
+				padding: 15px 0;
+			}
+
+			.contentBox_ct {
+				height: 763px;
+				background-color: #fff;
+			}
+
+			.contentLeft_ct {
+				width: 209px;
+			}
+
+			.contentLeft_ct ul {
+				margin-top: 32px;
+				margin-left: 25px;
+				font-size: 12px;
+				color: #999999;
+			}
+
+			.contentLeft_ct ul li span {
+				cursor: pointer;
+			}
+
+			.contentLeft_ct>ul>li:nth-child(n+12) span {
+				cursor: default;
+			}
+
+			.listTitle_ct {
+				font-size: 16px;
+				color: #333333;
+			}
+
+			.listActive_ct {
+				color: #eb5f33;
+			}
+
+			.contentLeft_ct ul li {
+				margin-bottom: 25px;
+			}
+
+			.contentRight_ct {
+				width: calc(100% - 209px);
+				padding: 30px 30px 0 18px;
+			}
+
+			.rightTitle_ct {
+				font-size: 26px;
+				color: #333333;
+				margin-bottom: 28px;
+			}
+		</style>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/bottom_ct.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+
+		<!-- 头部 引入了 header_ct.css  -->
+		<div>
+			<div class="w100" style="height: 187px;">
+				<div class="header_top">
+					<include src="./common/header.html"></include>
+					<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+				</div>
+				<include src="./common/header1.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+				<!-- header -->
+			
+				<include src="./common/header_header.html"></include>
+			</div>
+
+
+			<!-- 中间内容部分 -->
+			<div id="app_ct">
+				<div class="contentBox_ct w1200 flex">
+					<div class="contentLeft_ct">
+						<ul>
+							<li v-for="item,index in lists_ct" :key='index'>
+								<span @click="listsBtn(index)"
+									:class="{listActive_ct:ind==index, listTitle_ct:item.istitle}">{{item.txt}}</span>
+							</li>
+						</ul>
+					</div>
+					<div class="contentRight_ct">
+						<div class="rightTitle_ct">{{rightTitle}}</div>
+						<div>
+							<img src="img/content.jpg">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<include src="./common/footer.html"></include>
+		</div>
+
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app_ct',
+				data: {
+					// 左侧列表
+					lists_ct: [{
+							txt: '新手指南',
+							istitle: 1
+						},
+						{
+							txt: '关于我们'
+						},
+						{
+							txt: '隐私协议'
+						},
+						{
+							txt: '常见问题'
+						},
+						{
+							txt: '会员问题'
+						},
+						{
+							txt: '会员介绍'
+						},
+						{
+							txt: '特色服务',
+							istitle: 1
+						},
+						{
+							txt: '快速下单'
+						},
+						{
+							txt: '售后说明',
+							istitle: 1
+						},
+						{
+							txt: '发票说明'
+						},
+						{
+							txt: '售后政策'
+						},
+						{
+							txt: '取消订单'
+						},
+						{
+							txt: '在线支付'
+						},
+						{
+							txt: '联系我们',
+							istitle: 1
+						},
+						{
+							txt: '业务咨询 : 051871-85080'
+						},
+						{
+							txt: '售后服务 : 051871-85080'
+						},
+						{
+							txt: '邮箱 : 051871-85080'
+						}
+					],
+					// 列表点击后样式判断
+					ind: 1,
+					rightTitle: '关于我们'
+				},
+				created() {
+					var url = decodeURI(window.location.href);
+					var urlindex = url.indexOf('=');
+					console.log(urlindex)
+
+					if (urlindex > -1) {
+						url = url.substring(urlindex + 1);
+						this.$nextTick(function() {
+							this.ind = url
+							this.rightTitle = this.lists_ct[url].txt
+						})
+					}
+				},
+				methods: {
+					listsBtn:function(index) {
+						if (index <= 10) {
+							if (this.lists_ct[index].istitle) {
+								this.ind = index + 1
+							} else {
+								this.ind = index
+							}
+							this.rightTitle = this.lists_ct[this.ind].txt
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

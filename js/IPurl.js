@@ -1,6 +1,6 @@
 //接口地址
-var IPurl = "https://www.jinguantour.com/api.aspx/";
-var IPurl1 = "https://www.jinguantour.com/";
+var IPurl = "https://www.zhucaiguanjia.com/api/";
+var IPurl1 = "https://www.zhucaiguanjia.com/";
 var web_siteset=""					//公共信息
 var logintoken 
 var userMsg
@@ -222,6 +222,8 @@ var jg_list=[
 $(function () {
 	  webxx()
 })
+var token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjM2NzgsImF1ZGllbmNlIjoid2ViIiwib3BlbkFJZCI6MTM2NywiY3JlYXRlZCI6MTUzMzg3OTM2ODA0Nywicm9sZXMiOiJVU0VSIiwiZXhwIjoxNTM0NDg0MTY4fQ.Gl5L-NpuwhjuPXFuhPax8ak5c64skjDTCBC64N_QdKQ2VT-zZeceuzXB9TqaYJuhkwNYEhrV3pUx1zhMWG7Org"
+
 
 
 /**
@@ -335,9 +337,13 @@ function _ajax(ajaxUrl,method,datas,success,error) {
 		}
 	}
 	$.ajax({
-		type: "GET",
+		type: method,
 		url: IPurl+ajaxUrl,
 		data: datas,
+		// headers:{
+		// 	"Authorization":token,
+		// },
+	
 		success: success,
 		error: error
 	})
@@ -484,7 +490,23 @@ function webxx(that,xc_key){
 }
 
 
+function gettime(value) {
+		var seperator1 = "/";
+		value = new Date(value)
 
+		var year = value.getFullYear();
+		console.log(year)
+		var month = value.getMonth() + 1;
+		var strDate = value.getDate();
+		if (month >= 1 && month <= 9) {
+				month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+				strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate
+}
 //获取img
 function getgimg(pic) {
   if (!pic) {

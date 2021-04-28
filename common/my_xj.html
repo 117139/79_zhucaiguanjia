@@ -1,0 +1,248 @@
+<div  id="myyjfk" class="w100">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-xunjia"></i>我的询价
+		</div>
+		<div v-if="xq_kg==true" class="yjfk_back" @click="xq_kg=false">返回上一级</div>
+	</div>
+	<div v-if="xq_kg==false" class="w100">
+		<div class="my_r_tit dis_flex ais">
+			
+			<select class="my_xj_select my_r_tit_tab" v-model="xjtime_id" style="color: #EB5F33;">
+				<option v-for="(item,index) in xjtime_list" :value="item.id">{{item.name}}</option>
+			</select>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==0?'cur':''" @click="tab_yjfk_fuc(0)">全部反馈</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==1?'cur':''" @click="tab_yjfk_fuc(1)">已下单</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==2?'cur':''" @click="tab_yjfk_fuc(2)">已报价询价单</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==3?'cur':''" @click="tab_yjfk_fuc(3)">待报价询价单</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==4?'cur':''" @click="tab_yjfk_fuc(4)">已退回</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==5?'cur':''" @click="tab_yjfk_fuc(5)">已撤回</div>
+		</div>
+		<form>
+			<div class="my_search dis_flex aic">
+				<div class="yjfk_xz_name">项目名称：</div>
+				<input class="yjfk_wt_list" type="text" placeholder="请输入项目名称" v-model="xm_name" />
+				<div class="yjfk_xz_name">商品名称：</div>
+				<input class="yjfk_wt_list" type="text" placeholder="请输入商品名称" v-model="goods_name" />
+				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c">搜索</div>
+				<!-- <div class="my_search_btn my_search_btn2 dis_flex aic ju_c">重置</div> -->
+			</div>
+			
+			<div class="order_li_box">
+				<table class=" order_table">
+					<thead class="yjfk_table_tit">
+						<tr>
+							<td>项目名称</td>
+							<td>询价时间</td>
+							<td>询价商品种类</td>
+							<td>报价商品种类</td>
+							<td>报价/退回时间</td>
+							<td>状态</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody class="yjfk_table_body">
+						<tr v-for="(item,index) in yjfk_list">
+							<td>项目{{index+1}}</td>
+							<td>2020.10.06</td>
+							<td>2</td>
+							<td>2</td>
+							<td>
+								2105.02.03
+							</td>
+							<td>
+								<div v-if="index==0">待报价</div>
+								<div v-else-if="index==1">已下单</div>
+								<div v-else>已退回</div>
+							</td>
+							<td>
+								<a @click="see_fp_fuc(item)" href="javascript:;" style="color:#3DB8FF;">查看详情</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="dis_flex_c aic ju_c yjfk_null_box">
+					<div class="yjfk_null bg_div">
+						<div style="background-image: url(./img/yjfk_null.png);"></div>
+					</div>
+					<div>没有询价表</div>
+					
+				</div>
+				
+			</div>
+			
+			<div class="list_page tac dis_flex">
+				<!-- <div class="flex_1"></div>
+					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
+				<div class="flex_1"></div> -->
+				<div class="m-style M-box2"></div>
+			</div>
+		</form>
+	</div>
+	<div v-else class="w100">
+		<div class="order_li_box bb1" style="padding: 0 20px 30px;">
+			
+			<div class="dis_flex aic ju_b my_r_box_tit_z" style="padding: 0;border-bottom: 0;">
+				<div class="fwb">
+					询价单信息
+				</div>
+				<div class="xj_status flex_1">询价单状态：待报价</div>
+				<a class="fb_xuqiu_btn dis_flex aic ju_c" @click="qx_xj_fuc">撤销询价</a>
+			</div>
+			<div>
+				<table class="xjd_table_dd">
+					<tr>
+						<td>询价单号：XJ202104255527</td>
+						<td>询价单名称：1	</td>
+						<td>询价时间：2021-04-25 17:59:04	</td>
+						<td>收货地：北京市北京市东城区东华门街道weeee</td>
+					</tr>
+					<tr>
+						<td>联系人：1111</td>
+						<td>联系电话：18300000000	</td>
+						<td>要求到货时间：2021-04-29</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="4">其他说明：111</td>
+					</tr>
+					<tr>
+						<td colspan="4">客服备注：</td>
+					</tr>
+				</table>
+					
+			</div>
+		</div>
+		<div class="order_li_box" style="padding: 0 20px;">
+			<div class="dis_flex aic ju_b my_r_box_tit_z" style="padding: 0;">
+				<div class="fwb">
+					询价商品清单
+				</div>
+				<a class="fb_xuqiu_btn dis_flex aic ju_c" href="">去支付</a>
+			</div>
+			<table class=" order_table">
+				<thead class="yjfk_table_tit">
+					<tr>
+						<td>序号</td>
+						<td>商品名称</td>
+						<td>平台商品名称</td>
+						<td>品牌</td>
+						<td>商品描述</td>
+						<td>数量</td>
+						<td>单位</td>
+						<td>小计</td>
+						<td>预计到货 周期(天）</td>
+					</tr>
+				</thead>
+				<tbody class="yjfk_table_body ">
+					<tr class="c9" v-for="(item,index) in yjfk_list">
+						<td>{{index+1}}</td>
+						<td>钳子</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>1</td>
+						<td>个</td>
+						<td>
+							10
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="dis_flex_c aic ju_c yjfk_null_box">
+				<div class="yjfk_null bg_div">
+					<div style="background-image: url(./img/yjfk_null.png);"></div>
+				</div>
+				<div>没有询价表</div>
+				
+			</div>
+			
+		</div>
+	</div>	
+</div>
+	
+	
+<script>
+	console.log(111)
+	// 意见反馈
+	
+	$(function(){
+		//此处演示关闭
+		setTimeout(function(){
+		  layer.closeAll('loading');
+		}, 300);
+		
+		
+		
+		// $('.M-box2').pagination({
+		// 		totalData:100,
+		// 		showData:10,
+		// 		coping: true,
+		// 		// mode: 'fixed',
+		// 		// homePage: '首页',
+		// 		// endPage: '末页',
+		// 		prevContent: '上页',
+		// 		nextContent: '下页',
+		// 		callback: function (api) {
+		// 			//console.log(api.getCurrent())
+		// 			var page=api.getCurrent()
+		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
+		// 		}
+		// }); 
+		
+		
+	})
+	
+	var vm_myyjfk = new Vue({
+			el: '#myyjfk',
+			data: {
+				
+				tab_yjfk_id:0,
+				xjtime_list:[
+					{
+						name:'近三个月询价单',
+						id:0
+					},
+					{
+						name:'今年内询价单',
+						id:1
+					},
+				],
+				xjtime_id:0,
+				
+				xm_name:'',
+				goods_name:'',
+				yjfk_list:[1,1,1,],
+				xq_kg:false,
+				fb_type:1,
+				fb_content:'',
+				yjfk_img:[],
+				yjfk_fb_user:'',
+				yjfk_fb_tel:''
+			},
+			created: function() {
+				console.log('vm_myyjfk')
+			
+			},
+			methods: {
+				see_fp_fuc: function(item){
+					this.xq_kg=true
+				},
+				qx_xj_fuc:function(){
+					layer.confirm('是否撤销询价？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						layer.msg('操作成功');
+					}, function() {
+									
+					});
+				},
+				tab_yjfk_fuc:function(item) {
+					console.log(item)
+					this.tab_yjfk_id=item
+				}
+				
+			}
+		})
+</script>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/laydate/laydate.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+		<script src="./js/layui/layui.js"></script>
+		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style>
+			.tk_btns{
+				margin-top: 10px;
+				border-top: 1px solid #E4E4E4;
+				padding-top: 20px;
+			}
+			.tk_btns div{
+				font-size: 12px;
+				color: #fff;
+				width: 59px;
+				height: 30px;
+				background: #EB5F34;
+				border-radius: 4px;
+				margin: 0 20px;
+	 cursor: pointer;
+			}
+			.tk_btns .tk_btns_d1{
+				background: #CACACA;
+			}
+			.getcode{
+				font-size: 12px;
+				color: #FFFEFE;
+				width: 80px;
+				height: 27px;
+				background: #EB5F34;
+				border-radius: 4px;
+	 cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="myzhaq">
+			<div class="w100 set_list" style="padding: 10px 50px;">
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">项目名称：</div>
+					<input type="text" v-model="xm_name" placeholder="请输入项目名称"/>
+				</div>
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">合作时间：</div>
+					<input type="text"  v-model="xm_time" placeholder="请输入合作时间"/>
+					<!-- <input type="text" id="test1"  v-model="code" placeholder="请选择"/> -->
+				</div>
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">发布方：</div>
+					<input type="text" placeholder="请输入" v-model="xm_fbf"/>
+				</div>
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">联系方式：</div>
+					<input type="text" placeholder="请输入联系方式" v-model="tel"/>
+				</div>
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">工作区域范围：</div>
+					<input type="text" placeholder="可输入多个工作区域范围" v-model="xm_qy"/>
+				</div>
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">施工经验：</div>
+					<textarea v-model="xm_sgjy"  placeholder="请输入"></textarea>
+				</div>
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name flex_0"></div>
+					
+					<div class="dis_flex fww flex_1" style="padding: 0 10px;">
+						<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
+							<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
+							<div :style="'background-image: url('+item+');'"></div>
+						</div>
+						<div class="up_img" v-if="yjfk_img.length<9">
+							<img src="./img/upimg_03.jpg" alt="">
+							<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
+							<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+						</div>
+					</div>
+				</div>
+				
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">团队介绍：</div>
+					<textarea v-model="xm_tdjs"  placeholder="请输入团队介绍"></textarea>
+				</div>
+			</div>
+			
+			<div class="tk_btns dis_flex aic ju_c">
+				<div class="dis_flex aic ju_c"  @click="sub">确定</div>
+				<div class="dis_flex aic ju_c tk_btns_d1" @click="quxiao">关闭</div>
+			</div>
+		</div>
+		<script>
+			// 意见反馈
+			
+			$(function(){
+				
+				//执行一个laydate实例
+				laydate.render({
+				  elem: '#test1' //指定元素
+					,range: true
+				});
+				
+			})
+			
+			var vm_myzhaq = new Vue({
+					el: '#myzhaq',
+					data: {
+						xm_name: '',
+						xm_time:'',
+						xm_fbf: '',
+						tel:'',
+						xm_qy:'',
+						xm_sgjy:'',
+						yjfk_img:[],
+						xm_tdjs:'',
+					},
+					created: function() {
+						console.log('vm_myzhaq')
+					
+					},
+					methods: {
+						uploadImg:function(file){
+							var  _this=this
+							var reader = new FileReader();
+							reader.readAsDataURL(file.target.files[0]); // 读出 base64
+							reader.onloadend = function () {
+							      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
+							     var dataURL = reader.result;//base64
+							     // 显示图片
+							     // $('#showImg').attr('src',dataURL);
+									 _this.yjfk_img.push(dataURL)
+									 
+									
+							};
+							return
+							var fd=new FormData()
+							fd.append('file',file)
+							// var datas={
+							// 	file:file
+							// }
+							console.log(file)
+							$.ajax({
+								type: "POST",
+								url: IPurl+'/Base/upload',
+								data: fd,
+								async:false,
+								cache: true,
+								processData: false,
+								contentType: false,//不去设置Content-Type请求头
+								success: function(res) {
+									// console.log(res);
+									if(typeof(res)=='string'){
+										res=JSON.parse(res)
+									}
+									if (res.error == 0) {
+									console.log(res)
+										layer.msg('上传成功')
+									} else {
+										layer.msg('获取数据失败')
+									}
+							
+								},
+								error: function(err) {
+									layer.msg('获取数据失败')
+									console.log(err)
+								}
+							})
+							
+						},
+						up_img_del:function(index){
+							var _this=this
+							layer.confirm('是否删除该图片？', {
+							  btn: ['确定','取消'] //按钮
+							}, function(){
+							  layer.msg('操作成功');
+								_this.yjfk_img.splice(index, 1)
+							}, function(){
+							  
+							});
+							
+						},
+						getCode:function() {
+							var that = this
+						
+							if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
+								wx.showToast({
+									icon: 'none',
+									title: '手机号有误'
+								})
+								return
+							}
+							if (that.btnkg == 1) {
+								return
+							} else {
+								that.btnkg = 1
+							}
+							// uni.showToast({
+							// 	icon: 'none',
+							// 	title: '发送成功'
+							// })
+							// that.codetime()
+							// that.btnkg = 0
+							// return
+							var jkurl = '/login/index'
+							var data = {
+								type:that.login_type==0?2:that.login_type==2?1:1,
+								phone: that.tel
+							}
+							service.P_post(jkurl, data).then(res => {
+								that.btnkg = 0
+								console.log(res)
+								if (res.code == 1) {
+									var datas = res.data
+									console.log(typeof datas)
+							
+									if (typeof datas == 'string') {
+										datas = JSON.parse(datas)
+									}
+							
+									uni.showToast({
+										icon: 'none',
+										title: '发送成功'
+									})
+									console.log(res)
+									// that.verification_key = res.data.data.key
+									that.codetime()
+							
+								} else {
+									if (res.msg) {
+										uni.showToast({
+											icon: 'none',
+											title: res.msg
+										})
+									} else {
+										uni.showToast({
+											icon: 'none',
+											title: '操作失败'
+										})
+									}
+								}
+							}).catch(e => {
+								that.btnkg = 0
+								console.log(e)
+								uni.showToast({
+									icon: 'none',
+									title: '操作失败'
+								})
+							})
+							
+						
+						},
+						codetime:function() {
+							var that = this
+							var time = 60
+							var st = setInterval(function() {
+								if (time == 0) {
+									that.yzm_type = 0
+									clearInterval(st);
+								} else {
+									var news = time--;
+									// console.log(news)
+									that.yzm_type = 1
+									that.yztime = news
+						
+								}
+							}, 1000);
+						},
+						sub:function(){
+							var that=this
+							
+							if (!that.xm_name) {
+								layer.msg('请输入项目名称')
+								
+								return;
+							}
+							if (!that.xm_time) {
+								layer.msg('请输入合作时间')
+								
+								return;
+							}
+							if (!that.xm_fbf) {
+								layer.msg('请输入发布方')
+								
+								return;
+							}
+							if (!that.tel) {
+								layer.msg('请输入联系方式')
+								
+								return;
+							}
+							if (!that.xm_qy) {
+								layer.msg('请输入工作区域范围')
+								
+								return;
+							}
+							if (!that.xm_sgjy) {
+								layer.msg('请输入施工经验')
+								
+								return;
+							}
+							if (!that.xm_tdjs) {
+								layer.msg('请输入团队介绍')
+								
+								return;
+							}
+							// if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
+							// 	layer.msg('手机号有误')
+								
+							// 	return
+							// }
+							
+							
+							var datas = {
+								title: that.xm_name,
+								work_time:that.xm_time,
+								service_name: that.xm_fbf,
+								mobile:that.tel,
+								xm_qy:that.xm_qy,
+								desc_exp:that.xm_sgjy,
+								desc_pic:that.yjfk_img,
+								desc_team:that.xm_tdjs,
+							}
+							console.log(datas)
+							layer.msg('操作成功')
+							setTimeout(function(){
+								// parent.layer.close('layer_pwd');
+								parent.layer.closeAll();
+							},1000)
+						},
+						quxiao:function(){
+							parent.layer.closeAll();
+						}
+						
+					}
+				})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,96 @@
+<div  id="myzhaq" class="w100" style="min-height: 810px;">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-wodedizhikaobei"></i>我的服务
+		</div>
+		<div class="fb_xuqiu_btn dis_flex aic ju_c" @click="open_tk(0)">发布服务</div>
+	</div>
+	<div class="my_fw_list">
+		<div class="my_fw_li dis_flex ju_b aic" v-for="(item,index) in my_fw_list">
+			<div class="flex_1">
+				<div class="my_fw_li_name">服务项目</div>
+				<div class="my_fw_li_address">北京市丰台区卢沟桥街道</div>
+				<div v-if="index==0" class="my_fw_li_time">随时</div>
+				<div v-else class="my_fw_li_time">面议</div>
+			</div>
+			<div class="my_fw_see dis_flex aic ju_c">查看</div>
+		</div>
+	</div>
+	<div class="list_page tac dis_flex">
+		
+		<div class="m-style M-box3"></div>
+	</div>
+</div>
+	
+	
+<script>
+	// 意见反馈
+	
+	$(function(){
+		
+		
+		
+	})
+	var layer_pwd,layer_tel
+	var vm_myzhaq = new Vue({
+			el: '#myzhaq',
+			data: {
+				my_fw_list:[
+					{},
+					{},
+					{},
+				]
+			},
+			created: function() {
+				console.log('vm_myzhaq')
+				
+			},
+			mounted:function(){
+				$('.M-box3').pagination({
+						totalData:100,
+						showData:10,
+						coping: true,
+						// mode: 'fixed',
+						// homePage: '首页',
+						// endPage: '末页',
+						prevContent: '上页',
+						nextContent: '下页',
+						callback: function (api) {
+							//console.log(api.getCurrent())
+							var page=api.getCurrent()
+							// getdatalist(that,type,cityid,cityid1,page,pagesize)
+						}
+				});
+				
+				
+			},
+			methods: {
+				open_tk(num){
+					//页面层
+					if(num==0){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '发布服务',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['600px', '600px'],
+						  content: './fb_fw.html' //iframe的url
+						}); 
+					}else{
+						layer_tel=layer.open({
+						  type: 2,
+						  title: '修改手机号',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '300px'],
+						  content: './set_tel.html' //iframe的url
+						}); 
+					}
+					
+				},
+				
+				
+				
+			}
+		})
+</script>

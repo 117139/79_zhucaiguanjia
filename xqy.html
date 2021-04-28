@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			*,
+			ul,
+			li,
+			p,
+			a {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				outline: none;
+				/* color: #000000; */
+			}
+
+			#xqyCot_ct {
+				background-color: #f7f7f7;
+			}
+
+			.smallNav_ct {
+				height: 58px;
+				font-size: 12px;
+				align-items: center;
+			}
+
+			.smallNav_ct img {
+				margin: 0 3px;
+			}
+
+			.snActive_ct {
+				color: #eb5f33;
+			}
+
+			.menus {
+				width: 1200px;
+				justify-content: space-between;
+				margin: 0 auto;
+				padding: 92px 0 55px 0;
+			}
+
+			.menu {
+				flex: 1;
+				height: 34px;
+				border-left: #CCCCCC dashed 1px;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.menu:last-of-type {
+				border-right: #CCCCCC dashed 1px;
+			}
+
+			.menu img {
+				max-width: 60px;
+				max-height: 60px;
+			}
+
+			.menu span {
+				font-size: 16pxs;
+				color: #797979;
+				padding-left: 14px;
+			}
+
+			.xqnt_ct {
+				margin-bottom: 3px;
+			}
+
+			.xqnt_ct>div {
+				background-color: #fff;
+			}
+
+			.lunbobox_ct {
+				width: 382px;
+				margin-right: 3px;
+				padding: 20px 14px 0 18px;
+			}
+
+			.bigImg {
+				width: 350px;
+				height: 350px;
+				border: 1px solid #e2e2e2;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.bigImg img {
+				max-width: 350px;
+				max-height: 350px;
+			}
+
+			.leri_ct {
+				width: 350px;
+				height: 69px;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 5px;
+				margin-top: 16px;
+				position: relative;
+			}
+
+			.lbribox_ct {
+				padding: 27px 16px 0;
+			}
+
+			.lbrtit_ct {
+				width: 782px;
+				justify-content: space-between;
+				margin-bottom: 25px;
+			}
+
+			.lbrtit_ct>h6 {
+				font-size: 18px;
+			}
+
+			.lbrtit_ct span {
+				font-size: 12px;
+				color: #666666;
+			}
+
+			.lbrtit_ct img {
+				max-width: 13px;
+				max-height: 13px;
+				margin-right: 8px;
+			}
+
+			.lbrbgh_ct {
+				background-color: #f3f3f3;
+				padding: 14px 18px 20px;
+				justify-content: space-between;
+			}
+
+			.bghR_ct {
+				width: 156px;
+				height: 91px;
+				background-color: #fff;
+				flex-direction: column;
+				font-size: 12px;
+			}
+
+			.ppxx_ct {
+				padding-bottom: 20px;
+				border-bottom: 1px solid #f7f7f7;
+				flex-wrap: wrap;
+				font-size: 12px;
+				padding-left: 18px;
+			}
+
+			.ppxx_ct>div {
+				margin-top: 19px;
+			}
+
+			.ppxx_ct p {
+				margin-left: 10px;
+			}
+
+			.ppxx_ct>div:nth-child(2n) {
+				width: 300px;
+			}
+
+			.ppxx_ct>div:nth-child(2n+1) {
+				width: 250px;
+			}
+
+			.w60tit {
+				width: 60px;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.bgjtxt_ct {
+				font-size: 12px;
+				align-items: flex-end;
+			}
+
+			.bgjtxt_ct>p span {
+				color: #ed0d1f;
+			}
+
+			.bghL_ct {
+				flex-direction: column;
+				justify-content: space-between;
+				padding: 10px 0;
+			}
+
+			.f_s18 {
+				font-size: 18px;
+			}
+
+			.bottxt_ct {
+				padding-bottom: 2px;
+			}
+
+			.p_L_ct {
+				margin-left: 12px;
+			}
+
+			.bgimgb_ct {
+				width: 140px;
+				height: 55px;
+				background-color: #f5f5f5;
+				margin-bottom: 6px;
+			}
+
+			.bgimgb_ct img {
+				max-width: 140px;
+				max-height: 55px;
+			}
+
+			.ggb_ct {
+				padding: 17px 0 17px 17px;
+				font-size: 12px;
+				border-bottom: 1px solid #f7f7f7;
+			}
+
+			.ggtxt_ct {
+				margin-top: 13px;
+				width: 82px;
+				flex-shrink: 0;
+			}
+
+			.ggsB_ct {
+				flex-wrap: wrap;
+			}
+
+			.ggs_ct {
+				width: 100px;
+				height: 33px;
+				border: 1px solid #999999;
+				color: #666666;
+				font-size: 12px;
+				line-height: 33px;
+				text-align: center;
+				margin-left: 14px;
+				margin-bottom: 14px;
+				position: relative;
+			}
+
+			.ggs_ct:nth-last-child(-n+6) {
+				margin-bottom: 0;
+			}
+
+			.ggs_ct img {
+				max-width: 13px;
+				max-height: 12px;
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+
+			.bder_ct {
+				border-color: #eb5f34;
+			}
+
+			.jrOgm_ct {
+				height: 76px;
+				border-bottom: 1px solid #f7f7f7;
+			}
+
+			.slnum_ct {
+				height: 34px;
+				margin-left: 1px;
+			}
+
+			.slnum_ct button,
+			.slnum_ct input {
+				width: 35px;
+				height: 100%;
+				background-color: #f4f4f4;
+				border: 1px solid #e6e1db;
+				margin-left: -1px;
+				text-align: center;
+			}
+
+			.slnum_ct input {
+				width: 54px;
+				background-color: #fff;
+			}
+
+			.jrOgm_ct>button {
+				height: 40px;
+				border: none;
+				align-items: center;
+				margin-right: 10px;
+				background-color: #ffe3da;
+				border: 1px solid #eb5f34;
+				padding: 0 23px 0 18px;
+			}
+
+			.jrOgm_ct>button img {
+				max-width: 22px;
+				max-height: 20px;
+				margin-right: 12px;
+			}
+
+			.jrOgm_ct>button:first-of-type {
+				background-color: #eb5f34;
+				margin-left: 30px;
+			}
+
+			.jrOgm_ct>button>span {
+				color: #eb5f34;
+			}
+
+			.jrOgm_ct>button:first-of-type>span {
+				color: #fff;
+			}
+
+			.xqbmL_ct {
+				width: 255px;
+				background-color: #fff;
+			}
+
+			.xqbmL_ct>ul {
+				margin: 5px;
+				border: 1px solid #e2e2e2;
+			}
+
+			.xqbmL_ct>ul>li {
+				width: 233px;
+				height: 98px;
+				margin: 0 auto;
+				border-bottom: 1px dashed #e2e2e2;
+				cursor: pointer;
+			}
+
+			.xqbmL_ct>ul>li:first-of-type {
+				width: 100%;
+				height: 40px;
+				background-color: #f1f1f1;
+				border-bottom: 1px solid #e2e2e2;
+				text-align: center;
+				font-size: 15px;
+				color: #333333;
+				line-height: 40px;
+			}
+
+			.xqbmL_ct>ul>li:last-of-type {
+				border: none;
+			}
+
+			.xssp_ct>li {}
+
+			.xsspimg_ct {
+				width: 70px;
+				height: 70px;
+				border: 1px solid #e2e2e2;
+				margin: 0 6px 0 3px;
+			}
+
+			.xssptxt_ct {
+				width: 150px;
+				height: 70px;
+				font-size: 12px;
+				padding: 6px 0;
+			}
+
+			.xssptxt_ct>p {
+				word-wrap: break-word;
+			}
+
+			.xssptxt_ct>p:last-of-type {
+				margin-top: 10px;
+				color: #ee0913;
+			}
+
+			.xssptxt_ct>p>span {
+				color: #ee0913;
+			}
+
+			.xqbmR_ct {
+				background-color: #fff;
+				padding: 4px;
+			}
+
+			.xqconbom_ct {
+				align-items: flex-start;
+			}
+
+			.scjs_ct {
+				height: 40px;
+				line-height: 40px;
+				font-size: 12px;
+			}
+
+			.scjs_ct>div:first-of-type {
+				width: 106px;
+				border: #e2e2e2 solid 1px;
+				text-align: center;
+				border-bottom: none;
+			}
+
+			.scjs_ct>div:last-of-type {
+				background-color: #f1f1f1;
+				border: #e2e2e2 solid 1px;
+				width: 825px;
+			}
+
+			.spjxxx_ct {
+				width: 890px;
+				height: 85px;
+				border-bottom: #e2e2e2 dashed 1px;
+				font-size: 12px;
+				padding-top: 42px;
+				box-sizing: border-box;
+				margin: 0 auto;
+			}
+
+			.spjxxx_ct>div:nth-child(2) {
+				margin: 0 113px 0 88px;
+			}
+
+			u {
+				color: #1b81ff;
+				cursor: pointer;
+			}
+
+			.cps_ct {
+				cursor: pointer;
+			}
+
+			.cptd_ct {
+				width: 890px;
+				margin: 0 auto;
+				font-size: 12px;
+				color: #666666;
+			}
+
+			.cptd_ct>p {
+				width: 640px;
+				word-wrap: break-word;
+			}
+
+			.cptd_ct>p:first-of-type {
+				margin: 34px 0 14px 0;
+			}
+
+			.cptd_ct>p:last-of-type {
+				margin-bottom: 33px;
+			}
+
+			.cptdimg_ct {
+				margin-left: 5px;
+				width: width: 875px;
+			}
+
+			.cptdimg_ct img {
+				max-width: 875px;
+				margin-bottom: 10px;
+			}
+
+			display: block;
+
+			.cptdimg_ct img:last-of-type {
+				margin-bottom: 45px;
+			}
+
+			.zffs_ct {
+				height: 60px;
+				margin-left: 17px;
+			}
+
+			.zffs_ct>div {
+				margin: 0 12px 0 11px;
+			}
+
+			.zffs_ct img {
+				max-width: 16px;
+				max-height: 14px;
+				margin-right: 5px;
+			}
+
+			.swiper-container {
+				width: 294px;
+				height: 100%;
+				padding: 0 2px;
+			}
+			.swiper-button-prev{
+				top: 38px;
+				left: 0;
+			}
+			.swiper-button-next{
+				top: 38px;
+				right: 0;
+			}
+			.swiperSlideAtve{
+				border: 1px solid red;
+			}
+			.swiper-button-disabled{
+				opacity: 1 !important;cursor:pointer !important;pointer-events:auto !important;
+				
+			}
+		</style>
+
+	</head>
+	<body>
+	
+		<div class="w100" style="height: 187px;">
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+		
+		
+			<!-- header -->
+		
+			<include src="./common/header_header.html"></include>
+		</div>
+		<!-- 中间内容部分 -->
+		<div id="xqyCot_ct">
+			<div class="w1200">
+				<div class="smallNav_ct flex">
+					<a href="index.html" class="c0">首页</a>
+					<img src="img/jiantou.jpg" alt="">
+					<a href="cjcg.html?header_cur=1">场景采购</a>
+					<img src="img/jiantou.jpg" alt="">
+					<a href="" class="snActive_ct">绥化不锈钢阀门厂家-din15不锈钢</a>
+				</div>
+				<div class="flex xqnt_ct">
+					<div class="lunbobox_ct">
+						<div class="bigImg flex bg_div">
+							<!-- <img :src="tpimg"> -->
+							<div :style="'background-image: url('+tpimg+');'"></div>
+						</div>
+						<div class="leri_ct">
+							<div class="swiper-container">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide flex aic ju_c bg_div"
+									v-for="item,index in swiperImg"
+									@click="swiperact=index"
+									:class="{swiperSlideAtve:swiperact == index}">
+										<!-- <img :src="item"> -->
+										<!-- <div class="bg_div"> -->
+											<div :style="'background-image: url('+item+');'"></div>
+										<!-- </div> -->
+									</div>
+								</div>
+							</div>
+							<div class="swiper-button-prev" @click="aaaa"></div>
+							<div class="swiper-button-next" @click="bbbb"></div>
+						</div>
+					</div>
+					<div class="lbribox_ct">
+						<div class="lbrtit_ct flex">
+							<h6>绥化不锈钢阀门厂家-din15不锈钢</h6>
+							<div class="flex aic">
+								<img src="img/qnhz_sc.jpg">
+								<span>收藏</span>
+							</div>
+						</div>
+						<div class="lbrbgh_ct flex">
+							<div class="bghL_ct flex">
+								<div class="bgjtxt_ct flex">
+									<div class="w60tit bottxt_ct">
+										<span>价</span><span>格:</span>
+									</div>
+									<p>￥<span class="f_s18">1222.00</span><span>/个</span></p>
+								</div>
+								<div class="bgjtxt_ct flex">
+									<div class="w60tit">
+										<span>优</span><span>惠</span><span>券:</span>
+									</div>
+									<p class="p_L_ct"><span class="cps_ct">登录</span>查看可用优惠券</p>
+								</div>
+							</div>
+							<div class="bghR_ct flex aic ju_c">
+								<div class="bgimgb_ct flex ju_c aic">
+									<img src="img/lylimg.jpg">
+								</div>
+								<p>品牌 : LYL/蓝月亮</p>
+							</div>
+						</div>
+						<div class="ppxx_ct flex">
+							<div class="flex">
+								<div class="w60tit">
+									<span>品</span><span>牌</span><span>名</span><span>称:</span>
+								</div>
+								<p><u>LYL/首钢牌</u></p>
+							</div>
+							<div class="flex">
+								<div class="w60tit">
+									<span>最</span><span>少</span><span>起</span><span>订</span><span>量:</span>
+								</div>
+								<p>1台</p>
+							</div>
+							<div class="flex">
+								<div class="w60tit">
+									<span>件</span><span>数</span><span>数</span><span>量:</span>
+								</div>
+								<p>1台/件</p>
+							</div>
+							<div class="flex">
+								<div class="w60tit">
+									<span>商</span><span>品</span><span>编</span><span>码:</span>
+								</div>
+								<p>6925252121</p>
+							</div>
+							<div class="flex">
+								<div class="w60tit">
+									<span>商</span><span>家</span><span>信</span><span>息:</span>
+								</div>
+								<p>北京筑采管家有限公司</p>
+							</div>
+						</div>
+						<div class="ggb_ct flex ju_b">
+							<div class="ggtxt_ct">
+								<div class="flex">
+									<div class="w60tit">
+										<span>规</span><span>格:</span>
+									</div>
+								</div>
+							</div>
+							<div class="ggsB_ct flex">
+								<div v-for="item,index in 8" :key="index" class="ggs_ct cps_ct"
+									@click="ggActive = index" :class="{bder_ct:ggActive==index}">
+									<span>3A/0.45KW</span>
+									<img v-show="ggActive==index" src="img/xzxz_ct.jpg" alt="">
+								</div>
+							</div>
+						</div>
+						<div class="jrOgm_ct flex aic">
+							<div class="slnum_ct flex aic">
+								<button class="cps_ct" @click="shopNum<=0?shopNum=0:shopNum--">-</button>
+								<input type="text" v-model="shopNum">
+								<button class="cps_ct" @click="shopNum++">+</button>
+							</div>
+							<button class="flex cps_ct">
+								<img src="img/jrgwc.jpg" alt="">
+								<span>加入购物车</span>
+							</button>
+							<button class="flex cps_ct" onclick="jump('./tjdd.html')">
+								<img src="img/ljgm.jpg" alt="">
+								<span>立即购买</span>
+							</button>
+						</div>
+						<div class="zffs_ct flex aic">
+							<span>支付方式 : </span>
+							<div class="flex aic">
+								<img src="img/zffswx.jpg" alt="">
+								<span>微&nbsp;&nbsp;&nbsp;&nbsp;信</span>
+							</div>
+							<div class="flex aic">
+								<img src="img/zffsk.jpg" alt="">
+								<span>银行转账</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="xqconbom_ct flex">
+					<div class="xqbmL_ct">
+						<ul class="xssp_ct">
+							<li>相似商品</li>
+							<li class="flex aic" v-for="item in 5">
+								<div class="xsspimg_ct flex aic ju_c">
+									<img src="img/lunbo03.jpg" alt="">
+								</div>
+								<div class="xssptxt_ct">
+									<p>
+										绥化<span>不锈钢</span>阀门厂家-id
+										n15不锈钢
+									</p>
+									<p>￥32.00元</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="xqbmR_ct">
+						<div class="scjs_ct flex">
+							<div>商城介绍</div>
+							<div></div>
+						</div>
+						<div class="spjxxx_ct flex">
+							<div>品牌名称 : <u>LYL/首钢牌</u></div>
+							<div>件数数量 : 1台/件</div>
+							<div>净 含 量 : 1KG</div>
+						</div>
+						<div class="cptd_ct">
+							<p>产品特点 : </p>
+							<p>·规格 : 盘形，有孔，不锈钢质外壳</p>
+							<p>·磁体材料 : 影铁HF，最高工作温度220℃</p>
+							<p>
+								·特征及应用 : 固定磁体50.45是一种屏蔽磁性系统。由于不锈钢外壳导磁性较低，其附着力低
+								于钢制外壳中磁体。为保证磁性属性(附着力)不受影响，固定螺钉必须为非磁性材料。
+							</p>
+							<div class="cptdimg_ct">
+								<img src="img/index_banner_03.jpg" v-for="item in 3">
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<include src="./common/footer_f.html"></include>
+		<include src="./common/footer.html"></include>
+		<script type="text/javascript">
+			var mySwiper
+			var app = new Vue({
+				el: '#xqyCot_ct',
+				data: {
+					swiperact: 0,
+					shopNum: 0,
+					ggActive: null,
+					swiperImg: [
+						'./img/cjcg_img_05.jpg','./img/cjcg_img_07.jpg','./img/cjcg_img_03.jpg',
+						'./img/cjcg_img_05.jpg','./img/cjcg_img_07.jpg','./img/cjcg_img_03.jpg',
+						'./img/cjcg_img_05.jpg','./img/cjcg_img_07.jpg','./img/cjcg_img_03.jpg',
+					]
+				},
+				created: function() {
+					
+				},
+				computed:{
+					tpimg(){
+						let url = 'img/lunbo01.jpg'
+						url = this.swiperImg[this.swiperact]
+						return url
+					}
+				},
+				mounted:function(){
+					mySwiper = new Swiper('.swiper-container', {
+						slideToClickedSlide: true,
+						autoplay: false, //可选选项，自动滑动
+						slidesPerView : 4,
+						spaceBetween : 4,
+						centeredSlides : false,
+						navigation: {
+						      nextEl: '.swiper-button-next',
+						      prevEl: '.swiper-button-prev',
+							  
+						    },
+					})
+				},
+				methods: {
+					aaaa(){
+						if(this.swiperact>0){
+							this.swiperact -= 1
+						}
+					},
+					bbbb(){
+						if(this.swiperact<this.swiperImg.length-1){
+							this.swiperact += 1
+						}
+					}
+				}
+			})
+		</script>
+
+	</body>
+</html>

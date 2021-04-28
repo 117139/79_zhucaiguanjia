@@ -1,0 +1,359 @@
+<div  id="myyjfk" class="w100">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-yijianfankui"></i>意见反馈
+		</div>
+		<div v-if="yjfk_fabu==true" class="yjfk_back" @click="yjfk_fabu=false">返回上一级</div>
+	</div>
+	<div v-if="yjfk_fabu==false" class="w100">
+		<div class="my_r_tit dis_flex ais">
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==0?'cur':''" @click="tab_yjfk_fuc(0)">全部反馈</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==1?'cur':''" @click="tab_yjfk_fuc(1)">已接收</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==2?'cur':''" @click="tab_yjfk_fuc(2)">已回复</div>
+		</div>
+		<form>
+			<div class="my_search dis_flex aic">
+				<div class="yjfk_xz_name">问题类型：</div>
+				<select class="yjfk_wt_list" @change="yjfk_wenti" v-model="wenti_list_id">
+					<option v-for="(item,index) in wenti_list" :value="item.id">{{item.name}}</option>
+				</select>
+				<div class="yjfk_xz_name">状态：</div>
+				<select class="yjfk_wt_list" @change="yjfk_status" v-model="status_list_id">
+					<option v-for="(item,index) in status_list" :value="item.id">{{item.name}}</option>
+				</select>
+				<div class="yjfk_xz_name">文字描述：</div>
+				<input class="yjfk_wt_list" type="text" placeholder="请输入文字描述" v-model="yjfk_text" />
+				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c">搜索</div>
+				<div class="my_search_btn my_search_btn2 dis_flex aic ju_c">重置</div>
+			</div>
+			
+			<div class="order_li_box">
+				<table class=" order_table">
+					<thead class="yjfk_table_tit">
+						<tr>
+							<td>序号</td>
+							<td>反馈编号</td>
+							<td>问题类型</td>
+							<td>文字描述</td>
+							<td>图片描述</td>
+							<td>状态</td>
+							<td>接受时间</td>
+							<td>客服回复</td>
+							<td>回复时间</td
+						</tr>
+					</thead>
+					<tbody class="yjfk_table_body">
+						<tr v-for="(item,index) in yjfk_list">
+							<td>{{index+1}}</td>
+							<td>210521050{{index+1}}</td>
+							<td>功能问题</td>
+							<td>这是一点描述</td>
+							<td>
+								<div class="dis_flex fww yjfk_imgs">
+									<div class="bg_div" v-for="(item1,index1) in 9">
+										<div style="background-image: url(./img/cjcg_img_05.jpg);"></div>
+									</div>
+								</div>
+							</td>
+							<td>状态</td>
+							<td>2105.02.03</td>
+							<td>
+								<div style="max-width: 150px;">这是一段回复</div></td>
+							<td>2020.03.02</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="dis_flex_c aic ju_c yjfk_null_box">
+					<div class="yjfk_null bg_div">
+						<div style="background-image: url(./img/yjfk_null.png);"></div>
+					</div>
+					<div>您还没有提交意见反馈</div>
+					<div @click="yjfk_fabu=true" class="go_yjfk_btn dis_flex aic ju_c">意见反馈</div>
+				</div>
+				
+			</div>
+			
+			<div class="list_page tac dis_flex">
+				<!-- <div class="flex_1"></div>
+					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
+				<div class="flex_1"></div> -->
+				<div class="m-style M-box2"></div>
+			</div>
+		</form>
+	</div>
+	<div v-else class="w100">
+		<div class="fabu_yjfk_box">
+			<div class="yjfk_fb_tit">1.建议类型(必选）</div>
+			<div class="dis_flex fww">
+				<div v-if="index>0" class="from_dx_box dis_flex aic" :class="fb_type==index?'cur':''" v-for="(item,index) in wenti_list" @click="fb_type=index">
+					<span></span>{{item.name}}
+				</div>
+			</div>
+			<div class="yjfk_fb_tit  yjfk_fb_jg">1.文字说明(必选）</div>
+			<div class="fb_content">
+				<textarea  v-model="fb_content"></textarea>
+			</div>
+			<div class="yjfk_fb_tit  yjfk_fb_jg">3.图片说明(选填）</div>
+			<div class="dis_flex fww w100">
+				<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
+					<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
+					<div :style="'background-image: url('+item+');'"></div>
+				</div>
+				<div class="up_img" v-if="yjfk_img.length<9">
+					<img src="./img/upimg_03.jpg" alt="">
+					<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
+					<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+				</div>
+			</div>
+			<div class="dis_flex aic yjfk_fb_user">
+				<div class="yjfk_fb_user_l"><span style="color: #EB5F33;">*</span>您的称呼</div>
+				<input type="text" placeholder="请输入您的姓名" v-model="yjfk_fb_user">
+			</div>
+			<div class="dis_flex aic yjfk_fb_user">
+				<div class="yjfk_fb_user_l"><span style="color: #EB5F33;">*</span>手机号</div>
+				<input type="number" placeholder="请输入您的手机号" v-model="yjfk_fb_tel">
+			</div>
+			<div class="yjfk_fb_sub dis_flex aic ju_c" @click="yjfk_fb_fuc">提交申请</div>
+		</div>
+	</div>	
+</div>
+	
+	
+<script>
+	console.log(111)
+	// 意见反馈
+	
+	$(function(){
+		//此处演示关闭
+		setTimeout(function(){
+		  layer.closeAll('loading');
+		}, 300);
+		
+		
+		
+		// $('.M-box2').pagination({
+		// 		totalData:100,
+		// 		showData:10,
+		// 		coping: true,
+		// 		// mode: 'fixed',
+		// 		// homePage: '首页',
+		// 		// endPage: '末页',
+		// 		prevContent: '上页',
+		// 		nextContent: '下页',
+		// 		callback: function (api) {
+		// 			//console.log(api.getCurrent())
+		// 			var page=api.getCurrent()
+		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
+		// 		}
+		// }); 
+		
+		
+	})
+	
+	var vm_myyjfk = new Vue({
+			el: '#myyjfk',
+			data: {
+			
+				tab_yjfk_id:0,
+				wenti_list:[
+					{
+						name:'请选择',
+						id:''
+					},
+					{
+						name:'功能问题',
+						id:1
+					},
+					{
+						name:'商品问题',
+						id:2
+					},
+					{
+						name:'物流问题',
+						id:3
+					},
+					{
+						name:'服务问题',
+						id:4
+					},
+					{
+						name:'其他问题',
+						id:5
+					},
+				],
+				wenti_list_id:'',
+				status_list:[
+					
+					{
+						name:'请选择',
+						id:''
+					},
+					{
+						name:'已接收',
+						id:1
+					},
+					{
+						name:'以回复',
+						id:2
+					},
+				],
+				status_list_id:'',
+				yjfk_text:'',
+				yjfk_list:[1,1,1,],
+				yjfk_fabu:false,
+				fb_type:1,
+				fb_content:'',
+				yjfk_img:[],
+				yjfk_fb_user:'',
+				yjfk_fb_tel:''
+			},
+			created: function() {
+				console.log('vm_myyjfk')
+			
+			},
+			methods: {
+				yjfk_fb_fuc:function(e){
+					var _this=this
+					if(!_this.fb_content){
+						layer.msg('请输入文字说明')
+						return
+					}
+					if(!_this.yjfk_fb_user){
+						layer.msg('请输入您的姓名')
+						return
+					}
+					if(!_this.yjfk_fb_tel){
+						layer.msg('请输入您的手机号')
+						return
+					}
+					if (_this.yjfk_fb_tel == '' || !(/^1\d{10}$/.test(_this.yjfk_fb_tel))) {
+						layer.msg('手机号有误')
+						return
+					}
+					var datas={
+						fb_content:_this.fb_content,
+						yjfk_fb_user:_this.yjfk_fb_user,
+						yjfk_img:_this.yjfk_img.join(','),
+						yjfk_fb_tel:_this.yjfk_fb_tel,
+					}
+					console.log(datas)
+					layer.msg('操作成功')
+				},
+				uploadImg:function(file){
+					var  _this=this
+					var reader = new FileReader();
+					reader.readAsDataURL(file.target.files[0]); // 读出 base64
+					reader.onloadend = function () {
+					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
+					     var dataURL = reader.result;//base64
+					     // 显示图片
+					     // $('#showImg').attr('src',dataURL);
+							 _this.yjfk_img.push(dataURL)
+							 
+							
+					};
+					return
+					var fd=new FormData()
+					fd.append('file',file)
+					// var datas={
+					// 	file:file
+					// }
+					console.log(file)
+					$.ajax({
+						type: "POST",
+						url: IPurl+'/Base/upload',
+						data: fd,
+						async:false,
+						cache: true,
+						processData: false,
+						contentType: false,//不去设置Content-Type请求头
+						success: function(res) {
+							// console.log(res);
+							if(typeof(res)=='string'){
+								res=JSON.parse(res)
+							}
+							if (res.error == 0) {
+							console.log(res)
+								layer.msg('上传成功')
+							} else {
+								layer.msg('获取数据失败')
+							}
+					
+						},
+						error: function(err) {
+							layer.msg('获取数据失败')
+							console.log(err)
+						}
+					})
+					
+				},
+				getint_img:function(e){
+					var _this=this
+					// 检查是否是图片
+					// var filePath = $(this).val()
+					// console.log(e.target.files[0])
+					// var fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();//获取文件后缀名
+					// //检查后缀名
+					// if( !fileFormat.match(/.png|.jpg|.jpeg/) ) {
+					//       layer.msg('文件格式必须为：png/jpg/jpeg');
+					//       return;  
+					// }
+					// console.log(e.target.files[0])
+					//获取并记录图片的base64编码
+					var reader = new FileReader();
+					reader.readAsDataURL(e.target.files[0]); // 读出 base64
+					reader.onloadend = function () {
+					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
+					     var dataURL = reader.result;//base64
+					     // 显示图片
+					     // $('#showImg').attr('src',dataURL);
+							 _this.yjfk_img.push(dataURL)
+							 var datas={
+							 	flie:dataURL
+							 }
+							 _post('/Base/upload',datas,function(){
+								 if(typeof(res)=='string'){
+								 	res=JSON.parse(res)
+								 }
+								 if (res.error == 0) {
+								 console.log(res)
+								 	layer.msg('上传成功')
+								 } else {
+								 	layer.msg('获取数据失败')
+								 }
+							 },function(err){
+								 layer.msg('获取数据失败')
+								 console.log(err)
+							 })
+							
+					};
+				},
+				up_img_del:function(index){
+					var _this=this
+					layer.confirm('是否删除该图片？', {
+					  btn: ['确定','取消'] //按钮
+					}, function(){
+					  layer.msg('操作成功');
+						_this.yjfk_img.splice(index, 1)
+					}, function(){
+					  
+					});
+					
+				},
+				yjfk_wenti:function(e){
+				  console.log(e); //得到select原始DOM对象
+				  console.log(vm_myyjfk.wenti_list_id); //得到select原始DOM对象
+					return
+					
+				  console.log(data.value); //得到被选中的值
+					vm_myyjfk.wenti_list_id=data.value
+					
+				},
+				tab_yjfk_fuc:function(item) {
+					console.log(item)
+					this.tab_yjfk_id=item
+				}
+				
+			}
+		})
+</script>

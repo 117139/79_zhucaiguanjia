@@ -20,15 +20,19 @@
 	<body>
 		<div  class="">
 			<!-- header -->
-			<div class="header_top">
-				<include src="./common/header.html"></include>
-				 <!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			<div class="w100" style="height: 187px;">
+				<div class="header_top">
+					<include src="./common/header.html"></include>
+					<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+				</div>
+				<include src="./common/header1.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+				<!-- header -->
+			
+				<include src="./common/header_header.html"></include>
 			</div>
-			<include src="./common/header1.html"></include>
-			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
-			
-			
-			<include src="./common/header_header.html"></include>
 			<div v-cloak id="body" class="html_main" style="padding-top: 4px;">
 				<div class="w1200 dis_flex ais">
 					<div class="main_L   flex_0">
@@ -63,7 +67,7 @@
 							<div class="dis_flex aib"><span>圈内合作</span>筑采为您服务</div>
 						</div>
 						<div class="dis_flex aic ju_b">
-							<a href="" class="hz_type bg_div">
+							<a href="qnhz.html?header_cur=2" class="hz_type bg_div">
 								<div class="hz_type_1" style="background-image: url(img/qnhz_bg_15.jpg);">
 									<div class="hz_type_tit">
 										<span>我是服务方</span>筑采管家，为您提供更多资源放心找人，找合作，找项目
@@ -88,7 +92,7 @@
 									</div>
 								</div>
 							</a>
-							<a href="" class="hz_type bg_div">
+							<a href="qnhz.html?header_cur=2" class="hz_type bg_div">
 								<div class="hz_type_1" style="background-image: url(img/qnhz_bg_15.jpg);">
 									<div class="hz_type_tit">
 										<span>我是需求方</span>筑采管家，为您提供优质合作伙伴
@@ -119,10 +123,10 @@
 						<div class="i_qnhz">
 							<div class="i_qnhz_tit dis_flex aic ju_b">
 								<div class="dis_flex aib"><span>场景采购</span>产品拥有场景</div>
-								<a href="" class="dis_flex aic c6">更多场景<i class="iconfont icon-gengduo1"></i></a>
+								<a href="cjcg.html?header_cur=1" class="dis_flex aic c6">更多场景<i class="iconfont icon-gengduo1"></i></a>
 							</div>
 							<div class="dis_flex aic ju_b">
-								<a href="" class="cjcg_li bg_div bg_div_hover" v-for="(item,index) in cjcg">
+								<a href="cjcg.html?header_cur=1" class="cjcg_li bg_div bg_div_hover" v-for="(item,index) in cjcg">
 									<div :style="'background-image: url('+item.img+ ');'">
 										<div class="cjcg_tit">{{item.title}}</div>
 									</div>

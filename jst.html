@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			/* *,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;color: #000000;} */
+			*,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;}
+			.cp_ct{
+				cursor: pointer;
+			}
+			#jstCot_ct{
+				background-color: #f7f7f7;
+				overflow: hidden;
+				padding-bottom: 32px;
+			}
+			.gwcbz_ct{
+				margin: 14px auto;
+				height: 92px;
+				margin-bottom: 6px;
+			}
+			.bzl_ct{
+				width: 115px;
+				height: 100%;
+				background-color: #f2f2f2; 
+				text-align: center;
+				line-height: 92px;
+				font-size: 12px;
+				font-weight: bold;
+			}
+			.bzr_ct{
+				width: calc(100% - 115px);
+				height: 100%;
+				background-color: #fff;
+			}
+			.mbxbf_ct{
+				width: 376px;
+				height: 48px;
+				flex-direction: column;
+				margin-left: 70px;
+			}
+			.mbxtxt_ct{
+				width: 376px;
+				font-size: 12px;
+				margin-top: 13px;
+			}
+			.mbxbf_ct img{
+				max-width: 342px;
+				max-height: 23px;
+			}
+			.jstcont_ct{
+				background: #FFFFFF;
+				padding-bottom: 130px;
+			}
+			.jstH_ct{
+				height: 120px;
+			}
+			.jsthtimg_ct{
+				width: 54px;
+				height: 46px;
+				margin: 0 18px 0 30px;
+			}
+			.jsthtimg_ct img{
+				max-width: 54px;
+				max-height: 46px;
+			}
+			.jstht_ct{
+				flex-direction: column;
+			}
+			.jstht_ct>span:first-of-type{
+				font-size: 26px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.jstht_ct>span:last-of-type{
+				font-size: 12px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.jstjyh_ct{
+				padding: 0 31px 0 39px;
+			}
+			.jstjyh_ct>span{
+				font-size: 12px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.jstjyh_ct>div>span:first-of-type{
+				font-size: 12px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.jstjyh_ct>div>span:last-of-type{
+				font-size: 20px;
+				font-weight: 400;
+				color: #FF7B7B;
+			}
+			.zffs_ct{
+				margin-top: 16px;
+				padding: 0 31px 0 39px;
+			}
+			.zffs_ct>h6{
+				font-size: 16px;
+				color: #333333;
+			}
+			.zffscon_ct{
+				margin-top: 10px;
+				border: 1px dashed #E5E5E5;
+			}
+			.zffscon_ct>ul{
+				width: 370px;
+				background: #F2F2F2;
+				flex-shrink: 0;
+			}
+			.zffscon_ct>ul>li{
+				height: 62px;
+			}
+			.activeli{
+				background-color: #fff;
+			}
+			.zffscon_ct>ul>li img{
+				max-width: 36px;
+				max-height: 33px;
+				margin: 0 12px;
+			}
+			.zffscon_ct>ul>li span{
+				font-size: 16px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.zfxsnr_ct{
+				padding: 28px 0 20px 0;
+			}
+			.zfnrl_ct{
+				flex-direction: column;
+				margin: 0 52px 0 220px;
+			}
+			.zfnrl_ct>div{
+				width: 173px;
+				height: 173px;
+				border: 1px solid #4AAF1A;
+				margin-bottom: 27px;
+			}
+			.zfnrl_ct>div img{
+				max-width: 150px;
+				max-height: 150px;
+			}
+			.zfnrl_ct span{
+				font-size: 16px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.zfnrr_ct{
+				width: 276px;
+				min-height: 167px;
+				border-left: 1px #999999 dashed;
+				flex-direction: column;
+			}
+			.zfnrr_ct>span{
+				font-size: 16px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.zfnrr_ct>div{
+				font-size: 16px;
+				font-weight: 400;
+				color: #333333;
+				margin-top: 10px;
+			}
+			.zfnrr_ct>div span{
+				font-size: 36px;
+				font-weight: 400;
+				color: #FF5E5E;
+			}
+			.zfxsnr2_ct{
+				padding: 28px 0 17px 0;
+			}
+			.uhkzfl_ct{
+				margin-left: 23px;
+				flex-shrink: 0;
+			}
+			.uhkzfl_ct>span{
+				font-size: 14px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.uhkzfl_ct table{
+				margin: 15px 0 0 3px;
+			}
+			.uhkzfl_ct tr{
+				height: 42px;
+				font-size: 12px;
+				font-weight: 400;
+				color: #333333;
+				text-align: left;
+			}
+			.uhkzfl_ct tr>td:first-of-type{
+				width: 89px;
+				padding: 0 10px;
+			}
+			.uhkzfl_ct tr>td:last-of-type{
+				width: 250px;
+				padding: 0 20px;
+			}
+			.uhkzfr_ct{
+				border-left: 1px dashed #999999;
+				margin-left: 28px;
+				flex-direction: column;
+				padding-left: 22px;
+			}
+			.uhkzfr_ct>span:first-of-type{
+				font-size: 14px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.uhkzfr_ct>span:last-of-type{
+				font-size: 12px;
+				font-weight: 400;
+				color: #333333;
+			}
+			.uhkzfr_ct>div{
+				margin-top: 20px;
+				flex-wrap: wrap;
+			}
+			.uhkzfr_ct>div>div{
+				width: 98px;
+				height: 98px;
+				margin: 0 20px 20px 0;
+			}
+			.uhkzfr_ct>div>div>img{
+				max-width: 98px;
+				max-height: 98px;
+			}
+			.uhkzfr_ct>button{
+				width: 142px;
+				height: 43px;
+				background: #EB5F34;
+				border-radius: 4px;
+				font-size: 14px;
+				font-weight: 400;
+				color: #FFFFFF;
+				border: none;
+				margin-top: 87px;
+			}
+			
+			
+			
+			
+			
+			
+			
+		</style> 
+		
+	</head>
+	<body>
+		<div class="w100" style="height: 187px;">
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+		
+		
+			<!-- header -->
+		
+			<include src="./common/header_header.html"></include>
+		</div>
+		
+		<!-- 中间内容部分 -->
+		<div id="jstCot_ct">
+			
+			<div class="w1200 gwcbz_ct flex aic">
+				<div class="bzl_ct">订单确认页</div>
+				<div class="bzr_ct flex aic">
+					 <div class="mbxbf_ct flex aic">
+						 <img src="img/jstnvaimg.png" >
+						 <div class="mbxtxt_ct flex ju_b">
+							 <div>加入采购单</div>
+							 <span>填写核对订单信息</span>
+							 <div>支付订单</div>
+						 </div>
+					 </div>
+				</div>
+			</div>
+			<div class="jstcont_ct w1200">
+				<div class="jstH_ct flex aic">
+					<div class="jsthtimg_ct flex aic ju_c">
+						<img src="img/jstlogo.png" alt="">
+					</div>
+					<div class="jstht_ct flex">
+						<span>结算台</span>
+						<span>您正在使用筑采结算台</span>
+					</div>
+				</div>
+				<div class="jstjyh_ct flex ju_b aife">
+					<span>交易号 : 2020121021021020202</span>
+					<div>
+						<span>应付金额 : </span>
+						<span>￥500</span>
+					</div>
+				</div>
+				<div class="zffs_ct">
+					<h6>支付方式</h6>
+					<div class="zffscon_ct flex">
+						<ul>
+							<li class="cp_ct flex aic"
+							@click="zffs='wx'"
+							:class="{activeli: zffs=='wx'}">
+								<img src="img/jstwxtb1.png" v-show="zffs=='wx'">
+								<img src="img/jstwxtb.png" v-show="zffs!=='wx'">
+								<span>微信扫码</span>
+							</li>
+							<li class="cp_ct flex aic"
+							@click="zffs='yhk'"
+							:class="{activeli:zffs=='yhk'}">
+								<img src="img/jstyhktb1.png" v-show="zffs=='yhk'">
+								<img src="img/jstyhktb.png" v-show="zffs!=='yhk'">
+								<span>银行转账</span>
+							</li>
+						</ul>
+						<div class="zfxsnr_ct flex aic" v-show="zffs=='wx'">
+							<div class="zfnrl_ct flex aic">
+								<div class="flex aic ju_c">
+									<img src="img/jstewm.png" >
+								</div>
+								<span>请打开支付宝扫描上方二维码</span>
+							</div>
+							<div class="zfnrr_ct flex aic ju_c">
+								<span>应付金额</span>
+								<div>
+									<span>8500</span>元
+								</div>
+							</div>
+						</div>
+						<div class="zfxsnr2_ct flex aic" v-show="zffs=='yhk'">
+							<div class="uhkzfl_ct">
+								<span>转账银行信息：</span>
+								<table border="1" cellspacing="" cellpadding="">
+									<tr>
+										<td>户名</td>
+										<td>筑采商务有限公司</td>
+									</tr>
+									<tr>
+										<td>账户</td>
+										<td>265151285412</td>
+									</tr>
+									<tr>
+										<td>开行胡</td>
+										<td>中国银行北京分行</td>
+									</tr>
+									<tr>
+										<td>联行号</td>
+										<td>1521 1212  21212</td>
+									</tr>
+									<tr>
+										<td>订单编号：</td>
+										<td>21154632152</td>
+									</tr>
+									<tr>
+										<td>联系方式</td>
+										<td>1878254584</td>
+									</tr>
+								</table>
+							</div>
+							<div class="uhkzfr_ct flex ">
+								<span>上传凭证：</span>
+								<div class="flex">
+									<input type="file" accept="image/*" @change="getzImg(this)" style="display:none" value="" id="img_z" ref="img_z"/>
+									<div class="flex aic ju_c cp_ct" @click="zhengmian()">
+										<img src="img/hstsczj.png" id="zmz">
+									</div>
+								</div>
+								<span>注：上传银行转账还记录凭证</span>
+								<button class="cp_ct" @click="sub()">提交</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		
+			
+		</div>
+		
+		
+		<include src="./common/footer.html"></include>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#jstCot_ct',
+				data: {
+					// 支付方式
+					zffs: 'wx',
+				},
+				computed:{
+				},
+				methods: {
+					sub(){
+						layer.msg('提交成功')
+					},
+					zhengmian:function(){
+						$('#img_z').click();
+					},
+					getzImg:function(){
+					    var file = this.$refs.img_z.files[0];
+					    var reader = new FileReader();
+					    reader.readAsDataURL(file);//将文件读取为Data URL小文件   这里的小文件通常是指图像与 html 等格式的文件
+					    reader.onload = function(e){
+					        $("#zmz").attr("src",e.target.result);
+					    }
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

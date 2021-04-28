@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+		<script src="./js/layui/layui.js"></script>
+		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style>
+			.tk_btns{
+				margin-top: 50px;
+			}
+			.tk_btns div{
+				font-size: 12px;
+				color: #fff;
+				width: 59px;
+				height: 30px;
+				background: #EB5F34;
+				border-radius: 4px;
+				margin: 0 20px;
+	 cursor: pointer;
+			}
+			.tk_btns .tk_btns_d1{
+				background: #CACACA;
+			}
+			.getcode{
+				font-size: 12px;
+				color: #FFFEFE;
+				width: 80px;
+				height: 27px;
+				background: #EB5F34;
+				border-radius: 4px;
+	 cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="myzhaq" class="w100 set_list">
+			<div class="dis_flex aic set_li">
+				<div class="set_li_name">姓名：</div>
+				<input type="number" v-model="name" placeholder="请输入2-10个字的姓名" maxlength="10"/>
+			</div>
+		
+			<div class="tk_btns dis_flex aic ju_c">
+				<div class="dis_flex aic ju_c"  @click="sub">确定</div>
+				<div class="dis_flex aic ju_c tk_btns_d1" @click="quxiao">关闭</div>
+			</div>
+		</div>
+		<script>
+			// 意见反馈
+			
+			$(function(){
+				
+				
+				
+			})
+			
+			var vm_myzhaq = new Vue({
+					el: '#myzhaq',
+					data: {
+						name: '',
+						code: '',
+						yzm_type: 0,
+						yztime: 60,
+						pwd: '',
+						pwd1: '',
+					},
+					created: function() {
+						console.log('vm_myzhaq')
+					
+					},
+					methods: {
+						
+						sub:function(){
+							var that=this
+							if (!that.name) {
+								// wx.showToast({
+								// 	icon: 'none',
+								// 	title: '请输入2-10个字的姓名'
+								// })
+								layer.msg('请输入2-10个字的姓名')
+								return
+							}
+							
+							var datas = {
+								name: that.name
+								// password: that.pwd
+							}
+							// console.log(datas)
+							layer.msg('操作成功')
+							setTimeout(function(){
+								// parent.layer.close('layer_pwd');
+								parent.layer.closeAll();
+							},1000)
+						},
+						quxiao:function(){
+							parent.layer.closeAll();
+						}
+						
+					}
+				})
+		</script>
+	</body>
+</html>

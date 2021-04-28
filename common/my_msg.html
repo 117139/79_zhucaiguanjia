@@ -1,0 +1,252 @@
+<div  id="myyjfk" class="w100">
+	<div class="dis_flex aic ju_b my_r_box_tit_z">
+		<div>
+			<i class="iconfont icon-gerenxinxi"></i>编辑资料
+		</div>
+		<!-- <div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(-1)">自提地址</div> -->
+	</div>
+	<div class="dis_flex ais bb1">
+		<div class="set_my_tx dis_flex_c aic ju_c">
+			<div class="up_img set_my_tx_img dis_flex_c aic">
+				<div class="  bg_div" >
+					<div :style="'background-image: url('+yjfk_img+');'"></div>
+					<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
+					
+				</div>
+				<span @click="$('#scheaderimg').click()">点击上传/修改头像</span>
+				<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+			</div>
+			
+			<div class="set_my_tx_tel">{{get_tel(18512341879)}}</div>
+		</div>
+		<div class="bj_user_msg dis_flex_c  ju_c">
+			<div class="dis_flex aic bj_user_msg_li">
+				<div class="bj_usermsg_tit">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</div>
+				<div class="flex_1">ndmerf382614</div>
+			</div>
+			<div class="dis_flex aic bj_user_msg_li">
+				<div class="bj_usermsg_tit">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</div>
+				<div class="flex_1"></div>
+				<div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(0)">编辑</div>
+			</div>
+			<div class="dis_flex aic bj_user_msg_li">
+				<div class="bj_usermsg_tit">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</div>
+				<div class="flex_1"></div>
+				<div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(1)">编辑</div>
+			</div>
+			<div class="dis_flex aic bj_user_msg_li">
+				<div class="bj_usermsg_tit">注册手机号：</div>
+				<div class="flex_1">1786350035</div>
+				<div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(2)">修改</div>
+			</div>
+			<div class="dis_flex aic bj_user_msg_li">
+				<div class="bj_usermsg_tit">用户类型：</div>
+				<div class="flex_1">普通会员</div>
+			</div>
+			<div class="dis_flex aic bj_user_msg_li">
+				<div class="bj_usermsg_tit">账号安全级别：</div>
+				<div class="flex_1 dis_flex aic">
+					<div class="dis_flex aic zhaq_lv_img">
+						<span style="background: #71BDE1;"></span>
+						<span style="background: #569BCB;"></span>
+						<span style="background: #1471b2;"></span>
+					</div>
+					<div class="c9">一般</div>
+				</div>
+			</div>
+		</div>
+		<div class="dis_flex aic ju_a flex_1">
+			<a class="dis_flex_c aic bj_go_btn" href="">
+				<img src="./img/grzx_bj_03.jpg" alt="">
+				<span>可用优惠券<i class="iconfont icon-next-m"></i></span>
+			</a>
+			<a class="dis_flex_c aic bj_go_btn" href="?my_cur=4">
+				<img src="./img/grzx_bj_06.jpg" alt="">
+				<span>常购商品<i class="iconfont icon-next-m"></i></span>
+			</a>
+		</div>
+	</div>
+	<div class="dis_flex aic ju_b my_zh_order_list">
+		<a href="./grzx.html?my_cur=0&my_r_cur=1" class="my_zh_order_li dis_flex aic ju_b">
+			<i class="iconfont icon-daifukuan my_zh_order_li_l"></i>
+			<div class="dis_flex_c aic">
+				<div class="my_zh_order_li_num">2</div>
+				<div class="my_zh_order_li_type">待付款</div>
+			</div>
+			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
+		</a>
+		<a href="./grzx.html?my_cur=0&my_r_cur=2" class="my_zh_order_li dis_flex aic ju_b">
+			<i class="iconfont icon-daifahuo my_zh_order_li_l"></i>
+			<div class="dis_flex_c aic">
+				<div class="my_zh_order_li_num">2</div>
+				<div class="my_zh_order_li_type">待发货</div>
+			</div>
+			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
+		</a>
+		<a href="./grzx.html?my_cur=0&my_r_cur=3" class="my_zh_order_li dis_flex aic ju_b">
+			<i class="iconfont icon-daishouhuo my_zh_order_li_l"></i>
+			<div class="dis_flex_c aic">
+				<div class="my_zh_order_li_num">0</div>
+				<div class="my_zh_order_li_type">待收货</div>
+			</div>
+			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
+		</a>
+		<a href="./grzx.html?my_cur=0&my_r_cur=4" class="my_zh_order_li dis_flex aic ju_b">
+			<i class="iconfont icon-dingdan1 my_zh_order_li_l"></i>
+			<div class="dis_flex_c aic">
+				<div class="my_zh_order_li_num">0</div>
+				<div class="my_zh_order_li_type">订单成功</div>
+			</div>
+			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
+		</a>
+	</div>
+</div>
+	
+	
+<script>
+	console.log(111)
+	// 意见反馈
+	
+	$(function(){
+		//此处演示关闭
+		setTimeout(function(){
+		  layer.closeAll('loading');
+		}, 300);
+		
+		
+		
+		// $('.M-box2').pagination({
+		// 		totalData:100,
+		// 		showData:10,
+		// 		coping: true,
+		// 		// mode: 'fixed',
+		// 		// homePage: '首页',
+		// 		// endPage: '末页',
+		// 		prevContent: '上页',
+		// 		nextContent: '下页',
+		// 		callback: function (api) {
+		// 			//console.log(api.getCurrent())
+		// 			var page=api.getCurrent()
+		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
+		// 		}
+		// }); 
+		
+		
+	})
+	
+	var vm_myyjfk = new Vue({
+			el: '#myyjfk',
+			data: {
+				
+				yjfk_img:'./img/tx_03.jpg'
+			},
+			created: function() {
+				console.log('vm_myyjfk')
+			
+			},
+			methods: {
+				open_tk(num){
+					//页面层
+					if(num==-1){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '自提地址',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['720px', '520px'],
+						  content: './set_zt_address.html' //iframe的url
+						}); 
+					}else if(num==0){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '姓名编辑',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '300px'],
+						  content: './set_name.html' //iframe的url
+						}); 
+					}else if(num==1){
+						layer_tel=layer.open({
+						  type: 2,
+						  title: '邮箱编辑',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '300px'],
+						  content: './set_email.html' //iframe的url
+						}); 
+					}else{
+						layer_tel=layer.open({
+						  type: 2,
+						  title: '修改注册手机号',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['420px', '400px'],
+						  content: './set_tel_zc.html' //iframe的url
+						}); 
+					}
+					
+				},
+				get_tel:function(tel){
+					if(!tel){
+						return
+					}
+					tel = "" + tel;
+					var ary = tel.split("");
+					ary.splice(3,4,"****");
+					var tel1=ary.join("");
+					return tel1
+					console.log(tel1);
+				},
+				uploadImg:function(file){
+					var  _this=this
+					var reader = new FileReader();
+					reader.readAsDataURL(file.target.files[0]); // 读出 base64
+					reader.onloadend = function () {
+					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
+					     var dataURL = reader.result;//base64
+					     // 显示图片
+					     // $('#showImg').attr('src',dataURL);
+							 _this.yjfk_img=dataURL
+							 
+							
+					};
+					return
+					var fd=new FormData()
+					fd.append('file',file)
+					// var datas={
+					// 	file:file
+					// }
+					console.log(file)
+					$.ajax({
+						type: "POST",
+						url: IPurl+'/Base/upload',
+						data: fd,
+						async:false,
+						cache: true,
+						processData: false,
+						contentType: false,//不去设置Content-Type请求头
+						success: function(res) {
+							// console.log(res);
+							if(typeof(res)=='string'){
+								res=JSON.parse(res)
+							}
+							if (res.error == 0) {
+							console.log(res)
+								layer.msg('上传成功')
+							} else {
+								layer.msg('获取数据失败')
+							}
+					
+						},
+						error: function(err) {
+							layer.msg('获取数据失败')
+							console.log(err)
+						}
+					})
+					
+				},
+				
+				
+			}
+		})
+</script>

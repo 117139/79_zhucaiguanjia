@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style type="text/css">
+			*,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;}
+			#tjddCot_ct{
+				background-color: #f7f7f7;
+				overflow: hidden;
+				padding-bottom: 34px;
+			}
+			.gwcbz_ct{
+				margin: 14px auto;
+				height: 92px;
+				margin-bottom: 6px;
+			}
+			.bzl_ct{
+				width: 115px;
+				height: 100%;
+				background-color: #f2f2f2; 
+				text-align: center;
+				line-height: 92px;
+				font-size: 12px;
+				font-weight: bold;
+			}
+			.bzr_ct{
+				width: calc(100% - 115px);
+				height: 100%;
+				background-color: #fff;
+			}
+			.mbxbf_ct{
+				width: 376px;
+				height: 48px;
+				flex-direction: column;
+				margin-left: 70px;
+			}
+			.mbxtxt_ct{
+				width: 376px;
+				font-size: 12px;
+				margin-top: 13px;
+			}
+			.mbxbf_ct img{
+				max-width: 342px;
+				max-height: 23px;
+			}
+			.gwqdcon_ct{
+				background-color: #fff;
+				padding: 34px 11px 31px;
+			}
+			.cheadT_ct{
+				font-size: 16px;
+				color: #494949;
+			}
+			.cheadT_ct>div span{
+				color: #1079d2;
+				font-size: 12px;
+			}
+			.cheadT_ct>div span:last-of-type{
+				position: relative;
+				margin-bottom: 2px;
+			}
+			.qdbor_ct{
+				margin-top: 18px;
+				border: 1px solid #e5e5e5;
+			}
+			.qdbz_ct{
+				height: 56px;
+				border-bottom: 1px solid #e5e5e5;
+				padding-left: 19px;
+			}
+			.qdbz_ct span{
+				font-size: 12px;
+				color: #333333;
+			}
+			.qdbz_ct input{
+				padding: 0 10px;
+				font-size: 12px;
+				width: 95%;
+			}
+			.qdpsfs_ct{
+				height: 50px;
+				padding-left: 19px;
+			}
+			.qdpsfs_ct>div:first-of-type span{
+				font-size: 12px;
+				color: #333333;
+			}
+			.qdpsfs_ct>div:first-of-type button{
+				margin-left: 22px;
+				width: 106px;
+				height: 28px;
+				background-color: #fff;
+				border: 1px solid #dddddd;
+			}
+			.qdpsfs_ct>div:first-of-type .btnAct{
+				border: none;
+				background-color: #eb5f33;
+				color: #fff;
+			}
+			.qdpsfs_ct>div:last-of-type p{
+				font-size: 12px;
+			}
+			.qdpsfs_ct>div:last-of-type>p:nth-child(5){
+				margin-right: 28px;
+				color: #2d84d5;
+			}
+			.qdpsfs_ct>div:last-of-type>p:nth-child(4){
+				margin-right: 28px;
+			}
+			.qdpsfs_ct>div:last-of-type>p:nth-child(3){
+				margin-right: 24px;
+			}
+			.qdpsfs_ct>div:last-of-type>p:nth-child(2){
+				margin-right: 40px;
+				width: 95px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+			.qdpsfs_ct>div:last-of-type>p:nth-child(1){
+				margin-right: 20px;
+			}
+			.qdsptit_ct{
+				height: 44px;
+				background-color: #f5f5f5;
+				font-size: 12px;
+				padding-left: 19px; 
+			}
+			.qdsptit_ct>div{
+				color: #999999;
+			}
+			.qdsptit_ct>div:first-of-type{
+				color: #333333;
+			}
+			.qdsptit_ct>div:nth-child(2){
+				margin-left: 564px;
+			}
+			.qdsptit_ct>div:nth-child(3){
+				margin-left: 105px;
+			}
+			.qdsptit_ct>div:nth-child(4){
+				margin-left: 135px;
+			}
+			.qdsptit_ct>div:nth-child(5){
+				margin-left: 135px;
+			}
+			.spLists_ct{
+				height: 86px;
+				margin: 0 16px;
+				border-bottom: 1px solid #f2f2f2;
+			}
+			.spimg_ct{
+				width: 62px;
+				height: 62px;
+				border: 1px solid #dddddd;
+			}
+			.spimg_ct img{
+				max-width: 100%;
+				max-height: 100%;
+			}
+			.spLists_ct p{
+				font-size: 12px;
+				height: 62px;
+				color: #333333;
+				width: 120px;
+				text-align: center;
+				padding-top: 5px;
+			}
+			.spLists_ct p:nth-child(2){
+				width: 340px;
+				padding: 10px;
+				text-align: left;
+				word-break: break-all;
+			}
+			.spLists_ct p:nth-child(3){
+				text-align: left;
+				color:  #999999;
+				padding-top: 8px; 
+			}
+			.spLists_ct p:nth-child(4){
+				margin-left: 45px;
+			}
+			.spLists_ct p:nth-child(5){
+				color: #eb5f34;
+				margin-left: 9px;
+			}
+			.spLists_ct p:nth-child(6){
+				margin-left: 39px;
+			}
+			.spLists_ct p:nth-child(7){
+				margin-left: 39px;
+			}
+			.spLists_ct:last-of-type{
+				border: none;
+			}
+			.qdshdz_ct{
+				margin-top: 24px;
+			}
+			.qdshdz_ct>span{
+				font-size: 16px;
+				color: #333333;
+			}
+			.qdshdz_ct>div{
+				margin-top: 16px;
+				width: 285px;
+				height: 110px;
+			}
+			.qdshdz_ct>div img{
+				max-width: 100%;
+				height: 100%;
+			}
+			.qdzffs_ct{
+				margin-top: 25px;
+			}
+			.qdzffs_ct>span{
+				font-size: 16px;
+				color: #3333333;
+			}
+			.qdzffs_ct>div{
+				margin-top: 16px;
+			}
+			.qdzffs_ct>div button{
+				background-color: #fff;
+				border: 1px solid #dddddd;
+				width: 200px;
+				height: 42px;
+				margin-right: 12px;
+				font-size: 14px;
+				color: #333333;
+			}
+			.qdzffs_ct>div .btnfsact{
+				border-color: #ff7c00;
+				color: #ff7c00;
+			}
+			.qdfpxx_ct{
+				margin-top: 23px;
+			}
+			.qdfpxx_ct>span{
+				font-size: 16px;
+				color: #3333333;
+			}
+			.qdfpxx_ct>div{
+				border: 1px solid #e5e5e5;
+				height: 54px;
+				margin-top: 17px;
+			}
+			.qdfpxx_ct>div span{
+				font-size: 12px;
+				color: #333333;
+				padding-left: 25px;
+			}
+			.qdfpxx_ct>div span:last-of-type{
+				font-size: 12px;
+				color: #6c9ff0;
+				padding-left: 21px;
+			}
+			.qdyhj_ct{
+				margin-top: 22px;
+			}
+			.qdyhj_ct>span{
+				font-size: 16px;
+				color: #333333;
+			}
+			.qdyhj_ct>div{
+				margin-top: 22px;
+				border: 1px solid #e5e5e5;
+				padding-bottom: 24px;
+				flex-wrap: wrap;
+			}
+			.qdyhj_ct>div>div{
+				flex-wrap: wrap;
+			}
+			.qdyhj_ct>div>p{
+				font-size: 12px;
+				padding-left: 22px;
+			}
+			.qdyhj_ct>div>p span{
+				padding-right: 22px;
+				color: #ff864a;
+			}
+			.yhjimg_ct{
+				width: 240px;
+				height: 119px;
+				margin: 15px;
+				background: url(img/yhjbg.png) no-repeat;
+				position: relative;
+				border: 1px solid #fff;
+			}
+			.yhjimg_ct2{
+				background: url(img/yhjbg2.png) no-repeat;
+			}
+			.yhjL_ct{
+				width: 36px;
+				height: 100%;
+				border-right: 1px dashed #fff;
+				flex-direction: column;
+			}
+			.yhjL_ct span{
+				color: #fff;
+				font-size: 15px;
+			}
+			.yhjR_ct{
+				width: 184px;
+				margin-right: 8px;
+				height: 100%;
+				padding: 36px 8px 18px 0;
+			}
+			.yhjR_ct>div{
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				font-size: 12px;
+				color: #fff;
+			}
+			.yhjR_ct>div:first-of-type{
+				padding-bottom: 18px;
+				border-bottom: 1px solid rgba(250,250,250,0.5);
+			}
+			.yhjR_ct>div:last-of-type{
+				padding-top: 10px;
+			}
+			.yhjR_ct>div>span{
+				color: #fff;
+				font-size: 20px;
+				padding-right: 15px;
+			}
+			.yhjimg_ct2 div,.yhjimg_ct2 span,.yhjimg_ct2>.yhjR_ct>div>span{
+				color: #999999;
+			}
+			.qdtop{
+				margin-top: 24px;
+			}
+			.qdjf_ct{
+				margin-top: 24px;
+				border: 1px solid #e5e5e5;
+			}
+			.qdjf_ct span{
+				color: #ff3c3c;
+				font-size: 12px;
+			}
+			.qdjf_ct>div:first-of-type{
+				margin: 20px 0 15px 20px;
+			}
+			.qdjf_ct>div:last-of-type{
+				margin: 0 0 16px 90px;
+			}
+			.kyjf_ct{
+				height: 25px;
+				font-size: 12px;
+			}
+			.kyjf_ct>button{
+				border: 1px solid #dddddd;
+				width: 25px;
+				height: 25px;
+			}
+			.kyjf_ct>button:first-of-type{
+				margin-left: 9px;
+			}
+			.kyjf_ct>button:last-of-type{
+				margin-right: 22px;
+			}
+			.kyjf_ct>p:last-of-type{
+ 				height: 100%;
+				width: 50px;
+				border: 1px solid #dddddd;
+				text-align: center;
+				line-height: 25px;
+			}
+			.qdjs_ct{
+				text-align: right;
+				position: relative;
+				padding-right: 18px;
+				font-size: 12px;
+			}
+			.qdjs_ct span{
+				position: absolute;
+				right: 148px;
+			}
+			.qdjs_ct>p{
+				margin-top: 16px;
+			}
+			.qdjs_ct>p:nth-child(1){
+				margin-top: 25px;
+			}
+			.qdjs_ct>p:nth-child(5){
+				color: #ff8000;
+				font-size: 18px;
+				margin-top: 64px;
+			}
+			.qdjs_ct>p:nth-child(5)>span{
+				font-size: 12px;
+				bottom: 2px;
+			}
+			.gwqdcon_ct>button{
+				float: right;
+				width: 138px;
+				height: 40px;
+				margin-top: 19px;
+				background-color: #eb5f34;
+				border: none;
+				color: #fff;
+				font-size: 20px;
+			}
+			.cp_ct{
+				cursor: pointer;
+			}
+			.actyhj_ct{
+				border: 1px solid red;
+				box-sizing: border-box;
+				border-radius: 5px;
+			}
+			.qxyhj{
+				font-size: 12px;
+				position: absolute;
+				top: 0;
+				right: 0;
+				color: red;
+				background-color: rgba(250,250,250,0.5);
+				padding: 2px;
+			}
+		</style> 
+		
+	</head>
+	<body>
+		<div class="w100" style="height: 187px;">
+			<div class="header_top">
+				<include src="./common/header.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			</div>
+			<include src="./common/header1.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+		
+		
+			<!-- header -->
+		
+			<include src="./common/header_header.html"></include>
+		</div>
+		<!-- 中间内容部分 -->
+		<div id="tjddCot_ct"> 
+			<div class="w1200 gwcbz_ct flex aic">
+				<div class="bzl_ct">订单确认页</div>
+				<div class="bzr_ct flex aic">
+					 <div class="mbxbf_ct flex aic">
+						 <img src="img/ddqry.jpg" >
+						 <div class="mbxtxt_ct flex ju_b">
+							 <div>加入采购单</div>
+							 <span>填写核对订单信息</span>
+							 <div>支付订单</div>
+						 </div>
+					 </div>
+				</div>
+			</div>
+		
+			<div class="w1200 gwqdcon_ct">
+				<div class="cheadT_ct flex aic ju_b">
+					<span>购物清单</span>
+					<div class="flex aic ju_b cp_ct">
+						<span>返回修改购物清单</span>
+						<span>》</span>
+					</div>
+				</div>
+				<div class="qdbor_ct">
+					<div class="qdbz_ct flex aic">
+						<span>备注 : </span>
+						<input type="" name="" id="" value="" placeholder="备注信息事先跟客服沟通"/>
+					</div>
+					<div class="qdpsfs_ct flex aic ju_b">
+						<div>
+							<span>配送方式</span>
+							<button class="cp_ct" :class="{btnAct: psfs == 'kd'}" @click="psfs = 'kd'">快递</button>
+							<button class="cp_ct" :class="{btnAct: psfs == 'smqj'}" @click="psfs = 'smqj'">上门自取</button>
+						</div>
+						<div class="flex aic" v-show="psfs == 'smqj'">
+							<p id="parentgs">北京大兴分公司</p>
+							<p>北京市北京大兴区啊吧啊吧啊吧</p>
+							<p id="parentIframe">李逵</p>
+							<p id="parentcode">151****5555</p>
+							<p class="cp_ct" @click="open_tk(-1)">修改自提点</p>
+						</div>
+					</div>
+					<div class="qdsptit_ct flex aic">
+						<div>商品信息</div>
+						<div>数量</div>
+						<div>单价</div>
+						<div>小计</div>
+						<div>库存</div>
+					</div>
+					<div class="spLists_ct flex aic" v-for="item in 3">
+						<div class="spimg_ct flex aic ju_c"><img src="img/gwcgoods.jpg" ></div>
+						<p>绥化不锈钢阀门厂家-din15不锈钢</p>
+						<p>规格 : 3A/0.45KW</p>
+						<p>数量</p>
+						<p>单价</p>
+						<p>小计</p>
+						<p>有货</p>
+					</div>
+				</div>
+				<div class="qdshdz_ct">
+					<span>收货地址</span>
+					<div class="flex aic ju_c cp_ct">
+						<img src="img/tjdd.jpg" >
+					</div>
+				</div>
+				<div class="qdzffs_ct">
+					<span>支付方式</span>
+					<div>
+						<button type="button" class="cp_ct" :class="{btnfsact: zffs == 'zx'}" @click="zffs = 'zx'">在线支付</button>
+						<button type="button" class="cp_ct" :class="{btnfsact: zffs == 'yh'}" @click="zffs = 'yh'">银行转账</button>
+					</div>
+				</div>
+				<div class="qdfpxx_ct">
+					<span>发票信息</span>
+					<div class="flex aic">
+						<span>发票类型 : </span>
+						<span class="cp_ct">请选择</span>
+					</div>
+				</div>
+				<div class="qdyhj_ct">
+					<span>优惠券</span>
+					<div>
+						<div class="flex">
+							<div class="yhjimg_ct cp_ct flex aic ju_b"
+							v-for="item,index in 3"
+							:class="{actyhj_ct:index==yhj}"
+							@click="yhj=index">
+								<div class="yhjL_ct flex aic ju_c">
+									<span>满</span>
+									<span>减</span>
+									<span>券</span>
+								</div>
+								<div class="yhjR_ct">
+									<div><span>￥33.00</span>订单金额满30阿巴阿巴</div>
+									<div>2021.02.19-2021.03.22</div>
+								</div>
+								<div class="qxyhj" v-show="index == yhj" @click.stop="yhj=null">取消选中</div>
+							</div>
+							<div class="yhjimg_ct yhjimg_ct2 cp_ct flex aic ju_b"
+							v-for="item,index in 3">
+								<div class="yhjL_ct flex aic ju_c">
+									<span>满</span>
+									<span>减</span>
+									<span>券</span>
+								</div>
+								<div class="yhjR_ct">
+									<div><span>￥33.00</span>订单金额满30阿巴阿巴</div>
+									<div>2021.02.19-2021.03.22</div>
+								</div>
+							</div>
+						</div>
+						<p>金额抵用￥<span>75.00</span>优惠券1张</p>
+					</div>
+				</div>
+				<div class="cheadT_ct qdtop flex aic ju_b">
+					<span>积分</span>
+					<div class="flex aic ju_b">
+						<span class="cp_ct">了解什么是积分</span>
+					</div>
+				</div>
+				<div class="qdjf_ct">
+					<div class="kyjf_ct flex aic">
+						<p>共<span>0</span>积分，本次可用1000×</p>
+						<button class="cp_ct">-</button>
+						<p>0</p>
+						<button class="cp_ct">+</button>
+						<span>抵扣￥0.00</span>
+					</div>
+					<div>
+						<span>不符合积分使用规则，无可用积分</span>
+					</div>
+				</div>
+				<div class="qdjs_ct">
+					<p><span>总共3商品，商品总额 : </span>￥1143.00</p>
+					<p><span>优惠券 : </span>￥33.00</p>
+					<p><span>立减 : </span>￥0.00</p>
+					<p><span>抵扣积分 : </span>￥0.00</p>
+					<p><span>应付金额 : </span>￥1143.00</p>
+				</div>
+				<button class="cp_ct cpointer" onclick="jump('./jst.html')">结算</button>
+				<div style="clear: both;"></div>
+			</div>
+			
+		</div>
+		
+		
+		<include src="./common/footer.html"></include>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#tjddCot_ct',
+				data: {
+					// 配送方式
+					psfs: 'kd',
+					// 支付方式
+					zffs: 'zx',
+					// 优惠券
+					yhj: null
+				},
+				computed:{
+				},
+				methods: {
+					open_tk(num){
+					     //页面层
+					     if(num==-1){
+					      layer_pwd=layer.open({
+					        type: 2,
+					        title: '自提地址',
+					        shadeClose: true,
+					        shade: 0.8,
+					        area: ['720px', '520px'],
+					        content: './set_zt_address.html' //iframe的url
+					      }); 
+					     }
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

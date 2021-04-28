@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+		<script src="./js/layui/layui.js"></script>
+		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style>
+			.tk_btns{
+				margin-top: 50px;
+			}
+			.tk_btns div{
+				font-size: 12px;
+				color: #fff;
+				width: 59px;
+				height: 30px;
+				background: #EB5F34;
+				border-radius: 4px;
+				margin: 0 20px;
+	 cursor: pointer;
+			}
+			.tk_btns .tk_btns_d1{
+				background: #CACACA;
+			}
+			.getcode{
+				font-size: 12px;
+				color: #FFFEFE;
+				width: 80px;
+				height: 27px;
+				background: #EB5F34;
+				border-radius: 4px;
+	 cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="myzhaq" class="w100 set_list">
+			<div class="dis_flex aic set_li">
+				<div class="set_li_name">原手机号码：</div>
+				<input type="number" :value="18334774129" readonly="" placeholder="请输入手机号"/>
+			</div>
+			<div class="dis_flex aic set_li">
+				<div class="set_li_name">输入验证码：</div>
+				<input class="set_li_code" type="number"v-model="code0" placeholder="请输入验证码"/>
+				<div  v-if="yzm_type0==0" class="getcode dis_flex aic ju_c" @click="getCode(0)">获取验证码</div>
+				<div v-if="yzm_type0==1" class="getcode dis_flex aic ju_c">{{yztime0}}s</div>
+			</div>
+			<div class="dis_flex aic set_li">
+				<div class="set_li_name">输入手机号：</div>
+				<input type="number" v-model="tel" placeholder="请输入手机号"/>
+			</div>
+			<div class="dis_flex aic set_li">
+				<div class="set_li_name">输入验证码：</div>
+				<input class="set_li_code" type="number"v-model="code" placeholder="请输入验证码"/>
+				<div  v-if="yzm_type==0" class="getcode dis_flex aic ju_c" @click="getCode(1)">获取验证码</div>
+				<div v-if="yzm_type==1" class="getcode dis_flex aic ju_c">{{yztime}}s</div>
+			</div>
+			<div class="dis_flex aic set_li">
+				若原手机号无法接收短信验证码，请联系客服：400-650-2828	
+			</div>
+			<!-- <div class="dis_flex aic set_li">
+				<div class="set_li_name">新密码：</div>
+				<input type="password" placeholder="请输入密码" v-model="pwd"  maxlength="46"/>
+				<div>6-46个字符，区分大小写</div>
+			</div>
+			<div class="dis_flex aic set_li">
+				<div class="set_li_name">确认新密码：</div>
+				<input type="password" placeholder="请再次输入密码" v-model="pwd1"  maxlength="46"/>
+			</div> -->
+			<div class="tk_btns dis_flex aic ju_c">
+				<div class="dis_flex aic ju_c"  @click="sub">确定</div>
+				<div class="dis_flex aic ju_c tk_btns_d1" @click="quxiao">关闭</div>
+			</div>
+		</div>
+		<script>
+			// 意见反馈
+			
+			$(function(){
+				
+				
+				
+			})
+			
+			var vm_myzhaq = new Vue({
+					el: '#myzhaq',
+					data: {
+						tel: '',
+						code: '',
+						code0: '',
+						yzm_type0: 0,
+						yztime0: 60,
+						yzm_type: 0,
+						yztime: 60,
+						pwd: '',
+						pwd1: '',
+					},
+					created: function() {
+						console.log('vm_myzhaq')
+					
+					},
+					methods: {
+						getCode:function(num) {
+							var that = this
+						
+							if(num==1){
+								if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
+									// wx.showToast({
+									// 	icon: 'none',
+									// 	title: '手机号有误'
+									// })
+									layer.msg('手机号有误')
+									return
+								}
+							}
+							if (that.btnkg == 1) {
+								return
+							} else {
+								that.btnkg = 1
+							}
+							// uni.showToast({
+							// 	icon: 'none',
+							// 	title: '发送成功'
+							// })
+							
+							layer.msg('发送成功')
+							that.codetime(num)
+							that.btnkg = 0
+							return
+							var jkurl = '/login/index'
+							var data = {
+								type:that.login_type==0?2:that.login_type==2?1:1,
+								phone: that.tel
+							}
+							service.P_post(jkurl, data).then(res => {
+								that.btnkg = 0
+								console.log(res)
+								if (res.code == 1) {
+									var datas = res.data
+									console.log(typeof datas)
+							
+									if (typeof datas == 'string') {
+										datas = JSON.parse(datas)
+									}
+							
+									uni.showToast({
+										icon: 'none',
+										title: '发送成功'
+									})
+									console.log(res)
+									// that.verification_key = res.data.data.key
+									that.codetime()
+							
+								} else {
+									if (res.msg) {
+										uni.showToast({
+											icon: 'none',
+											title: res.msg
+										})
+									} else {
+										uni.showToast({
+											icon: 'none',
+											title: '操作失败'
+										})
+									}
+								}
+							}).catch(e => {
+								that.btnkg = 0
+								console.log(e)
+								uni.showToast({
+									icon: 'none',
+									title: '操作失败'
+								})
+							})
+							
+						
+						},
+						codetime:function(num) {
+							var that = this
+							if(num==0){
+								var time0 = 60
+								var st0 = setInterval(function() {
+									if (time0 == 0) {
+										that.yzm_type0 = 0
+										clearInterval(st0);
+									} else {
+										var news0 = time0--;
+										// console.log(news)
+										that.yzm_type0 = 1
+										that.yztime0 = news0
+														
+									}
+								}, 1000);
+							}else{
+								var time = 60
+								var st = setInterval(function() {
+									if (time == 0) {
+										that.yzm_type = 0
+										clearInterval(st);
+									} else {
+										var news = time--;
+										// console.log(news)
+										that.yzm_type = 1
+										that.yztime = news
+														
+									}
+								}, 1000);
+							}
+						},
+						sub:function(){
+							var that=this
+							if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
+								layer.msg('手机号有误')
+								
+								return
+							}
+							
+							if (!that.code) {
+								layer.msg('请输入验证码')
+								
+								return;
+							}
+							// if (!that.pwd) {
+							// 	layer.msg('请输入密码')
+								
+							// 	return;
+							// }
+							// if (that.pwd.length<6) {
+							// 	layer.msg('请输入6-46个字符的密码')
+								
+							// 	return;
+							// }
+							
+							// if (!that.pwd1) {
+							// 	layer.msg('请再次输入密码')
+								
+							// 	return;
+							// }
+							// if (that.pwd != that.pwd1) {
+							// 	layer.msg('两次密码不一致')
+								
+							// 	return;
+							// }
+							
+							var datas = {
+								phone: that.tel,
+								code: that.code,
+								// password: that.pwd
+							}
+							// console.log(datas)
+							layer.msg('操作成功')
+							setTimeout(function(){
+								// parent.layer.close('layer_pwd');
+								parent.layer.closeAll();
+							},1000)
+						},
+						quxiao:function(){
+							parent.layer.closeAll();
+						}
+						
+					}
+				})
+		</script>
+	</body>
+</html>

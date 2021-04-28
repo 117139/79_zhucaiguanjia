@@ -8,12 +8,12 @@
 		<meta name="renderer" content="webkit">
 		<meta name=renderer content=webkit>
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
-		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<link rel="stylesheet" type="text/css" href="./css/public.css" />
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.min.css" />
 		<script src="./js/jquery.min.js"></script>
 		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
 		<script src="./js/layer/layer.js"></script>
-		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="./js/swiper/js/swiper4.min.js"></script>
 		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
 		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
@@ -21,14 +21,19 @@
 	</head>
 	<body>
 		<div  v-cloak id="body" class="">
-			<!-- header -->
-			<div class="header_top">
-				<include src="./common/header.html"></include>
-				 <!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+			<div class="w100" style="height: 187px;">
+				<div class="header_top">
+					<include src="./common/header.html"></include>
+					<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+				</div>
+				<include src="./common/header1.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+				<!-- header -->
+			
+				<include src="./common/header_header.html"></include>
 			</div>
-			<include src="./common/header1.html"></include>
-		
-			<include src="./common/header_header.html"></include>
 			<div class="html_main">
 				<div class="w1200">
 					<div class="xz_tit dis_flex aic ju_b">
@@ -98,20 +103,20 @@
 									<div class="dis_flex aic ">
 										<div class="cgxz_btn dis_flex aic ju_c">所有品牌</div>
 										<div class="cg_pp_list">
-											<span>A</span>
-											<span>B</span>
-											<span>C</span>
-											<span>D</span>
-											<span>E</span>
-											<span>F</span>
-											<span>G</span>
-											<span>H</span>
-											<span>I</span>
-											<span>J</span>
-											<span>K</span>
-											<span>L</span>
-											<span>M</span>
-											<span>N</span>
+											<span class="cpointer">A</span>
+											<span class="cpointer">B</span>
+											<span class="cpointer">C</span>
+											<span class="cpointer">D</span>
+											<span class="cpointer">E</span>
+											<span class="cpointer">F</span>
+											<span class="cpointer">G</span>
+											<span class="cpointer">H</span>
+											<span class="cpointer">I</span>
+											<span class="cpointer">J</span>
+											<span class="cpointer">K</span>
+											<span class="cpointer">L</span>
+											<span class="cpointer">M</span>
+											<span class="cpointer">N</span>
 										</div>
 									</div>
 									<div class="dis_flex aic">
@@ -205,7 +210,7 @@
 					
 					
 					<div class="goods_list dis_flex fww">
-						<div class="goods_li" v-for="(item,index) in 10">
+						<a href="xqy.html?id=1" class="goods_li" v-for="(item,index) in 10">
 							<div class="goods_li_img bg_div bg_div_hover">
 								<div style="background-image: url(./img/cjcg_img_03.jpg);"></div>
 							</div>
@@ -214,7 +219,7 @@
 								<div class="goods_li_pp dis_flex aic">西门子品牌<img src="img/ppsj_19.jpg" ></div>
 								<div class="goods_li_jg">￥<span>60.00</span>元</div>
 							</div>
-						</div>
+						</a>
 					</div>
 					<div class="list_page tac dis_flex">
 						<div class="flex_1"></div>
