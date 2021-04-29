@@ -85,12 +85,16 @@
 					<div class="dis_flex fww flex_1" style="padding: 0 10px;">
 						<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
 							<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
-							<div :style="'background-image: url('+item+');'"></div>
+							<div :style="'background-image: url('+getimg(item)+');'"></div>
 						</div>
+						
 						<div class="up_img" v-if="yjfk_img.length<9">
 							<img src="./img/upimg_03.jpg" alt="">
 							<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
-							<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+							<!-- <input id="scheaderimg" type="file" @change="uploadImg($event)"> -->
+							<form id="form">
+								<input id="scheaderimg" type="file" name="file" @change="uploadImg($event)">
+							</form>
 						</div>
 					</div>
 				</div>
@@ -118,6 +122,7 @@
 				});
 				
 			})
+		
 			
 			var vm_myzhaq = new Vue({
 					el: '#myzhaq',
@@ -136,44 +141,38 @@
 					
 					},
 					methods: {
+						getimg:function(img){
+							if(!img){
+								return
+							}
+							return IPurl1+img
+						},
 						uploadImg:function(file){
 							var  _this=this
-							var reader = new FileReader();
-							reader.readAsDataURL(file.target.files[0]); // 读出 base64
-							reader.onloadend = function () {
-							      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-							     var dataURL = reader.result;//base64
-							     // 显示图片
-							     // $('#showImg').attr('src',dataURL);
-									 _this.yjfk_img.push(dataURL)
-									 
-									
-							};
-							return
-							var fd=new FormData()
-							fd.append('file',file)
-							// var datas={
-							// 	file:file
-							// }
-							console.log(file)
 							$.ajax({
 								type: "POST",
 								url: IPurl+'/Base/upload',
-								data: fd,
-								async:false,
-								cache: true,
+								data: new FormData($('#form')[0]),
+								// async:false,
+								cache: false,
 								processData: false,
 								contentType: false,//不去设置Content-Type请求头
+								// enctype: 'multipart/form-data',    //需要正确设置此项
 								success: function(res) {
 									// console.log(res);
 									if(typeof(res)=='string'){
 										res=JSON.parse(res)
 									}
-									if (res.error == 0) {
+									if (res.status == 200) {
 									console.log(res)
 										layer.msg('上传成功')
+										 _this.yjfk_img.push(res.data)
 									} else {
-										layer.msg('获取数据失败')
+										if(res.msg){
+											layer.msg(res.msg)
+										}else{
+											layer.msg('操作失败')
+										}
 									}
 							
 								},

@@ -37,7 +37,7 @@
 			<div class="html_main">
 				<div class="w1200">
 					<div class="xz_tit dis_flex aic ju_b">
-						<div><a href="index.html">首页</a>＞<a href="#">场景采购</a></div>
+						<div><a href="index.html">首页</a>＞<a href="#" style="color: rgb(235, 95, 51);">场景采购</a></div>
 						<a class="">共145件相关商品</a>
 						<!-- ＞<a href="#" style="color: #EB5F33;">咨讯详情</a> -->
 					</div>
@@ -62,6 +62,7 @@
 								<span v-for="(item,index) in jg_xz">{{item.title}}{{index!=jg_xz.length-1?',':''}}</span>
 							</div> <i class="iconfont icon-cuowu"></i>
 						</div>
+						
 						<div  v-if="cj_xz.length>0 ||pp_xz.length>0||xm_xz.length>0||jg_xz.length>0" class="xq_all_btn" @click="xq_xz_fuc(-1)">清除筛选</div>
 					</div>
 					<div v-if="cj_xz.length==0" class="cg_boxs">
@@ -166,10 +167,10 @@
 									</div>
 									<div class="flex_1" style="min-width: 100px;"></div>
 									<div class="dis_flex aic">
-										<input class="cg_pg_min" type="number" placeholder="￥最低价">
+										<input class="cg_pg_min" type="number" placeholder="￥最低价" v-model="zdj">
 										<span>-</span>
-										<input class="cg_pg_min" type="number" placeholder="￥最高价">
-										<div class="cg_pg_btn dis_flex aic ju_c">确定</div>
+										<input class="cg_pg_min" type="number" placeholder="￥最高价" v-model="zgj">
+										<div class="cg_pg_btn dis_flex aic ju_c cpointer" @click="jgbtn">确定</div>
 									</div>
 								</div>
 							</div>
@@ -178,7 +179,7 @@
 					
 					<div class="cg_jg_sx dis_flex aic ju_b">
 						<div class="dis_flex aic ">
-							<div class="dis_flex aic cg_jg_px" @click="jg_px_fuc(0)">价格:
+							<div class="dis_flex aic cg_jg_px cpointer" @click="jg_px_fuc(0)">价格:
 								<img v-if="jg_px==0" src="img/paixu_jiang.png" >
 								<img v-else src="img/paixu_sheng.png" >
 							</div>
@@ -284,6 +285,9 @@
 				
 				page:1,
 				
+				zgj: '',
+				zdj: ''
+				
 			},
 			created: function() {
 				
@@ -303,6 +307,12 @@
 				header_cur=1
 			},
 			methods: {
+				jgbtn:function(){
+					that.jg_xz=[]
+					that.jg_xz.push({title:this.zdj+'-'+this.zgj,img:'img/index_cjcg_28.jpg'})
+					this.zdj = ''
+					this.zgj = ''
+				},
 				set_page:function(num){
 					if(num==0){
 						if(this.page>1){

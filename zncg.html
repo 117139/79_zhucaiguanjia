@@ -162,13 +162,9 @@
 			}
 
 			.table_ct {
-				width: 1170px;
+				width: 1168px;
 				margin: 0 auto;
 				border: none;
-			}
-
-			.table_ct2 {
-				width: 1165px;
 			}
 
 			.thead_ct {
@@ -291,7 +287,7 @@
 			}
 
 			::-webkit-scrollbar {
-				width: 5px;
+				width: 2px;
 			}
 
 			.xbtns_ct {
@@ -337,12 +333,22 @@
 				color: #eb5f33;
 				font-size: 16px;
 			}
+			.firstTr_ct{
+				height:98px;
+			}
+			.firstTr_ct>div{
+				 width: 13px;
+				 height: 13px;
+				 border: 1px solid #999999;
+			}
+			.firstTr_ct>div>i{
+				
+			}
 		</style>
 		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<div class="">
-
 			<div class="w100" style="height: 187px;">
 				<div class="header_top">
 					<include src="./common/header.html"></include>
@@ -434,13 +440,16 @@
 						</thead>
 					</table>
 					<div class="scrollBox">
-						<table class="table_ct" :class="{table_ct2:datalist.length>5}" border="" cellspacing=""
+						<table class="table_ct" border="" cellspacing=""
 							cellpadding="">
 							<tbody class="tbody_ct">
-								<tr v-for="item in datalist">
-									<td>
-										<input  class="cpointer" type="checkbox" name="" id="" value="" />
-										<span>1</span>
+								<tr v-for="item,index in datalist">
+									<td class="flex aic ju_c firstTr_ct">
+										<div class="flex aic ju_c cpointer"
+										@click="dxbtn(index)">
+											<i v-show="item.dx" class="iconfont icon-duigou cEE0913"></i>
+										</div>
+										<span>{{index+1}}</span>
 									</td>
 									<td class="spbm">
 										<input type="" name="" id="" value="" placeholder="请输入商品编码" />
@@ -453,16 +462,16 @@
 										<span>库存充足</span>
 									</td>
 									<td class="dj">
-										<span>￥8.30</span>
+										<span>￥{{item.dj}}</span>
 									</td>
 									<td class="sl">
-										<input type="" name="" id="" value="1" />
+										<input type="" name="" id="" :value="item.sl" />
 									</td>
 									<td>
-										<span>￥8.30</span>
+										<span>￥{{item.dj * item.sl}}</span>
 									</td>
 									<td class="cz">
-										<button class="cpointer">删除</button>
+										<button class="cpointer" @click="del(index)">删除</button>
 										<img  class="cpointer" src="img/gwc.jpg">
 									</td>
 								</tr>
@@ -470,17 +479,21 @@
 						</table>
 					</div>
 					<div class="tabBottom_ct flex">
-						<div class="botmL_ct">
-							<label  class="cpointer">
-								<input type="checkbox" name="" id="" value="" />
+						<div class="botmL_ct flex">
+							<div class="flex aic">
+								<div class="flex aic ju_c cpointer"
+								style="width:13px;height:13px;border:1px solid #999999;margin: 0 8px 0 35px;"
+								@click="qxbtn">
+									<i v-show="qx" class="iconfont icon-duigou cEE0913"></i>
+								</div>
 								<span>全选</span>
-							</label>
-							<button  class="cpointer" class="xbtns_ct">删除选中商品</button>
-							<button  class="cpointer" class="xbtns_ct">继续添加商品</button>
+							</div>
+							<button  class="cpointer xbtns_ct">删除选中商品</button>
+							<button  class="cpointer xbtns_ct" @click="addsp">继续添加商品</button>
 						</div>
 						<div class="botmR_ct">
 							<span>已选商品</span>
-							<span> : ￥0.00</span>
+							<span> : ￥{{yxspjg}}</span>
 							<button  class="cpointer">提交询价</button>
 							<button  class="cpointer">加入购物车</button>
 						</div>
@@ -503,17 +516,48 @@
 			var app = new Vue({
 				el: '#zncgContent_ct',
 				data: {
-					datalist: [{},
-						{},
-						{},
-						{},
-						{},
-						{},
+					// 全选
+					qx:false,
+					// 已选商品价格
+					yxspjg: '0.00',
+					datalist: [
+						{dx:false,sl:1,dj:8.30},
+						{dx:true,sl:1,dj:8.30},
+						{dx:false,sl:1,dj:8.30},
+						{dx:false,sl:1,dj:8.30},
+						{dx:false,sl:1,dj:8.30},
 					],
-					
 					sh_add:'北京市北京东城区1号大院'
 				},
 				methods:{
+					qxbtn:function(){
+						this.qx = !this.qx
+						if(this.qx){
+							for (var i = 0; i < this.datalist.length; i++) {this.datalist[i].dx = true}
+						}else{
+							for (var i = 0; i < this.datalist.length; i++) {this.datalist[i].dx = false}
+						}
+					},
+					dxbtn(index){
+						this.datalist[index].dx = !this.datalist[index].dx
+						var ind = 0
+						for (var i = 0; i < this.datalist.length; i++) {
+							if(this.datalist[i].dx){
+								ind += 1
+							}
+						}
+						if(ind == this.datalist.length && ind !== 0){
+							this.qx = true
+						}else{
+							this.qx = false
+						}
+					},
+					del(index){
+						this.datalist.splice(index,1)
+					},
+					addsp:function(){
+						this.datalist.push({dx:false,sl:3,dj:5})
+					},
 					open_tk:function(id){
 						layer_pwd=layer.open({
 						  type: 2,

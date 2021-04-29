@@ -4,7 +4,12 @@ var IPurl1 = "https://www.zhucaiguanjia.com/";
 var web_siteset=""					//公共信息
 var logintoken 
 var userMsg
-
+function getimg(img){
+	if(!img){
+		return
+	}
+	return IPurl1+img
+}
 var cj_list=[
 	{
 		title:'空调通风',
