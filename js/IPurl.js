@@ -1,6 +1,7 @@
 //接口地址
-var IPurl = "https://www.zhucaiguanjia.com/api/";
-var IPurl1 = "https://www.zhucaiguanjia.com/";
+var IPurl = "https://admin.zhucaiguanjia.com/api/";
+var IPurl1 = "https://admin.zhucaiguanjia.com/";
+var storage_fuc = window.localStorage;
 var web_siteset=""					//公共信息
 var logintoken 
 var userMsg
@@ -204,23 +205,28 @@ var xm_list=[
 ]
 var jg_list=[
 	{
-		title:'0-5000',
+		title:'0',
+		title1:'5000',
 		img:'img/index_cjcg_28.jpg'
 	},
 	{
-		title:'5001-10000',
+		title:'5001',
+		title1:'10000',
 		img:'img/index_cjcg_28.jpg'
 	},
 	{
-		title:'10001-15000',
+		title:'10001',
+		title1:'15000',
 		img:'img/index_cjcg_28.jpg'
 	},
 	{
-		title:'15001-20000',
+		title:'15001',
+		title1:'20000',
 		img:'img/index_cjcg_28.jpg'
 	},
 	{
-		title:'20001以上',
+		title:'20001',
+		title1:'',
 		img:'img/index_cjcg_28.jpg'
 	},
 ]
@@ -337,7 +343,7 @@ function telReg(tel) {
 function _ajax(ajaxUrl,method,datas,success,error) {
 	if(!error){
 		error=function (err){
-			layer.msg('获取数据失败')
+			layer.msg('请求失败')
 			console.log(err)
 		}
 	}
@@ -345,11 +351,27 @@ function _ajax(ajaxUrl,method,datas,success,error) {
 		type: method,
 		url: IPurl+ajaxUrl,
 		data: datas,
-		// headers:{
-		// 	"Authorization":token,
-		// },
+		headers:{
+			"Authorization":storage_fuc.getItem("token")||'',
+		},
 	
-		success: success,
+		success: function(res){
+			
+			if(res.status == 101){
+				parent.location.href="login.html?type=1"
+				return
+			}
+			if(res.status != 200){
+				if(res.msg){
+					layer.msg(res.msg)
+				}else{
+					layer.msg('操作失败')
+				}
+			}else{
+				
+				success(res)
+			}
+		},
 		error: error
 	})
 }
@@ -362,143 +384,159 @@ function _get(ajaxUrl,datas,success,error){
 
 //公众信息
 function webxx(that,xc_key){
-	$("meta[name='keywords']").attr('content', 'xc_key+'-'+web_siteset[0].seostr+'-'+web_siteset[0].Keywords');
-	$("meta[name='Description']").attr('content', 'web_siteset[0].Description');
-	var header_top_main ='<div class="w1200 header_top_main dis_flex aic ju_b">'
-					+'<div>筑采管家AHUCAIGU.COM</div>'
-					+'<div class="dis_flex aic">'
-					+'	<div>你好，<a class="login_header" href="login.html?type=1">请登录</a></div>'
-					+'	<span class="sg_header"></span>'
-					+'	<a class="a_header" href="login.html?type=-1">免费注册</a>'
-					+'	<span class="sg_header"></span>'
-					+'	<a class="a_header" href="">我的筑采</a>'
-					+'	<span class="sg_header"></span>'
-					+'	<a class="a_header dis_flex aic" href=""><img src="img/header_tel.png" alt="">400-0650-2828</a>'
-					+'	<span class="sg_header"></span>'
-					+'	<a class="a_header" href="">关于我们</a>'
-					+'	<span class="sg_header"></span>'
-					+'	<a class="a_header" href="">手机筑采</a>'
-					+'	<span class="sg_header"></span>'
-					+'	<a class="a_header" href="">官方微信</a>'
-					+'</div>'
-				+'</div>'
-		if($('.header_top')){
-			// $('.header_top').html(header_top_main)
-			// $('.header_top').load('./common/header.html');
-		}
-	return
+	
+	
+	// return
+	var jkurl='/Base/getConfig'
 	var datas={
 		
 	}
 	var success=function(res){
-		if(typeof(res)=='string'){
-			res=JSON.parse(res)
-		}
-		
-		// return
-		if (res.error == 0) {
-			var resultd = res.web_siteset
-			// if(that){
-			// 	that.web_siteset = resultd
-			// }
-			var web_siteset = res.web_siteset
+		if (res.status == 200) {
+			ConfigLink()
+			// layer.msg('登录成功')
+			// var storage_fuc = window.localStorage;
+			storage_fuc.setItem("BaseConfig",JSON.stringify(res.data))
+			$(document).attr("title",res.data.core.site_title);  
+			$("meta[name='keywords']").attr('content', res.data.core.keyword);
+			$("meta[name='Description']").attr('content', res.data.core.description);
 			
-			if(xc_key){
-				$("meta[name='keywords']").attr('content', xc_key+'-'+web_siteset[0].seostr+'-'+web_siteset[0].Keywords);
-			}else{
-				$("meta[name='keywords']").attr('content', web_siteset[0].seostr+'-'+web_siteset[0].Keywords);	
-			}
-			$("meta[name='Description']").attr('content', web_siteset[0].Description);
-			$("title").text( web_siteset[0].Title);
-			if(web_siteset[0].Phone!=''){
-				
-				$(".dh_int input").attr('placeholder','客服热线：'+web_siteset[0].Phone)
-			}
-			var html0='<div class="dm_r1">'+
-                '<div class="dm_r1_p1">联系我们</div>'+
-                '<div class="dm_r1_p2"><img src="images/lx_tel.png" alt="" /><b class="fz14 fwb">'+web_siteset[0].Phone+'</b></div>'+
-                '<div class="dm_r1_p2"><img src="images/lx_email.png" alt="" /><span class="fz14 fwb" >'+web_siteset[0].Email+'</span></div>'+
-                '<a href="dingzhi.html" class="dm_btn">定制我的行程</a>'+
-              '</div>'+
-              '<div class="dm_r2">'+
-              '  <div class="dmr2_tit">关注我们</div>'+
-               ' <img class="dm2_ewm wxewm_pc" src="'+'images/index057.png'+'" alt="" />'+
-               ' <div class="dmr2_tip">获取最新活动旅游咨询</div>'+
-              '</div>'
-			if($('.destmain_r')){
-				$('.destmain_r').html(html0)
-			}
-			
-			
-			
-			var html1='<div class="w1200 clearfix">'+
-					'<img class="f_logo" src="images/f_logo.png" alt="">'+
-					'<div v-if="web_siteset" class="footer_msg">'+
-					'	<p >客服专线：'+web_siteset[0].Phone+'</p>'+
-					'	<p>地址：'+web_siteset[0].Address+'</p>'+
-					'	<p><span>'+web_siteset[0].Copyright+'</span>　<span>'+web_siteset[0].Companyname+'</span>　版权所有</p>'+
-					'	<p><a target="_blank" href="http://beian.miit.gov.cn">京ICP备19039016号-1</a></p>'+
-					'</div>'+
-					'<div class="footer_ewm wxewm_pc">'+
-					'	<img src="'+'images/index057.png'+'" alt="">'+
-					'	<p>'+web_siteset[0].Phone+'</p>'+
-					'</div>'+
-				'</div>'
-				$('.footer_box').html(html1)
-				var html2='<div class="suspension-box">'+
-				'	<a href="javascript:;" class="a a-service-phone ">'+
-				'		<i class="i"></i>'+
-				'	</a>'+
-				'	<a href="javascript:;" class="a a-qrcode"><i class="i"></i>'+
-				'	</a>'+
-				'	<a href="javascript:;" class="a a-top"><i class="i"></i></a>'+
-				'	<div class="d d-service" style="display: none;">'+
-				'		<i class="arrow"></i>'+
-				'		<div class="inner-box">'+
-				'			<div class="d-service-item clearfix">'+
-				'				<a href="tencent://message/?uin=551181668&amp;Site=www.luoxiao123.cn&amp;Menu=yes" class="clearfix"><span class="circle"><i class="i-qq"></i></span>'+
-				'					<h3>咨询在线客服</h3></a>'+
-				'			</div>'+
-				'		</div>'+
-				'	</div>'+
-				'	<div class="d d-service-phone" style="display: none;">'+
-				'		<i class="arrow"></i>'+
-				'		<div class="inner-box">'+
-				'			<div class="d-service-item clearfix">'+
-				'				<span class="circle"><i class="i-tel"></i></span>'+
-				'				<div class="text"><p>服务热线</p><p class="red number">'+web_siteset[0].Phone+'</p></div>'+
-				'			</div>'+
-				'		</div>'+
-				'	</div>'+
-				'	<div class="d d-qrcode" style="display: none;">'+
-				'		<i class="arrow"></i>'+
-				'		<div class="inner-box">'+
-				'			<div class="qrcode-img"><img class="wxewm_pc" src="'+'./images/index057.png'+'" alt=""></div>'+
-				'			<p>微信</p>'+
-				'		</div>'+
-				'	</div>'+
-				'</div>'
-				$('.suspension').html(html2)
-				getewm_pc()
-			// console.log(resultd)
-			// return resultd
 		} else {
-			layer.msg('获取数据失败')
+			if(res.msg){
+				layer.msg(res.msg)
+			}else{
+				layer.msg('获取配置信息失败')
+			}
 		}
 	}
 	var error=function(res){
 		console.log(res)
 	}
-	_ajax(IPurl,datas,success,error)
+	_get(jkurl,datas,success,error)
+
+	
+}
+//友情链接数据列表
+function ConfigLink(){
+	
+	
+	// return
+	var jkurl='/Config.Link/index'
+	var datas={
+		limit:1000,
+		page:1
+	}
+	var success=function(res){
+		if (res.status == 200) {
+			// layer.msg('登录成功')
+			// var storage_fuc = window.localStorage;
+			storage_fuc.setItem("ConfigLink",JSON.stringify(res.data.list))
+			
+		} else {
+			if(res.msg){
+				layer.msg(res.msg)
+			}else{
+				layer.msg('获取友情链接数据失败')
+			}
+		}
+	}
+	var error=function(res){
+		console.log(res)
+	}
+	_get(jkurl,datas,success,error)
+
+	
+}
+//静默denglu
+function login_m(callback){
+	var jkurl='/Member.Member/login'
+	if(!storage_fuc.getItem('psd')){
+		return
+	}
+	var loginCodes=JSON.parse(storage_fuc.getItem('psd'))
+	var datas={
+		password:loginCodes.psd,	//string	 新密码(必填)
+		mobile:loginCodes.phone,	//string	 短信验证手机号
+	}
+	console.log(storage_fuc.getItem('psd'))
+	$.ajax({
+		type: "post",
+		url: IPurl+jkurl,
+		data:datas,
+		success: function(res) {
+			// console.log(res);
+			if(typeof(res)=='string'){
+				res=JSON.parse(res)
+			}
+			if (res.status == 200) {
+				// layer.msg('登录成功')
+				// var storage_fuc = window.localStorage;
+				storage_fuc.setItem("user",JSON.stringify(res.data))
+				storage_fuc.setItem("token",res.token)
+				
+				callback(res)
+			} else {
+				if(res.msg){
+					layer.msg(res.msg)
+				}else{
+					layer.msg('操作失败')
+				}
+			}
+	
+		},
+		error: function(err) {
+			layer.msg('请求失败')
+			console.log(err)
+		}
+	})	
+}
+//刷新用户信息
+function get_usermsg(callback){
+	
+	
+	// return
+	var jkurl='/Member.Member/view'
+	var datas={
+		
+	}
+	var success=function(res){
+		if (res.status == 200) {
+			console.log(res)
+			// return
+			storage_fuc.setItem("user",JSON.stringify(res.data))
+			if(!callback){
+				window.location.replace('')
+			}else{
+				callback(res)
+			}
+			
+			// storage_fuc.setItem("token",res.token)
+		} else {
+			if(res.msg){
+				layer.msg(res.msg)
+			}else{
+				layer.msg('获取配置信息失败')
+			}
+		}
+	}
+	var error=function(res){
+		console.log(res)
+	}
+	_get(jkurl,datas,success,error)
 
 	
 }
 
-
-function gettime(value) {
-		var seperator1 = "/";
-		value = new Date(value)
-
+function gettime(time_str,seperator1) {
+	if(!time_str){
+		return
+	}
+	console.log(time_str)
+		if(!seperator1){
+			seperator1 = "/";
+		}
+		var value = new Date(time_str*1000)
+		console.log(value)
 		var year = value.getFullYear();
 		console.log(year)
 		var month = value.getMonth() + 1;
@@ -554,4 +592,13 @@ function getTime(time) {
 
 function jump(url) {
   window.location.href = url;
+}
+
+
+function json_p(str){
+	if(!str){
+		return
+	}
+	// console.log(JSON.parse(str))
+	return JSON.parse(str)
 }

@@ -52,7 +52,7 @@
 		<div id="myzhaq" class="w100 set_list">
 			<div class="dis_flex aic set_li">
 				<div class="set_li_name">姓名：</div>
-				<input type="number" v-model="name" placeholder="请输入2-10个字的姓名" maxlength="10"/>
+				<input type="text" v-model="name" placeholder="请输入2-10个字的姓名" maxlength="10"/>
 			</div>
 		
 			<div class="tk_btns dis_flex aic ju_c">
@@ -78,10 +78,16 @@
 						yztime: 60,
 						pwd: '',
 						pwd1: '',
+						
+						user_datas:'',
+						token:'',
 					},
 					created: function() {
 						console.log('vm_myzhaq')
-					
+						if(storage_fuc.getItem("user")){
+							this.user_datas=JSON.parse(storage_fuc.getItem("user"))
+							this.token=storage_fuc.getItem("token")
+						}
 					},
 					methods: {
 						
@@ -96,16 +102,22 @@
 								return
 							}
 							
-							var datas = {
-								name: that.name
-								// password: that.pwd
+							var datas={
+								real_name: that.name,
+								avatar:that.user_datas.avatar
 							}
-							// console.log(datas)
-							layer.msg('操作成功')
-							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+							_post('/Member.Member/update',datas,function(res){
+								 if (res.status == 200){
+									 layer.msg('操作成功')
+									 get_usermsg(
+										setTimeout(function(){
+											// parent.layer.close('layer_pwd');
+											parent.layer.closeAll();
+										},1000)
+									 )
+								 }
+							})
+							
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

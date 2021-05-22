@@ -7,17 +7,19 @@
 	<div class="w100">
 		<div class="my_jf_topbox">
 			<div class="dis_flex_c aic ju_c my_jf_banner">
-				<div class="my_jf_num">1520</div>
+				<div class="my_jf_num">{{user_datas.integral?user_datas.integral:0}}</div>
 				<div>积分</div>
 			</div>
 		</div>
 		<div class="p10">
 			<div class="my_search dis_flex aic">
 				<div class="yjfk_xz_name">时间：</div>
+				<!-- <select class="yjfk_wt_list" @click="getdata_yh(1)" v-model="wenti_list_id"> -->
 				<select class="yjfk_wt_list" v-model="wenti_list_id">
 					<option v-for="(item,index) in time_list" :value="item.id">{{item.name}}</option>
 				</select>
 				<div class="yjfk_xz_name">积分：</div>
+				<!-- <select class="yjfk_wt_list" @click="getdata_yh(1)" v-model="status_list_id"> -->
 				<select class="yjfk_wt_list" v-model="status_list_id">
 					<option v-for="(item,index) in status_list" :value="item.id">{{item.name}}</option>
 				</select>
@@ -33,20 +35,19 @@
 						</tr>
 					</thead>
 					<tbody class="yjfk_table_body">
-						<tr v-for="(item,index) in yjfk_list">
-							<td style="border-right: 1px solid #D3D3D3;">2020.03.07</td>
+						<tr v-for="(item,index) in jf_datas">
+							<td style="border-right: 1px solid #D3D3D3;">{{gettime(item.create_time)}}</td>
 							<td style="border-right: 1px solid #D3D3D3;">
-								<div v-if="index==0" style="color: #53B0FF;">+17</div>
-								<div v-else style="color: #FF5353;">-17</div>
+								<div v-if="item.operator==1" style="color: #53B0FF;">+{{item.integral}}</div>
+								<div v-else style="color: #FF5353;">-{{item.integral}}</div>
 							</td>
 							<td>
-								<div v-if="index==0">购买商品获得17积分</div>
-								<div v-else>积分抵扣17积分</div>
+								<div>{{item.content}}</div>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<div class="dis_flex_c aic ju_c yjfk_null_box">
+				<div v-if="jf_datas.length==0" class="dis_flex_c aic ju_c yjfk_null_box">
 					<div class="yjfk_null bg_div">
 						<div style="background-image: url(./img/jf_null.png);"></div>
 					</div>
@@ -55,11 +56,11 @@
 				
 			</div>
 			
-			<div class="list_page tac dis_flex">
+			<div v-if="jf_datas.length>0" class="list_page tac dis_flex">
 				<!-- <div class="flex_1"></div>
 					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
 				<div class="flex_1"></div> -->
-				<div class="m-style M-box2"></div>
+				<div class="m-style M-box_jf"></div>
 			</div>
 		</div>
 	</div>	
@@ -76,40 +77,35 @@
 		  layer.closeAll('loading');
 		}, 300);
 		
-		
-		
-		// $('.M-box2').pagination({
-		// 		totalData:100,
-		// 		showData:10,
-		// 		coping: true,
-		// 		// mode: 'fixed',
-		// 		// homePage: '首页',
-		// 		// endPage: '末页',
-		// 		prevContent: '上页',
-		// 		nextContent: '下页',
-		// 		callback: function (api) {
-		// 			//console.log(api.getCurrent())
-		// 			var page=api.getCurrent()
-		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
-		// 		}
-		// }); 
-		
-		
 	})
 	
-	var vm_myyjfk = new Vue({
+	var vm_myjf = new Vue({
 			el: '#myyjfk',
 			data: {
 			
 				tab_yjfk_id:0,
 				time_list:[
-					
 					{
-						name:'最近六个月',
+						name:'全部',
+						id:0
+					},{
+						name:'最近一个月',
 						id:1
 					},
+					{
+						name:'最近三个月',
+						id:2
+					},
+					{
+						name:'最近六个月',
+						id:3
+					},
+					{
+						name:'最近一年',
+						id:4
+					},
 				],
-				wenti_list_id:1,
+				wenti_list_id:0,
 				status_list:[
 					
 					{
@@ -126,14 +122,77 @@
 					},
 				],
 				status_list_id:0,
-				yjfk_list:[1,1,1,],
-				
+				jf_datas:[],
+				user_datas:'',
+				token:''
 			},
 			created: function() {
 				console.log('vm_myyjfk')
-			
+				if(storage_fuc.getItem("user")){
+					this.user_datas=JSON.parse(storage_fuc.getItem("user"))
+					this.token=storage_fuc.getItem("token")
+				}
+			},
+			watch:{
+				
+				wenti_list_id:function(val){
+					console.log(val)
+					if(val>=0){
+						this.getdata_yh(1)
+					}
+				},
+				status_list_id:function(val){
+					this.getdata_yh(1)
+				},
+			},
+			mounted:function(){
+				
+				this.getdata_yh(1)
 			},
 			methods: {
+				gettime:function(time){
+					return gettime(time,'.')
+				},
+				getdata_yh:function(page){
+					var datas={
+						limit:30,
+						page:page||1,
+						time_type:this.wenti_list_id,
+						operator:this.status_list_id,
+						// create_time_start:'',
+						// create_time_end:''
+					}
+					var jkurl='/Member.MemberIntegral/index'
+					layer.load(1,{
+						shade: [0.2,'#000'] //0.1透明度的白色背景
+					});
+					setTimeout(function(){
+					  layer.closeAll('loading');
+					},500);
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_myjf.jf_datas=res.data.list
+							 if(page==1){
+								 $('.M-box_jf').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_myjf.getdata_yh(page)
+								 	}
+								 });
+							 }
+						 }
+					})
+				},
 				
 				tab_yjfk_fuc:function(item) {
 					console.log(item)

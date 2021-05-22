@@ -561,6 +561,9 @@ transform: scale(1.1);
 .mb20{
 	margin-bottom: 20px;
 }
+.ml30{
+	margin-left: 30px;
+}
 /* public end */
 
 [v-cloak]{
@@ -1165,7 +1168,7 @@ transform: scale(1.1);
 	max-width: 250px;
 	margin: 0 auto;
 	line-height: 30px;
-	height: 60px;
+	max-height: 60px;
 	text-align: center;
 }
 .vip_zzfw{
@@ -1318,6 +1321,7 @@ transform: scale(1.1);
 	border: 1px solid #EEEEEE;
 	margin-right: 15.5px;
 	margin-bottom: 15.5px;
+	position: relative;
 }
 .goods_li:nth-child(5n){
 	margin-right: 0;
@@ -2384,9 +2388,33 @@ td.order_list_td5
 .goods_li1:nth-child(4n){
 	margin-right: 0;
 }
+
+
+.logout_btn{
+	padding: 2px 10px;
+	font-size: 14px;
+	cursor: pointer;
+}
+.cg_del_btn{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 999;
+	width: 30px;
+	height: 30px;
+	display: none;
+}
+.goods_li:hover .cg_del_btn{
+	display: block;
+}
 /* 个人中心 end */
 
-
+@media screen and (max-width: 1300px) {
+	.header_top,.header_main,.html_main_header,.html_main,#vm_footer,.loginbox{
+		min-width: 1280px;
+	}
+	
+}
 
 .cEE0913{
 	color: #EE0913;

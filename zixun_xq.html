@@ -40,9 +40,9 @@
 						<a href="index.html">首页</a>＞<a href="zixun.html">咨讯</a>＞<a href="#" style="color: #EB5F33;">咨讯详情</a>
 					</div>
 					<div class="xz_list xz_xq">
-						<div class="zxxq_tit">【咨询】因疫情原因部分地区无法配送</div>
-						<div class="zxxz_time">时间：2019-08-28</div>
-						<div class="fwb_box zxxz_inr">
+						<div class="zxxq_tit">{{zx_datas.title}}</div>
+						<div class="zxxz_time">时间：{{gettime(zx_datas.create_time)}}</div>
+						<div class="fwb_box zxxz_inr" v-html="zx_datas.content">
 							<img src="img/images/zx_xq_03.jpg" >
 						</div>
 						<div class="dis_flex aic ju_c zxxq_back">
@@ -84,57 +84,11 @@
 			var vm = new Vue({
 				el: '#body',
 				data: {
-					h_main_m_key:[
-						'电线',
-						'电线版',
-						'户外砖',
-						'地砖',
-						'瓷片',
-						'大板',
-						'仿古砖'
-					],
+					h_main_m_key:[],
 					search_key:'',
-					banner:[
-						{
-							fm:'img/index_xbanner_06.jpg',
-							banner:'img/index_banner_03.jpg'
-						},
-						{
-							fm:'img/index_xbanner_09.jpg',
-							banner:'img/index_xbanner_09.jpg',
-						},
-						{
-							fm:'img/index_xbanner_11.jpg',
-							banner:'img/index_xbanner_11.jpg',
-						},
-					],
+					banner:[],
 					banner_index:0,
-					cjcg:[
-						{
-							title:'空调通风',
-							img:'img/index_cjcg_18.jpg'
-						},
-						{
-							title:'土建',
-							img:'img/index_cjcg_20.jpg'
-						},
-						{
-							title:'消防',
-							img:'img/index_cjcg_22.jpg'
-						},
-						{
-							title:'市政园林',
-							img:'img/index_cjcg_24.jpg'
-						},
-						{
-							title:'装饰装修',
-							img:'img/index_cjcg_26.jpg'
-						},
-						{
-							title:'水电',
-							img:'img/index_cjcg_28.jpg'
-						},
-					]
+					zx_datas:[]
 				},
 				created: function() {
 					
@@ -143,9 +97,19 @@
 					// 	that.token = getCookie('logintoken')
 					// 	// userMsg = JSON.parse(getCookie('userMsg'))
 					// }
-					
+					that.get_zixun()
 				},
 				methods: {
+					get_zixun:function(){
+						var datas={
+							article_member_info_id:getNowCanshu().id|''
+						}
+						_get('/Article.MemberInfo/view',datas,function(res){
+							 if (res.status == 200){
+								 that.zx_datas=res.data
+							 }
+						})
+					},
 					search_fuc:function(item) {
 						console.log(item)
 						that.search_key=item
@@ -160,38 +124,8 @@
 						// console.log(img1[0])
 						return img1[0]
 					},
-					//奢华甄选
-					getshdata:function(){
-						var that=this
-						var datas={
-							apipage:'travel',
-							op:'travel_data_list',
-							type:3,
-							keyword:'shzx'
-						}
-						$.ajax({
-							type: "GET",
-							url: IPurl,
-							data: datas,
-							success: function(res) {
-								// console.log(res);
-								if(typeof(res)=='string'){
-									res=JSON.parse(res)
-								}
-								if (res.error == 0) {
-									var resultd = res.list
-									that.shdata = resultd
-									
-								} else {
-									layer.msg('获取数据失败')
-								}
-						
-							},
-							error: function(err) {
-								layer.msg('获取数据失败')
-								console.log(err)
-							}
-						})
+					gettime:function(time){
+						return gettime(time,'-')
 					},
 					formatter:function(value) {
 					    if(!value){

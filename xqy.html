@@ -118,6 +118,7 @@
 
 			.lbribox_ct {
 				padding: 27px 16px 0;
+				width: 815px;
 			}
 
 			.lbrtit_ct {
@@ -131,14 +132,9 @@
 			}
 
 			.lbrtit_ct span {
+				padding-left: 5px;
 				font-size: 12px;
 				color: #666666;
-			}
-
-			.lbrtit_ct img {
-				max-width: 13px;
-				max-height: 13px;
-				margin-right: 8px;
 			}
 
 			.lbrbgh_ct {
@@ -201,9 +197,10 @@
 			}
 
 			.f_s18 {
-				font-size: 18px;
+				font-size: 22px;
+				font-weight: bold;
 			}
-
+ 
 			.bottxt_ct {
 				padding-bottom: 2px;
 			}
@@ -225,7 +222,7 @@
 			}
 
 			.ggb_ct {
-				padding: 17px 0 17px 17px;
+				padding: 17px 0 3px 17px;
 				font-size: 12px;
 				border-bottom: 1px solid #f7f7f7;
 			}
@@ -238,23 +235,19 @@
 
 			.ggsB_ct {
 				flex-wrap: wrap;
+				width: 684px;
 			}
 
 			.ggs_ct {
-				width: 100px;
-				height: 33px;
+				min-width: 100px;
 				border: 1px solid #999999;
 				color: #666666;
 				font-size: 12px;
-				line-height: 33px;
 				text-align: center;
 				margin-left: 14px;
 				margin-bottom: 14px;
 				position: relative;
-			}
-
-			.ggs_ct:nth-last-child(-n+6) {
-				margin-bottom: 0;
+				padding: 12px;
 			}
 
 			.ggs_ct img {
@@ -310,16 +303,17 @@
 				margin-right: 12px;
 			}
 
-			.jrOgm_ct>button:first-of-type {
+			.jrOgm_ct .goods_czbtn {
 				background-color: #eb5f34;
-				margin-left: 30px;
+				/* margin-left: 30px; */
+				color: #fff;
 			}
 
 			.jrOgm_ct>button>span {
 				color: #eb5f34;
 			}
 
-			.jrOgm_ct>button:first-of-type>span {
+			.jrOgm_ct .goods_czbtn>span {
 				color: #fff;
 			}
 
@@ -435,6 +429,7 @@
 			.cps_ct {
 				cursor: pointer;
 			}
+			
 
 			.cptd_ct {
 				width: 890px;
@@ -452,11 +447,8 @@
 				margin: 34px 0 14px 0;
 			}
 
-			.cptd_ct>p:last-of-type {
-				margin-bottom: 33px;
-			}
-
 			.cptdimg_ct {
+				margin-top: 33px;
 				margin-left: 5px;
 				width: width: 875px;
 			}
@@ -493,12 +485,26 @@
 				padding: 0 2px;
 			}
 			.swiper-button-prev{
-				top: 38px;
+				top: 47px;
 				left: 0;
+				width: 13px;
+				height: 21px;
+				background-image: none;
+			}
+			.swiper-button-prev>img{
+				max-width: 100%;
+				max-height: 100%;
 			}
 			.swiper-button-next{
-				top: 38px;
+				top: 47px;
 				right: 0;
+				width: 13px;
+				height: 21px;
+				background-image: none;
+			}
+			.swiper-button-next>img{
+				max-width: 100%;
+				max-height: 100%;
 			}
 			.swiperSlideAtve{
 				border: 1px solid #eb5f33;
@@ -507,11 +513,13 @@
 				opacity: 1 !important;cursor:pointer !important;pointer-events:auto !important;
 				
 			}
+			.swiper-slide{
+				width: 69px;
+			}
 		</style>
 
 	</head>
 	<body>
-	
 		<div class="w100" style="height: 187px;">
 			<div class="header_top">
 				<include src="./common/header.html"></include>
@@ -519,10 +527,7 @@
 			</div>
 			<include src="./common/header1.html"></include>
 			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
-		
-		
 			<!-- header -->
-		
 			<include src="./common/header_header.html"></include>
 		</div>
 		<!-- 中间内容部分 -->
@@ -533,153 +538,179 @@
 					<img src="img/jiantou.jpg" alt="">
 					<a href="cjcg.html?header_cur=1" style="color: #333333;">场景采购</a>
 					<img src="img/jiantou.jpg" alt="">
-					<a href="" class="snActive_ct">绥化不锈钢阀门厂家-din15不锈钢</a>
+					<a v-if="goods.goods_item[0]" :href="'cjcg.html?header_cur=1&goods_cate_item_id='+goods.goods_item[0].goods_cate_item_id" style="color: #333333;">{{goods.goods_item[0].cate_item_name}}</a>
+					<img v-if="goods.goods_item[0]" src="img/jiantou.jpg" alt="">
+					<a v-if="goods.goods_item[1]" :href="'cjcg.html?header_cur=1&goods_cate_item_id='+goods.goods_item[0].goods_cate_item_id+'&goods_cate_item_id2='+goods.goods_item[1].goods_cate_item_id" style="color: #333333;">{{goods.goods_item[1].cate_item_name}}</a>
+					<img v-if="goods.goods_item[1]" src="img/jiantou.jpg" alt="">
+					<a href="" class="snActive_ct">{{goods.goods_name}}</a>
 				</div>
 				<div class="flex xqnt_ct">
 					<div class="lunbobox_ct">
 						<div class="bigImg flex bg_div">
 							<!-- <img :src="tpimg"> -->
-							<div :style="'background-image: url('+tpimg+');'"></div>
+							<div :style="'background: url('+IPurl1+tpimg+') no-repeat center center;background-size: 100% 100%;'"></div>
 						</div>
 						<div class="leri_ct">
 							<div class="swiper-container">
 								<div class="swiper-wrapper">
 									<div class="swiper-slide flex aic ju_c bg_div"
-									v-for="item,index in swiperImg"
+									v-for="item,index in goods.goods_pic"
 									@click="swiperact=index"
 									:class="{swiperSlideAtve:swiperact == index}">
 										<!-- <img :src="item"> -->
 										<!-- <div class="bg_div"> -->
-											<div :style="'background-image: url('+item+');'"></div>
+											<div :style="'background: url('+IPurl1+item.url+') no-repeat center center;background-size: 100% 100%;'"></div>
 										<!-- </div> -->
 									</div>
 								</div>
 							</div>
-							<div class="swiper-button-prev" @click="aaaa"></div>
-							<div class="swiper-button-next" @click="bbbb"></div>
+							<div class="swiper-button-prev flex" @click="aaaa">
+								<img src="img/xqyz.png" >
+							</div>
+							<div class="swiper-button-next flex" @click="bbbb">
+								<img src="img/xqyy.png" >
+							</div>
 						</div>
 					</div>
 					<div class="lbribox_ct">
 						<div class="lbrtit_ct flex">
-							<h6>绥化不锈钢阀门厂家-din15不锈钢</h6>
-							<div class="flex aic cps_ct">
-								<img src="img/qnhz_sc.jpg">
+							<h6>{{goods.goods_name}}</h6>
+							<div v-if="goods.is_collect" class="flex aic cps_ct" @click="deleteCollect">
+								<i class="iconfont" :class="goods.is_collect?'icon-shoucang':'icon-shoucang1'" style="color: #f00;"></i>
+								<span>已收藏</span>
+							</div>
+							<div v-else class="flex aic cps_ct" @click="collect">
+								<i class="iconfont" :class="goods.is_collect?'icon-shoucang':'icon-shoucang1'"></i>
 								<span>收藏</span>
 							</div>
 						</div>
 						<div class="lbrbgh_ct flex">
 							<div class="bghL_ct flex">
 								<div class="bgjtxt_ct flex">
-									<div class="w60tit bottxt_ct">
+									<div class="w60tit flex bottxt_ct">
 										<span>价</span><span>格:</span>
 									</div>
-									<p>￥<span class="f_s18">1222.00</span><span>/个</span></p>
+									<p>￥<span class="f_s18">{{goods.goods_price}}</span><span>/{{goods.goods_unit}}</span></p>
 								</div>
 								<div class="bgjtxt_ct flex">
-									<div class="w60tit">
+									<div class="w60tit flex">
 										<span>优</span><span>惠</span><span>券:</span>
 									</div>
-									<p class="p_L_ct"><a href="http://127.0.0.1:8848/79_zhucaiguanjia/login.html?type=1"><span class="cps_ct">登录</span></a>查看可用优惠券</p>
+									<p v-if="token" class="p_L_ct">
+										<a v-if="goods_yh.length==0" href="javascript:;" style="color: #000;">无可用优惠券</a>
+										<a v-else href="./grzx.html?my_cur=32">可用优惠券共有{{goods_yh.length}}张</a>
+									</p>
+									<p v-else class="p_L_ct"><a href="login.html?type=1"><span class="cps_ct">登录</span></a>查看可用优惠券</p>
 								</div>
 							</div>
 							<div class="bghR_ct flex aic ju_c">
 								<div class="bgimgb_ct flex ju_c aic">
-									<img src="img/lylimg.jpg">
+									<img :src="IPurl1+goods.brand_logo">
 								</div>
-								<p>品牌 : LYL/蓝月亮</p>
+								<p>品牌 : {{goods.cate_brand_name}}</p>
 							</div>
 						</div>
 						<div class="ppxx_ct flex">
 							<div class="flex">
-								<div class="w60tit">
+								<div class="w60tit flex">
 									<span>品</span><span>牌</span><span>名</span><span>称:</span>
 								</div>
-								<p><u>LYL/首钢牌</u></p>
+								<p><u>{{goods.cate_brand_name}}</u></p>
 							</div>
 							<div class="flex">
-								<div class="w60tit">
+								<div class="w60tit flex">
 									<span>最</span><span>少</span><span>起</span><span>订</span><span>量:</span>
 								</div>
-								<p>1台</p>
+								<p>{{goods.goods_buy_min_sum}}{{goods.goods_unit}}</p>
 							</div>
 							<div class="flex">
-								<div class="w60tit">
+								<div class="w60tit flex">
 									<span>件</span><span>数</span><span>数</span><span>量:</span>
 								</div>
-								<p>1台/件</p>
+								<p>1{{goods.goods_unit}}/件</p>
 							</div>
 							<div class="flex">
-								<div class="w60tit">
+								<div class="w60tit flex">
 									<span>商</span><span>品</span><span>编</span><span>码:</span>
 								</div>
-								<p>6925252121</p>
+								<p>{{goods.goods_code}}</p>
 							</div>
 							<div class="flex">
-								<div class="w60tit">
+								<div class="w60tit flex">
 									<span>商</span><span>家</span><span>信</span><span>息:</span>
 								</div>
-								<p>北京筑采管家有限公司</p>
+								<p>{{goods.goods_store_name}}</p>
 							</div>
 						</div>
 						<div class="ggb_ct flex ju_b">
 							<div class="ggtxt_ct">
 								<div class="flex">
-									<div class="w60tit">
+									<div class="w60tit flex">
 										<span>规</span><span>格:</span>
 									</div>
 								</div>
 							</div>
 							<div class="ggsB_ct flex">
-								<div v-for="item,index in 8" :key="index" class="ggs_ct cps_ct"
-									@click="ggActive = index" :class="{bder_ct:ggActive==index}">
-									<span>3A/0.45KW</span>
+								<div v-for="item,index in goods.goods_sku" :key="index" class="ggs_ct cps_ct"
+									@click="goodsize(index,item)" :class="{bder_ct:ggActive==index}">
+									<span>{{index}}</span>
 									<img v-show="ggActive==index" src="img/xzxz_ct.jpg" alt="">
 								</div>
 							</div>
 						</div>
 						<div class="jrOgm_ct flex aic">
 							<div class="slnum_ct flex aic">
-								<button class="cps_ct" @click="shopNum<=0?shopNum=0:shopNum--">-</button>
-								<input type="text" v-model="shopNum">
-								<button class="cps_ct" @click="shopNum++">+</button>
+								<button v-if="goods.goods_buy_min_sum>1" class="cps_ct" @click="shopNum<=goods.goods_buy_min_sum?shopNum=goods.goods_buy_min_sum:shopNum--">-</button>
+								<button v-else class="cps_ct" @click="shopNum<=1?shopNum=1:shopNum--" style="font-size: 18px;color: #666666;">-</button>
+								<input type="text" v-model="shopNum" style="font-size: 14px;">
+								<button class="cps_ct" @click="shopNum++" style="font-size: 18px;color: #666666;">+</button>
 							</div>
-							<button class="flex cps_ct">
+							<!-- <button class="flex cps_ct goods_czbtn ml30" @click="jrxjd">
 								<img src="img/jrgwc.jpg" alt="">
-								<span>加入购物车</span>
+								<span>加入询价单</span>
+							</button> -->
+							<button class="flex cps_ct goods_czbtn ml30" @click="jrgwc">
+								<img src="img/jrgwc.jpg" alt="">
+								<span style="font-size: 16px;">加入购物车</span>
 							</button>
-							<button class="flex cps_ct" onclick="jump('./tjdd.html')">
+							<button class="flex cps_ct" @click="jump">
 								<img src="img/ljgm.jpg" alt="">
-								<span>立即购买</span>
+								<span style="font-size: 16px;">立即购买</span>
 							</button>
 						</div>
 						<div class="zffs_ct flex aic">
-							<span>支付方式 : </span>
+							<span style="font-size: 12px;color: #666666;">支付方式 : </span>
 							<div class="flex aic">
 								<img src="img/zffswx.jpg" alt="">
-								<span>微&nbsp;&nbsp;&nbsp;&nbsp;信</span>
+								<span style="font-size: 12px;color: #666666;">微&nbsp;&nbsp;&nbsp;&nbsp;信</span>
 							</div>
 							<div class="flex aic">
 								<img src="img/zffsk.jpg" alt="">
-								<span>银行转账</span>
+								<span style="font-size: 12px;color: #666666;">银行转账</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="xqconbom_ct flex">
+				<div class="xqconbom_ct flex ju_b">
 					<div class="xqbmL_ct">
 						<ul class="xssp_ct">
-							<li>相似商品</li>
-							<li class="flex aic" v-for="item in 5">
-								<div class="xsspimg_ct flex aic ju_c">
-									<img src="img/lunbo03.jpg" alt="">
-								</div>
-								<div class="xssptxt_ct">
-									<p>
-										绥化<span>不锈钢</span>阀门厂家-id
-										n15不锈钢
-									</p>
-									<p>￥32.00元</p>
-								</div>
+							<li style="font-size: 16px;">相似商品</li>
+							<li class="dis_flex aic"  v-for="item in datas_xs">
+								<a :href="'xqy.html?id='+item.goods_id" class="flex aic">
+									<div class="xsspimg_ct flex aic ju_c bg_div">
+										<!-- <img :src="IPurl1+goods.goods_pic[0].url" alt=""> -->
+										<div :style="'background-image: url('+IPurl1+goods.goods_pic[0].url+ ');'"></div>
+									</div>
+									<div class="xssptxt_ct">
+										<p style="color: #333;">
+											{{item.goods_name}}
+										</p>
+										<p>￥{{item.goods_price}}元</p>
+									</div>
+								</a>
+							</li>
+							<li v-if="datas_xs.length==0" class="dis_flex aic ju_c c9">
+								暂无数据
 							</li>
 						</ul>
 					</div>
@@ -689,21 +720,16 @@
 							<div></div>
 						</div>
 						<div class="spjxxx_ct flex">
-							<div>品牌名称 : <u>LYL/首钢牌</u></div>
-							<div>件数数量 : 1台/件</div>
-							<div>净 含 量 : 1KG</div>
+							<div>品牌名称 : <u>{{goods.cate_brand_name}}</u></div>
+							<div>件数数量 : 1{{goods.goods_unit}}/件</div>
+							<div v-for="(item,index) in goods.goods_param_desc">{{index}} : {{item}}</div>
 						</div>
-						<div class="cptd_ct">
+						<div class="cptd_ct fwb_box" style="padding: 5px;">
 							<p>产品特点 : </p>
-							<p>·规格 : 盘形，有孔，不锈钢质外壳</p>
-							<p>·磁体材料 : 影铁HF，最高工作温度220℃</p>
-							<p>
-								·特征及应用 : 固定磁体50.45是一种屏蔽磁性系统。由于不锈钢外壳导磁性较低，其附着力低
-								于钢制外壳中磁体。为保证磁性属性(附着力)不受影响，固定螺钉必须为非磁性材料。
-							</p>
-							<div class="cptdimg_ct">
+							<div v-html="goods.goods_content"></div>
+							<!-- <div class="cptdimg_ct">
 								<img src="img/index_banner_03.jpg" v-for="item in 3">
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -715,26 +741,36 @@
 		<include src="./common/footer.html"></include>
 		<script type="text/javascript">
 			var mySwiper
+			var that
 			var app = new Vue({
 				el: '#xqyCot_ct',
 				data: {
 					swiperact: 0,
 					shopNum: 0,
 					ggActive: null,
-					swiperImg: [
-						'./img/cjcg_img_05.jpg','./img/cjcg_img_07.jpg','./img/cjcg_img_03.jpg',
-						'./img/cjcg_img_05.jpg','./img/cjcg_img_07.jpg','./img/cjcg_img_03.jpg',
-						'./img/cjcg_img_05.jpg','./img/cjcg_img_07.jpg','./img/cjcg_img_03.jpg',
-					]
+					goods: {},
+					IPurl1: IPurl1,
+					id:'',
+					token: false,
+					user_datas:'',
+					
+					goods_yh:[],
+					datas_xs:[]
 				},
 				created: function() {
-					
+					that = this
+					that.id=getNowCanshu().id
+					if(storage_fuc.getItem("user")){
+						that.token=true
+					}
+					that.getdata()
 				},
 				computed:{
-					tpimg(){
-						let url = 'img/lunbo01.jpg'
-						url = this.swiperImg[this.swiperact]
-						return url
+					// localStorage.setItem('token','eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbGllbnQueGhhZG1pbiIsImF1ZCI6InNlcnZlci54aGFkbWluIiwiaWF0IjoxNjIwNDQ0MTcxLCJleHAiOjE2MjA0NTEzNzEsInVpZCI6Nn0.5t2d9gt0tyEgEsItZSNmq0Ij4s0P5KM90vXZYV4gNhw')
+					tpimg: function(){
+						if(this.goods.goods_pic){
+							return this.goods.goods_pic[this.swiperact].url
+						}
 					}
 				},
 				mounted:function(){
@@ -747,20 +783,195 @@
 						navigation: {
 						      nextEl: '.swiper-button-next',
 						      prevEl: '.swiper-button-prev',
-							  
 						    },
 					})
 				},
 				methods: {
-					aaaa(){
+					getdata:function(){
+						
+						var jkurl='/Goods.Goods/view'
+						var datas={
+							goods_id: that.id
+						}
+						_get(jkurl,datas,function(res){
+							 if (res.status == 200){
+								that.goods = res.data
+								that.shopNum= res.data.goods_buy_min_sum||1
+								that.getdata_xs()
+								if(that.token){
+									that.getdata_yh()
+								}
+							 }
+						})
+					},
+					getdata_xs:function(page){
+						
+						var datas = {
+							limit: 15,
+							page: page||1,
+							goods_cate_scene_id:that.goods.goods_cate_scene_id||'', //场景分类
+							goods_cate_brand_id:that.goods.goods_cate_brand_id||'', //品牌分类
+							goods_cate_item_id:that.goods.goods_cate_item_id||'', //商品分类
+							lose_goods_id:that.id
+						}
+						_get('/Goods.Goods/index', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								
+								that.datas_xs = res.data.list
+								
+							}
+						})
+					},
+					getdata_yh:function(){
+						
+						var jkurl='/Member.MemberCoupon/index'
+						var datas={
+							goods_id: that.id,
+							type:1
+						}
+						_get(jkurl,datas,function(res){
+							 if (res.status == 200){
+								that.goods_yh = res.data.list
+							 }
+						})
+					},
+					collect:function(){
+						if(!storage_fuc.getItem("user")){
+							window.location.replace('login.html')
+							return
+						}
+						var datas={
+							object_id:that.id,
+							type:1
+						}
+						jkurl='/Member.MemberCollect/collect'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								  that.getdata()
+							 }
+						})
+					},
+					deleteCollect:function(){
+						var datas={
+							object_id:that.id,
+							type:1
+						}
+						jkurl='/Member.MemberCollect/deleteCollect'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								 that.getdata()
+							 }
+						})
+					},
+					
+					aaaa:function(){
 						if(this.swiperact>0){
 							this.swiperact -= 1
 						}
 					},
-					bbbb(){
-						if(this.swiperact<this.swiperImg.length-1){
+					bbbb:function(){
+						if(this.swiperact<this.goods.goods_pic.length-1){
 							this.swiperact += 1
 						}
+					},
+					goodsize:function(index,item){
+						 this.ggActive = index
+						 this.goods.goods_price = item
+					},
+					jrxjd:function(){
+						if(this.ggActive){
+							var datas = {
+								goods_id: that.goods.goods_id,
+								goods_sku: that.ggActive,
+								goods_sum: that.shopNum
+							}
+							
+							var jkurl='/Member.MemberCart/add'
+							_post(jkurl,datas,function(res){
+								 if (res.status == 200){
+									 // console.log(res.data.list)
+									 // app.datas=res.data
+									 // that.getdata()
+									 layer.msg('操作成功')
+								 }
+							})
+						}else{
+							alert('请选择商品规格')
+						}
+					},
+					// 购物车
+					jrgwc:function(){
+						
+						if(!storage_fuc.getItem("user")){
+							window.location.replace('login.html')
+							return
+						}
+						
+						if(!this.ggActive){
+							layer.msg('请选择商品规格')
+							return
+						}
+						if(that.shopNum<1){
+							layer.msg('请选择正确商品数量')
+							return
+						}
+						if(that.shopNum<that.goods.goods_buy_min_sum){
+							layer.msg('最少起订数量为'+that.goods.goods_buy_min_sum)
+							return
+						}
+						var datas = {
+							goods_id: that.goods.goods_id,
+							goods_sku: that.ggActive,
+							goods_sum: that.shopNum
+						}
+						var jkurl='/Member.MemberCart/add'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								 // that.getdata()
+								 layer.msg('操作成功')
+							 }
+						})
+					},
+					jump:function(){
+						
+						if(!storage_fuc.getItem("user")){
+							window.location.replace('login.html')
+							return
+						}
+						
+						if(!this.ggActive){
+							layer.msg('请选择商品规格')
+							return
+						}
+						if(that.shopNum<1){
+							layer.msg('请选择正确商品数量')
+							return
+						}
+						if(that.shopNum<that.goods.goods_buy_min_sum){
+							layer.msg('最少起订数量为'+that.goods.goods_buy_min_sum)
+							return
+						}
+						var datas = {
+							goods_id: that.goods.goods_id,
+							goods_sku: that.ggActive,
+							goods_sum: that.shopNum
+						}
+						var jkurl='/Member.MemberCart/add'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								 // that.getdata()
+								window.location = './my_gwc.html'
+							 }
+						})
 					}
 				}
 			})

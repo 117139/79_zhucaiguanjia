@@ -9,54 +9,61 @@
 		<div class="set_my_tx dis_flex_c aic ju_c">
 			<div class="up_img set_my_tx_img dis_flex_c aic">
 				<div class="  bg_div" >
-					<div :style="'background-image: url('+yjfk_img+');'"></div>
+					<div :style="'background-image: url('+getimg_fuc(user_datas.avatar)+');'"></div>
 					<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
 					
 				</div>
-				<span @click="$('#scheaderimg').click()">点击上传/修改头像</span>
-				<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+				<!-- <span @click="$('#scheaderimg').click()">点击上传/修改头像</span> -->
+				<span>点击上传/修改头像</span>
+				<form id="form">
+					<input id="scheaderimg" type="file" name="file" @change="uploadImg($event)">
+				</form>
+				
 			</div>
 			
-			<div class="set_my_tx_tel">{{get_tel(18512341879)}}</div>
+			<div class="set_my_tx_tel">{{user_datas.username}}</div>
 		</div>
 		<div class="bj_user_msg dis_flex_c  ju_c">
 			<div class="dis_flex aic bj_user_msg_li">
 				<div class="bj_usermsg_tit">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</div>
-				<div class="flex_1">ndmerf382614</div>
+				<div class="flex_1" style="max-width: 160px;">{{user_datas.username}}</div>
 			</div>
 			<div class="dis_flex aic bj_user_msg_li">
 				<div class="bj_usermsg_tit">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</div>
-				<div class="flex_1"></div>
+				<div class="flex_1" style="max-width: 160px;">{{user_datas.real_name}}</div>
 				<div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(0)">编辑</div>
 			</div>
 			<div class="dis_flex aic bj_user_msg_li">
 				<div class="bj_usermsg_tit">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</div>
-				<div class="flex_1"></div>
+				<div class="flex_1" style="max-width: 160px;word-break:break-all;">{{user_datas.email}}</div>
 				<div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(1)">编辑</div>
 			</div>
 			<div class="dis_flex aic bj_user_msg_li">
 				<div class="bj_usermsg_tit">注册手机号：</div>
-				<div class="flex_1">1786350035</div>
+				<div class="flex_1" style="max-width: 160px;"><div class="">{{user_datas.mobile}}</div></div>
 				<div class="bj_user_msg_li_btn dis_flex aic ju_c" @click="open_tk(2)">修改</div>
 			</div>
 			<div class="dis_flex aic bj_user_msg_li">
 				<div class="bj_usermsg_tit">用户类型：</div>
-				<div class="flex_1">普通会员</div>
+				<div class="flex_1">{{user_datas.vip_name}}</div>
 			</div>
 			<div class="dis_flex aic bj_user_msg_li">
 				<div class="bj_usermsg_tit">账号安全级别：</div>
 				<div class="flex_1 dis_flex aic">
 					<div class="dis_flex aic zhaq_lv_img">
-						<span style="background: #71BDE1;"></span>
-						<span style="background: #569BCB;"></span>
-						<span style="background: #1471b2;"></span>
+						<span style="background: #71BDE1;" v-if="user_datas.safe_level>0"></span>
+						<span style="background: #569BCB;" v-if="user_datas.safe_level>1"></span>
+						<span style="background: #1471b2;" v-if="user_datas.safe_level>2"></span>
 					</div>
-					<div class="c9">一般</div>
+					<div class="c9" v-if="user_datas.safe_level==0">危险</div>
+					<div class="c9" v-if="user_datas.safe_level==1">不太安全</div>
+					<div class="c9" v-if="user_datas.safe_level==2">一般</div>
+					<div class="c9" v-if="user_datas.safe_level==3">安全</div>
 				</div>
 			</div>
 		</div>
 		<div class="dis_flex aic ju_a flex_1">
-			<a class="dis_flex_c aic bj_go_btn" href="">
+			<a class="dis_flex_c aic bj_go_btn" href="grzx.html?my_cur=32">
 				<img src="./img/grzx_bj_03.jpg" alt="">
 				<span>可用优惠券<i class="iconfont icon-next-m"></i></span>
 			</a>
@@ -70,7 +77,7 @@
 		<a href="./grzx.html?my_cur=0&my_r_cur=1" class="my_zh_order_li dis_flex aic ju_b">
 			<i class="iconfont icon-daifukuan my_zh_order_li_l"></i>
 			<div class="dis_flex_c aic">
-				<div class="my_zh_order_li_num">2</div>
+				<div class="my_zh_order_li_num">{{user_datas.order_count_a}}</div>
 				<div class="my_zh_order_li_type">待付款</div>
 			</div>
 			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
@@ -78,7 +85,7 @@
 		<a href="./grzx.html?my_cur=0&my_r_cur=2" class="my_zh_order_li dis_flex aic ju_b">
 			<i class="iconfont icon-daifahuo my_zh_order_li_l"></i>
 			<div class="dis_flex_c aic">
-				<div class="my_zh_order_li_num">2</div>
+				<div class="my_zh_order_li_num">{{user_datas.order_count_b}}</div>
 				<div class="my_zh_order_li_type">待发货</div>
 			</div>
 			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
@@ -86,7 +93,7 @@
 		<a href="./grzx.html?my_cur=0&my_r_cur=3" class="my_zh_order_li dis_flex aic ju_b">
 			<i class="iconfont icon-daishouhuo my_zh_order_li_l"></i>
 			<div class="dis_flex_c aic">
-				<div class="my_zh_order_li_num">0</div>
+				<div class="my_zh_order_li_num">{{user_datas.order_count_c}}</div>
 				<div class="my_zh_order_li_type">待收货</div>
 			</div>
 			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
@@ -94,7 +101,7 @@
 		<a href="./grzx.html?my_cur=0&my_r_cur=4" class="my_zh_order_li dis_flex aic ju_b">
 			<i class="iconfont icon-dingdan1 my_zh_order_li_l"></i>
 			<div class="dis_flex_c aic">
-				<div class="my_zh_order_li_num">0</div>
+				<div class="my_zh_order_li_num">{{user_datas.order_count_d}}</div>
 				<div class="my_zh_order_li_type">订单成功</div>
 			</div>
 			<i class="iconfont icon-next-m my_zh_order_li_r"></i>
@@ -112,39 +119,50 @@
 		setTimeout(function(){
 		  layer.closeAll('loading');
 		}, 300);
-		
-		
-		
-		// $('.M-box2').pagination({
-		// 		totalData:100,
-		// 		showData:10,
-		// 		coping: true,
-		// 		// mode: 'fixed',
-		// 		// homePage: '首页',
-		// 		// endPage: '末页',
-		// 		prevContent: '上页',
-		// 		nextContent: '下页',
-		// 		callback: function (api) {
-		// 			//console.log(api.getCurrent())
-		// 			var page=api.getCurrent()
-		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
-		// 		}
-		// }); 
-		
-		
 	})
 	
-	var vm_myyjfk = new Vue({
+	// function getPasswordSecurityLevel(password){
+	// 		return 0
+	// 		//密码长度大于5位
+	// 		+( password.length > 5 )
+	// 		//密码含有字母
+	// 		+( /[a-z]/.test(password) && /[A-Z]/.test(password) )
+	// 		//密码含有字母和数字
+	// 		+( /\d/.test(password) && /\D/.test(password) )
+	// 		//密码含有特殊字符
+	// 		+( /[!,@,#,$,%,^,&,*,?,_,~,-,(,)]/.test(password) && /\w/.test(password) )
+	// 		//密码长度大于12位
+	// 		+( password.length > 12 );
+
+	// }
+	var _my_msg
+	var vm_mymsg = new Vue({
 			el: '#myyjfk',
 			data: {
 				
-				yjfk_img:'./img/tx_03.jpg'
+				yjfk_img:'./img/tx_03.jpg',
+				user_datas:'',
+				token:'',
 			},
 			created: function() {
-				console.log('vm_myyjfk')
-			
+				_my_msg=this
+				console.log('我的账户')
+				if(storage_fuc.getItem("user")){
+					get_usermsg(function(res){
+						_my_msg.user_datas=JSON.parse(storage_fuc.getItem("user"))
+						_my_msg.token=storage_fuc.getItem("token")
+					})
+					
+				}
 			},
 			methods: {
+				repush_fuc:function(url){
+					// layer.closeAll()
+					window.location.replace(url)
+				},
+				getimg_fuc:function(img){
+					return getimg(img)
+				},
 				open_tk(num){
 					//页面层
 					if(num==-1){
@@ -154,7 +172,10 @@
 						  shadeClose: true,
 						  shade: 0.8,
 						  area: ['720px', '520px'],
-						  content: './set_zt_address.html' //iframe的url
+						  content: './set_zt_address.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}else if(num==0){
 						layer_pwd=layer.open({
@@ -163,7 +184,10 @@
 						  shadeClose: true,
 						  shade: 0.8,
 						  area: ['420px', '300px'],
-						  content: './set_name.html' //iframe的url
+						  content: './set_name.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}else if(num==1){
 						layer_tel=layer.open({
@@ -172,7 +196,10 @@
 						  shadeClose: true,
 						  shade: 0.8,
 						  area: ['420px', '300px'],
-						  content: './set_email.html' //iframe的url
+						  content: './set_email.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}else{
 						layer_tel=layer.open({
@@ -181,7 +208,11 @@
 						  shadeClose: true,
 						  shade: 0.8,
 						  area: ['420px', '400px'],
-						  content: './set_tel_zc.html' //iframe的url
+						  // content: './set_tel_zc.html' ,//iframe的url
+						  content: './set_tel.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}
 					
@@ -199,42 +230,43 @@
 				},
 				uploadImg:function(file){
 					var  _this=this
-					var reader = new FileReader();
-					reader.readAsDataURL(file.target.files[0]); // 读出 base64
-					reader.onloadend = function () {
-					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-					     var dataURL = reader.result;//base64
-					     // 显示图片
-					     // $('#showImg').attr('src',dataURL);
-							 _this.yjfk_img=dataURL
-							 
-							
-					};
-					return
-					var fd=new FormData()
-					fd.append('file',file)
-					// var datas={
-					// 	file:file
-					// }
-					console.log(file)
 					$.ajax({
 						type: "POST",
 						url: IPurl+'/Base/upload',
-						data: fd,
-						async:false,
-						cache: true,
+						data: new FormData($('#form')[0]),
+						// async:false,
+						cache: false,
 						processData: false,
 						contentType: false,//不去设置Content-Type请求头
+						// enctype: 'multipart/form-data',    //需要正确设置此项
+						headers:{
+							"Authorization":storage_fuc.getItem("token")||'',
+						},
 						success: function(res) {
 							// console.log(res);
 							if(typeof(res)=='string'){
 								res=JSON.parse(res)
 							}
-							if (res.error == 0) {
+							if (res.status == 200) {
 							console.log(res)
 								layer.msg('上传成功')
+								 Vue.set(_this.user_datas,'avatar',res.data)
+								 
+								 var datas={
+									 avatar:res.data
+								 }
+								 _post('/Member.Member/update',datas,function(res){
+									 if (res.status == 200){
+										 layer.msg('操作成功')
+										 get_usermsg()
+									 }
+								 })
 							} else {
-								layer.msg('获取数据失败')
+								if(res.msg){
+									layer.msg(res.msg)
+								}else{
+									layer.msg('操作失败')
+								}
 							}
 					
 						},
@@ -243,7 +275,6 @@
 							console.log(err)
 						}
 					})
-					
 				},
 				
 				

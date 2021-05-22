@@ -8,11 +8,14 @@
 		<div class="dis_flex aic zhaq_lv">
 			账号安全级别：
 			<div class="dis_flex aic zhaq_lv_img">
-				<span style="background: #71BDE1;"></span>
-				<span style="background: #569BCB;"></span>
-				<span style="background: #1471b2;"></span>
+				<span style="background: #71BDE1;" v-if="user_datas.safe_level>0"></span>
+				<span style="background: #569BCB;" v-if="user_datas.safe_level>1"></span>
+				<span style="background: #1471b2;" v-if="user_datas.safe_level>2"></span>
 			</div>
-			<div class="c9">一般</div>
+			<div class="c9" v-if="user_datas.safe_level==0">危险</div>
+			<div class="c9" v-if="user_datas.safe_level==1">不太安全</div>
+			<div class="c9" v-if="user_datas.safe_level==2">一般</div>
+			<div class="c9" v-if="user_datas.safe_level==3">安全</div>
 		</div>
 		<div class="dis_flex aic zhaq_li">
 			<i class="iconfont icon-denglumima"></i>
@@ -23,7 +26,7 @@
 		<div class="dis_flex aic zhaq_li">
 			<i class="iconfont icon-shoujihao"></i>
 			<div class="zhaq_li_name">手机验证</div>
-			<div class="zhaq_li_msg flex_1" style="color: #555;">您验证的手机：175418251，若丢失，请立即更换</div>
+			<div class="zhaq_li_msg flex_1" style="color: #555;">您验证的手机：{{user_datas.mobile}}，若丢失，请立即更换</div>
 			<div class="zhaq_li_cz" @click="open_tk(1)">修改</div>
 		</div>
 		
@@ -40,15 +43,24 @@
 		
 		
 	})
+	var _my_msg
 	var layer_pwd,layer_tel
 	var vm_myzhaq = new Vue({
 			el: '#myzhaq',
 			data: {
-			
+				user_datas:'',
+				token:'',
 			},
 			created: function() {
+				_my_msg=this
 				console.log('vm_myzhaq')
-			
+				if(storage_fuc.getItem("user")){
+					get_usermsg(function(res){
+						_my_msg.user_datas=JSON.parse(storage_fuc.getItem("user"))
+						_my_msg.token=storage_fuc.getItem("token")
+					})
+					
+				}
 			},
 			methods: {
 				open_tk(num){

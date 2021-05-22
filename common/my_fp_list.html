@@ -14,53 +14,60 @@
 				<div class="tac fp_list_td3 dis_flex aic ju_c">状态</div>
 				<div class="tac fp_list_td4 dis_flex aic ju_c">操作</div>
 			</div>
-			<div class="order_li_box" v-for="(item,index) in order_list">
+			<div class="order_li_box" v-for="(item,index) in fp_list">
 				<div class="order_li_tit dis_flex aic ju_b">
 					<div class="dis_flex aic">
 						<div class="dx_xz_li dis_flex aic" @click="order_xz_fuc(index,item)">
 							<!-- <span class="dx_xz_li_box dis_flex aic ">
 								<i v-if="item.active" class="iconfont icon-duigou cEE0913"></i>
 							</span> -->
-							2020-023-19
+							{{gettime(item.create_time)}}
 						</div>
-						<div class="order_li_id">订单号：123458401265490132</div>
+						<div class="order_li_id">订单号：{{item.order_code}}</div>
 					</div>
 					<div class="dis_flex aic order_li_del">
-						<i @click="order_del(index,item)" class="iconfont icon-shanchukaobei"></i>
+						<!-- <i @click="order_del(index,item)" class="iconfont icon-shanchukaobei"></i> -->
 					</div>
 				</div>
 				<table class=" order_table">
 					<tr v-for="(item1,index1) in item.goods">
 						<td class="fp_list_td1" rowspan="1">
 							<div class="dis_flex aic">
-								<div class="order_li_img bg_div">
+								<!-- <div class="order_li_img bg_div">
 									<div style="background-image: url(img/cjcg_img_03.jpg);"></div>
 								</div>
 								<div class="order_li_msg">
 									<div class="order_li_msg_name">绥化不锈钢阀门厂家-din15不锈钢</div>
 									<div class="order_li_msg_gg">规格：3A/0.45KW</div>
+								</div> -->
+								<div class="order_li_img bg_div">
+									<div v-if="item1.goods_pic" :style="'background-image: url('+getimg_fuc(item1.goods_pic)+');'"></div>
+								</div>
+								<div class="order_li_msg">
+									<div class="order_li_msg_name">{{item1.goods_name}}</div>
+									<div class="order_li_msg_gg">规格：{{item1.goods_sku}}</div>
 								</div>
 							</div>
 						</td>
-						<td class="fp_list_td2" rowspan="1">电子发票</td>
-						<td class="fp_list_td3" rowspan="1">
-							<div v-if="index==0" style="color: #4FA930;">已开票</div>
-							<div v-else style="color: #D43939;">未开票</div>
+						<td class="fp_list_td2" v-if="index1==0" :rowspan="item.goods.length">电子发票</td>
+						<td class="fp_list_td3" v-if="index1==0" :rowspan="item.goods.length">
+							<div v-if="item.receipt_status!=0" style="color: #D43939;">已开票</div>
+							<div v-else style="color: #4FA930;">未开票</div>
 						</td>
-						<td class="fp_list_td4" rowspan="1"> 
-							<a @click="see_fp_fuc(item)" href="javascript:;" v-if="index==0" style="color:#3DB8FF;">查看详情</a>
-							<a v-else class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer m0a"  @click="open_tk(0)">申请补开</a>
+						<td class="fp_list_td4" v-if="index1==0" :rowspan="item.goods.length"> 
+							<a @click="see_fp_fuc(item)" href="javascript:;" v-if="item.receipt_status==1||item.receipt_status==2" style="color:#3DB8FF;">查看详情</a>
+							<a v-else class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer m0a"  @click="open_tk(item)">申请补开</a>
 						</td>
 						
 					</tr>
 				</table>
 			</div>
-	
-			<div class="list_page tac dis_flex">
+			<div class="w100" v-if="fp_list.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
+			<div v-if="fp_list.length>0" class="list_page tac dis_flex">
 				<!-- <div class="flex_1"></div>
 					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
 				<div class="flex_1"></div> -->
-				<div class="m-style M-box2"></div>
+				<div class="m-style M-box_fp"></div>
 			</div>
 		</form>
 	
@@ -79,7 +86,11 @@
 						订单状态
 					</td>
 					<td>
-						已完成
+						<span v-if="datas.order_status==1"> 待付款</span>
+						<span v-if="datas.order_status==2"> 待发货</span>
+						<span v-if="datas.order_status==3"> 待收货</span>
+						<span v-if="datas.order_status==4"> 已完成</span>
+						<span v-if="datas.order_status==5"> 已取消</span>
 					</td>
 				</tr>
 				<tr>
@@ -87,7 +98,7 @@
 						订单编号
 					</td>
 					<td>
-						133251251211212
+						{{datas.order_code}}
 					</td>
 				</tr>
 				<tr>
@@ -95,7 +106,7 @@
 						下单时间
 					</td>
 					<td>
-						2020.02.03
+						{{gettime(datas.create_time)}}
 					</td>
 				</tr>
 				<tr>
@@ -103,7 +114,8 @@
 						发票类型
 					</td>
 					<td>
-						电子普通发票
+						<span v-if="datas.receipt_type==0">不开发票</span>
+						<span v-if="datas.receipt_type==1">电子普通发票</span>
 					</td>
 				</tr>
 			</tbody>
@@ -121,15 +133,9 @@
 						发票状态
 					</td>
 					<td>
-						已开票
-					</td>
-				</tr>
-				<tr>
-					<td>
-						发票内容
-					</td>
-					<td>
-						发票内容
+						<span v-if="datas.receipt_status==0">未开</span>
+						<span v-if="datas.receipt_status==1">已开</span>
+						<span v-if="datas.receipt_status==2">补开</span>
 					</td>
 				</tr>
 				<tr>
@@ -137,14 +143,30 @@
 						发票抬头
 					</td>
 					<td>
-						个人
+						<span>{{datas.receipt_header_type==1?'商家发票':'个人发票'}}</span>
+					</td>
+				</tr>
+				<tr v-if="datas.receipt_header_name">
+					<td>
+						发票单位名称
+					</td>
+					<td>
+						{{datas.receipt_header_name}}
+					</td>
+				</tr>
+				<tr v-if="datas.receipt_header_code">
+					<td>
+						发票纳税人识别号
+					</td>
+					<td>
+						{{datas.receipt_header_code}}
 					</td>
 				</tr>
 			</tbody>
 		</table>
 		
-		<div class="dis_flex aic down_fp">
-			<a href="javascript:;" @click="downLoad('发票','https://img2.baidu.com/it/u=111713540,615806613&fm=26&fmt=auto&gp=0.jpg')"><i class="iconfont icon-xiazai"></i>查看发票</a>
+		<div v-if="datas.receipt_pic" class="dis_flex aic down_fp">
+			<a class="cpointer" @click="downLoad('发票',datas.receipt_pic)"><i class="iconfont icon-xiazai"></i>查看发票</a>
 		</div>
 	</div>
 </div>
@@ -157,10 +179,10 @@
 		
 	})
 	var layer_pwd,layer_tel
-	var vm_myzhaq = new Vue({
+	var vm_myfp = new Vue({
 			el: '#myzhaq',
 			data: {
-				order_list:[
+				fp_list:[
 					{
 						goods:[1]
 					},
@@ -171,35 +193,70 @@
 						goods:[1]
 					},
 				],
-				xq_kg:false
+				xq_kg:false,
+				datas:''
 			},
 			created: function() {
-				console.log('vm_myzhaq')
+				console.log('vm_myfp')
 				
 			},
 			mounted:function(){
-				$('.M-box3').pagination({
-						totalData:100,
-						showData:10,
-						coping: true,
-						// mode: 'fixed',
-						// homePage: '首页',
-						// endPage: '末页',
-						prevContent: '上页',
-						nextContent: '下页',
-						callback: function (api) {
-							//console.log(api.getCurrent())
-							var page=api.getCurrent()
-							// getdatalist(that,type,cityid,cityid1,page,pagesize)
-						}
-				});
 				
+				this.getdata_fp(1)
 				
 			},
 			methods: {
+				gettime:function(time){
+					return gettime(time,'-')
+				},
+				getimg_fuc:function(img){
+					return getimg(img)
+				},
+				getdata_fp:function(page){
+					var datas={
+						limit:10,
+						page:page||1,
+						// type:this.wenti_list_id,
+						order_status:'1,2,3,4',
+						
+						
+					}
+					var jkurl='/Order.GoodsOrder/myList'
+					// layer.load(1);
+					setTimeout(function(){
+					  layer.closeAll('loading');
+					}, 1000);
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_myfp.fp_list=res.data.list
+							 if(page==1){
+								 $('.M-box_fp').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_myfp.getdata_fp(page)
+								 	}
+								 });
+							 }
+						 }
+					})
+				},
+				
 				downLoad: function(downloadName, url) {
 					var _this=this
 				    const tag = document.createElement('a');
+						if(url){
+							url=getimg(url)
+						}
 				    // 此属性的值就是下载时图片的名称，注意，名称中不能有半角点，否则下载时后缀名会错误
 				    tag.setAttribute('download', downloadName.replace(/\./g, '。'));
 				
@@ -228,7 +285,20 @@
 					return canvas.toDataURL('image/' + extension, 1);
 				},
 				see_fp_fuc: function(item){
-					this.xq_kg=true
+					
+					var datas={
+						goods_order_id: item.goods_order_id
+					}
+					var _this=this
+					this.datas=''
+					_get('/Order.GoodsOrder/myView', datas, function(res) {
+						if (res.status == 200) {
+							console.log(res.data.list)
+							_this.datas= res.data
+							_this.xq_kg=true
+							
+						}
+					})
 				},
 				order_del: function(num, item) {
 					//询问框
@@ -241,27 +311,15 @@
 				
 					});
 				},
-				open_tk(num){
-					//页面层
-					if(num==0){
-						layer_pwd=layer.open({
-						  type: 2,
-						  title: '发布服务',
-						  shadeClose: true,
-						  shade: 0.8,
-						  area: ['600px', '400px'],
-						  content: './tk_sq_kb.html' //iframe的url
-						}); 
-					}else{
-						layer_tel=layer.open({
-						  type: 2,
-						  title: '修改手机号',
-						  shadeClose: true,
-						  shade: 0.8,
-						  area: ['420px', '300px'],
-						  content: './set_tel.html' //iframe的url
-						}); 
-					}
+				open_tk(item){
+					layer_pwd=layer.open({
+					  type: 2,
+					  title: '发布服务',
+					  shadeClose: true,
+					  shade: 0.8,
+					  area: ['600px', '400px'],
+					  content: './tk_sq_kb.html?id='+item.goods_order_id //iframe的url
+					}); 
 					
 				},
 				

@@ -37,14 +37,14 @@
 				<div class="w1200 dis_flex ais">
 					<div class="main_L   flex_0">
 						<div class="main_L_z">
-							<div class="bg_div" :class="{'cur':banner_index==index}" v-for="(item,index) in banner" @click="setswiper(index)">
-								<div  :style="'background-image: url('+item.fm+');'"></div>
+							<div class="bg_div cpointer" :class="{'cur':banner_index==index}" v-for="(item,index) in banner" @click="setswiper(index)">
+								<div v-if="item.pic" :style="'background-image: url('+getimg_fuc(item.pic)+');'"></div>
 							</div>
 						</div>
 					</div>
 					<div class="main_R flex_1 dis_flex ais ju_b">
-						<a href="" class="bg_div index_baner">
-							<div :style="'background-image: url('+banner[banner_index].banner+');'"></div>
+						<a :href="banner[banner_index].url_link?banner[banner_index].url_link:'###'" class="bg_div index_baner">
+							<div v-if="banner[banner_index]" :style="'background-image: url('+getimg_fuc(banner[banner_index].pic)+');'"></div>
 						</a>
 						<div class="main_R_list">
 							<div class="main_list_tit dis_flex aic ju_b">
@@ -52,9 +52,9 @@
 								<a href="zixun.html">更多<i class="iconfont icon-next-m"></i></a>
 							</div>
 							<div class="w100">
-								<a class="dis_flex aic main_li" :href="'zixun_xq.html?id='+index" v-for="(item,index) in 18" title="港口钢材1折优惠，还不还不还不还不还不">
+								<a class="dis_flex aic main_li" :href="'zixun_xq.html?id='+item.article_member_info_id" v-for="(item,index) in zx_list" title="港口钢材1折优惠，还不还不还不还不还不">
 									<span class="main_li_icon dis_flex aic ju_c flex_0">资讯</span>
-									<span class="oh1">港口钢材1折优惠，还不还不还不还不还不...</span>
+									<span class="oh1">{{item.title}}</span>
 								</a>
 							</div>
 						</div>
@@ -67,7 +67,7 @@
 							<div class="dis_flex aib"><span>圈内合作</span>筑采为您服务</div>
 						</div>
 						<div class="dis_flex aic ju_b">
-							<a href="qnhz.html?header_cur=2" class="hz_type bg_div">
+							<a href="qnhz.html?header_cur=2&type=0" class="hz_type bg_div">
 								<div class="hz_type_1" style="background-image: url(img/qnhz_bg_15.jpg);">
 									<div class="hz_type_tit">
 										<span>我是服务方</span>筑采管家，为您提供更多资源放心找人，找合作，找项目
@@ -92,7 +92,7 @@
 									</div>
 								</div>
 							</a>
-							<a href="qnhz.html?header_cur=2" class="hz_type bg_div">
+							<a href="qnhz.html?header_cur=2&type=1" class="hz_type bg_div">
 								<div class="hz_type_1" style="background-image: url(img/qnhz_bg_15.jpg);">
 									<div class="hz_type_tit">
 										<span>我是需求方</span>筑采管家，为您提供优质合作伙伴
@@ -125,10 +125,10 @@
 								<div class="dis_flex aib"><span>场景采购</span>产品拥有场景</div>
 								<a href="cjcg.html?header_cur=1" class="dis_flex aic c6">更多场景<i class="iconfont icon-gengduo1"></i></a>
 							</div>
-							<div class="dis_flex aic ju_b">
-								<a href="cjcg.html?header_cur=1" class="cjcg_li bg_div bg_div_hover" v-for="(item,index) in cjcg">
-									<div :style="'background-image: url('+item.img+ ');'">
-										<div class="cjcg_tit">{{item.title}}</div>
+							<div class="dis_flex aic ">
+								<a :href="'cjcg.html?header_cur=1&goods_cate_scene_id='+item.goods_cate_scene_id+'&cj_xz='+JSON.stringify(item)" class="cjcg_li bg_div bg_div_hover" v-for="(item,index) in cjcg">
+									<div :style="'background-image: url('+getimg_fuc(item.pic)+ ');'">
+										<!-- <div class="cjcg_tit">{{item.cate_name}}</div> -->
 									</div>
 								</a>
 							</div>
@@ -172,47 +172,10 @@
 				el: '#body',
 				data: {
 					
-					banner:[
-						{
-							fm:'img/index_xbanner_06.jpg',
-							banner:'img/index_banner_03.jpg'
-						},
-						{
-							fm:'img/index_xbanner_09.jpg',
-							banner:'img/index_xbanner_09.jpg',
-						},
-						{
-							fm:'img/index_xbanner_11.jpg',
-							banner:'img/index_xbanner_11.jpg',
-						},
-					],
+					banner:[],
 					banner_index:0,
-					cjcg:[
-						{
-							title:'空调通风',
-							img:'img/index_cjcg_18.jpg'
-						},
-						{
-							title:'土建',
-							img:'img/index_cjcg_20.jpg'
-						},
-						{
-							title:'消防',
-							img:'img/index_cjcg_22.jpg'
-						},
-						{
-							title:'市政园林',
-							img:'img/index_cjcg_24.jpg'
-						},
-						{
-							title:'装饰装修',
-							img:'img/index_cjcg_26.jpg'
-						},
-						{
-							title:'水电',
-							img:'img/index_cjcg_28.jpg'
-						},
-					]
+					cjcg:[],
+					zx_list:[]
 				},
 				created: function() {
 					
@@ -221,9 +184,12 @@
 					// 	that.token = getCookie('logintoken')
 					// 	// userMsg = JSON.parse(getCookie('userMsg'))
 					// }
-					
+					that.get_banner()
 				},
 				methods: {
+					getimg_fuc:function(img){
+						return getimg(img)
+					},
 					setswiper:function(index){
 						console.log(index)
 						that.banner_index=index
@@ -233,6 +199,43 @@
 						var img1 = img.split("^")
 						// console.log(img1[0])
 						return img1[0]
+					},
+					get_banner:function(){
+						var datas={
+							place_type:1
+						}
+						_get('/Config.Banner/index',datas,function(res){
+							 if (res.status == 200){
+								 console.log(res.data.list)
+								 that.banner=res.data.list
+								 that.get_CateScene()
+								 that.get_zixun()
+							 }
+						})
+					},
+					get_zixun:function(){
+						var datas={
+							limit:18,
+							page:1
+						}
+						_get('/Article.MemberInfo/index',datas,function(res){
+							 if (res.status == 200){
+								 console.log(res.data.list)
+								 that.zx_list=res.data.list
+							 }
+						})
+					},
+					get_CateScene:function(){
+						var datas={
+							limit:6,
+							page:1
+						}
+						_get('/Goods.CateScene/index',datas,function(res){
+							 if (res.status == 200){
+								 console.log(res.data.list)
+								 that.cjcg=res.data.list
+							 }
+						})
 					},
 					//奢华甄选
 					getshdata:function(){

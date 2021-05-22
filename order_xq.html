@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>筑采管家</title>
+		<meta name="keywords" content="筑采管家">
+		<meta name="Description" content="筑采管家">
+		<meta name="renderer" content="webkit">
+		<meta name=renderer content=webkit>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
+		<script src="./js/jquery.min.js"></script>
+		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/layer/layer.js"></script>
+		<script src="./js/swiper/js/swiper.min.js"></script>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
+		<script src="js/pagination/jquery.pagination.js"></script>
+		<style>
+			.order_tit {
+			    width: 100%;
+			    height: 60px;
+			    background-color: #fff;
+			    line-height: 60px;
+			    margin-bottom: 10px;
+			    overflow: hidden;
+			}
+			.order_tit .order_num {
+			    float: left;
+			    margin-left: 20px;
+			    font-size: 14px;
+			    font-weight: bold;
+			}
+			.state_info li {
+			    position: relative;
+			    /* width: 259px; */
+					width: 25%;
+			    border-right: 1px solid #f5f5f5;
+			    float: left;
+			    min-height: 180px;
+			    padding: 20px 20px 0;
+					font-size: 12px;
+					list-style: none;
+			}
+			.state_info .title {
+			    font-size: 14px;
+			    font-weight: bold;
+			    padding-bottom: 20px;
+			}
+			.receiver_name_con, .receiver_phone_con {
+			    position: relative;
+			    cursor: pointer;
+					
+			}
+			.pb5{
+				padding-bottom: 5px;
+			}
+			.order_xq_li{
+				padding: 10px 0;
+				font-size: 14px;
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		<div  class="">
+			<div class="w100" style="height: 187px;">
+				<div class="header_top">
+					<include src="./common/header.html"></include>
+					<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header.html"></include> -->
+				</div>
+				<include src="./common/header1.html"></include>
+				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
+			
+			
+				<!-- header -->
+			
+				<include src="./common/header_header.html"></include>
+			</div>
+			<div v-cloak id="body" class="html_main bgf">
+				<div class="w1200">
+					<div class="xz_tit dis_flex aic ju_b">
+						<div>
+							<a href="index.html">首页</a>＞<a href="grzx.html?my_cur=40">我的筑采</a>＞<a  style="color: rgb(235, 95, 51);">我的订单</a></div> 
+						
+					</div>
+					<div class="order_tit ">
+						<div class=" dis_flex aic ju_b w100 pl10 pr10">
+							<span id="order_id">订单号：{{datas.order_code}}</span>
+							<span style='font-size: 20px;color:#FF8000;' v-if="datas.order_status==2"> 待发货</span>
+							<span style='font-size: 20px;color:#FF8000;' v-if="datas.order_status==1"> 待付款</span>
+							<span style='font-size: 20px;color:#FF8000;' v-if="datas.order_status==3"> 待收货</span>
+							<span style='font-size: 20px;color:#FF8000;' v-if="datas.order_status==4"> 已完成</span>
+							<span style='font-size: 20px;color:#FF8000;' v-if="datas.order_status==5"> 已取消</span>
+						</div>
+						<!--不需要时设置display：none；-->
+						<div class="remain_time" style="display: none;">
+							<span class="time_pic">剩余</span>
+							<div class="time-item">
+								<span id="day_show" style="display: none;"><s></s>00天</span>
+								<span id="hour_show"><s id="h"></s>00小时</span>
+								<span id="minute_show"><s></s>00分</span>
+								<span id="second_show"><s></s>00秒</span>
+							</div>
+						</div>
+						<div class="order_remain_remark" style="display: none;">退款时间储蓄卡1-7天、信用卡1-15天，如超期未收到，请联系客服。</div>
+							
+					</div>
+					<ul class="state_info clearfix bgf">
+						<li>
+							<div class="title">收货信息</div>
+							<div v-if="datas.send_type==1" class="receiver_name_con">收货人：
+								<span class="nowrap receiver_name">{{datas.member_name}}</span>
+								<!-- <span class="receiver_name_list">{{datas.member_name}}</span> -->
+							</div>
+							<div v-if="datas.send_type==1" class="receiver_phone_con">联系方式：
+								<span class="receiver_phone nowrap">{{datas.mobile}}</span>
+								<!-- <span class="receiver_phone_list">{{datas.mobile}} {{datas.mobile}}</span> -->
+							</div>
+							<div  v-if="datas.send_type==1" class="receiver_address_wrap" style="display: block;">
+								<div>收货地址：
+									<span class="receiver_address">{{datas.province}}{{datas.city}}{{datas.district}}{{datas.address}}</span>
+								</div>
+							</div>
+							<div v-if="datas.send_type==2" class="self_mention_address_wrap">
+								<div>自提点：
+									<span class="self_mention_name">{{datas.pick_name}}</span>
+								</div>
+								<div>自提点地址：
+									<span class="self_mention_address">{{datas.province}}{{datas.city}}{{datas.district}}{{datas.address}}</span>
+								</div>
+								<div>自提点联系方式：
+									<span class="self_mention_phone">{{datas.pick_mobile}}</span>
+								</div>
+							</div>
+						</li>
+						<li class="delivery_Info express" style="">
+							<div class="title">配送信息</div>
+							<div>配送方式：
+								<span v-if="datas.send_type==1" class="express-fast" style="">快递</span>
+								<span v-if="datas.send_type==2" class="express-take">自提</span>
+							</div>
+							<div>
+								<span>配送信息：</span>
+								<span class="express-info">
+									<!-- 顺丰快递|1,申通快递|2,中通快递|3,圆通快递|4,韵达快递|5,邮政快递|6,百世汇通|7,德邦物流|8 -->
+									<!-- <span v-if="datas.express_name==1" class="express-company">顺丰快递</span>
+									<span v-if="datas.express_name==2" class="express-company">申通快递</span>
+									<span v-if="datas.express_name==3" class="express-company">中通快递</span>
+									<span v-if="datas.express_name==4" class="express-company">圆通快递</span>
+									<span v-if="datas.express_name==5" class="express-company">韵达快递</span>
+									<span v-if="datas.express_name==6" class="express-company">邮政快递</span>
+									<span v-if="datas.express_name==7" class="express-company">百世汇通</span>
+									<span v-if="datas.express_name==8" class="express-company">德邦物流</span> -->
+									<span v-if="datas.express_name" class="express-company">{{datas.express_name}}</span>
+								</span>
+								<div v-if="datas.express_code" class="express-infonum">
+									<span style="width: 45px;">单号：</span>
+									<span>{{datas.express_code}}</span>
+									<!-- <input id="contents" class="express-number" title="">
+									<input type="text" style="border:0px solid red;width:0.1px;background: transparent;color:transparent;">
+									<a class="copy">复制</a> -->
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="title">付款信息</div>
+							<div>结算方式：
+								<span v-if="datas.pay_type==1" id="final_paid_type">微信</span>
+								<span v-if="datas.pay_type==2" id="final_paid_type">支付宝</span>
+								<span v-if="datas.pay_type==3" id="final_paid_type">银行转账</span>
+							</div>
+							<div>结算金额：¥
+								<span class="settle-money">{{datas.pay_money}}</span>
+								<!-- <span class="link_blue money_detail money_detailobj" style="display: none">明细
+									<ul></ul>
+								</span> -->
+							</div>
+						</li>
+						<li>
+							<div class="title">发票信息</div>
+							
+							<div class="invo_info plain-invoice-personal">
+								<span>开票类型:</span>
+								<span v-if="datas.receipt_type==0">不开发票</span>
+								<span v-if="datas.receipt_type==1">电子普通发票</span>
+								<br>
+								<span>开票状态：</span>
+								<span v-if="datas.receipt_status==0" class="invoice_status">未开</span>
+								<span v-if="datas.receipt_status==1" class="invoice_status">已开</span>
+								<span v-if="datas.receipt_status==2" class="invoice_status">补开</span>
+								<div v-if="datas.receipt_header_type">
+									<span>发票抬头：</span>
+									<span>{{datas.receipt_header_type==1?'商家发票':'个人发票'}}</span>
+								</div>
+								
+								<div v-if="datas.receipt_header_name">
+									<span>发票单位名称：</span>
+									<span>{{datas.receipt_header_name}}</span>
+								</div>
+								<div v-if="datas.receipt_header_name" class="pb5">
+									<span>发票纳税人识别号：</span>
+									<span>{{datas.receipt_header_code}}</span>
+								</div>
+								<div v-if="datas.receipt_pic" class=" dis_flex pb5">
+									<span>发票凭证：</span>
+									<div class="bg_div" style="width: 150px;height: 150px;">
+										<div :style="'background-image: url('+getimg_fuc(datas.receipt_pic)+');'"></div>
+									</div>
+								</div>
+							</div>
+							
+						</li>
+					</ul>
+					
+					
+					<div class="order_list_tit bgf3 dis_flex aic" style="margin-top: 10px;">
+						<div class="tac order_list_td1">商品</div>
+						<div class="tac order_list_td2">售价（元）</div>
+						<div class="tac order_list_td3">数量</div>
+						<div class="tac order_list_td4">支付方式</div>
+						<div class="tac order_list_td5">总计（元）</div>
+						<div class="tac order_list_td6">
+						</div>
+					</div>
+						<div class="order_li_tit dis_flex aic ju_b">
+							<div class="dis_flex aic">
+								<!-- <div class="dx_xz_li dis_flex aic" @click="order_xz_fuc(index,datas)"> -->
+								<div class="dx_xz_li dis_flex aic">
+								<!-- 	<span v-if="datas.order_status==4" class="dx_xz_li_box dis_flex aic ">
+										<i v-if="datas.active" class="iconfont icon-duigou cEE0913"></i>
+									</span> -->
+									{{gettime(datas.create_time)}}
+								</div>
+								<div class="order_li_id">订单号：{{datas.order_code}}</div>
+							</div>
+							<div class="dis_flex aic order_li_del">
+								<span v-if="datas.order_status==1" style="color: #D24043;">待付款</span>
+								<span v-if="datas.order_status==2" style="color:#3994D4;">待发货</span>
+								<span v-if="datas.order_status==3" style="color:#3994D4;">已发货</span>
+								<span v-if="datas.order_status==4" style="color: #666666;">已签收</span>
+								<span v-if="datas.order_status==5" style="color: #666666;">已取消</span>
+								<i v-if="datas.order_status==4" @click="order_del(index,datas)" class="iconfont icon-shanchukaobei"></i>
+							</div>
+						</div>
+					<table class=" order_table">
+						<tr v-for="(item1,index1) in datas.goods">
+							<td class="order_list_td1" rowspan="1">
+								<div class="dis_flex aic">
+									<div class="order_li_img bg_div">
+										<div v-if="item1.goods_pic" :style="'background-image: url('+getimg_fuc(item1.goods_pic)+');'"></div>
+									</div>
+									<div class="order_li_msg">
+										<div class="order_li_msg_name">{{item1.goods_name}}</div>
+										<div class="order_li_msg_gg">规格：{{item1.goods_sku}}</div>
+									</div>
+								</div>
+							</td>
+							<td class="order_list_td2" rowspan="1">￥{{item1.goods_price}}</td>
+							<td class="order_list_td3" rowspan="1">{{item1.goods_sum}}</td>
+							<td v-if="index1==0" class="order_list_td4" :rowspan="datas.goods.length">
+									<span v-if="datas.pay_type==1">微信</span>
+									<span v-if="datas.pay_type==2">支付宝</span>
+									<span v-if="datas.pay_type==3">银行转账</span>
+							</td>
+							<td v-if="index1==0" class="order_list_td5" :rowspan="datas.goods.length">
+								￥{{datas.pay_money}}</td>
+							<td class="order_list_td6">
+								<div class="dis_flex_c aic ju_a" v-if="datas.order_status != 5">
+									<!-- <a class="order_li_cz" :href="'xqy.html?id='+item1.goods_id">查看详情</a> -->
+									<a v-if="datas.order_status==1" class="order_li_cz" :href="'jst.html?order_code='+datas.order_code+'&pay_money='+datas.pay_money">去支付</a>
+									<span v-if="datas.order_status==1" class="order_li_cz cpointer" @click="order_off(datas)">取消订单</span>
+									<span v-if="datas.order_status==3" class="order_li_cz cpointer" @click="order_get(datas)">确认收货</span>
+									<span v-if="datas.receipt_type==0" class="order_li_cz order_li_cz1 cpointer" @click="open_fp(datas)">开发票</span>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div>
+						<div class="dis_flex aic ju_b order_xq_li">
+							<span>商品总额：</span>
+							<span>¥ {{datas.order_money}}</span>
+						</div>
+						<!-- <div class="dis_flex aic ju_b order_xq_li">
+							<span>运费：</span>
+							<span>¥ 14.74</span>
+						</div> -->
+						<div class="dis_flex aic ju_b order_xq_li">
+							<span>优惠券：</span>
+							<span>¥ {{datas.coupon_money}}</span>
+						</div>
+						<!-- <div class="dis_flex aic ju_b order_xq_li">
+							<span>运费立减：</span>
+							<span>¥ 14.74</span>
+						</div>
+						<div class="dis_flex aic ju_b order_xq_li">
+							<span>积分抵扣：</span>
+							<span>¥ 14.74</span>
+						</div> -->
+						<div class="dis_flex aic ju_b order_xq_li" style="color: #ff8327;">
+							<span>结算金额：</span>
+							<span>¥ {{datas.pay_money}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+		
+			
+			<!-- <include src="./common/footer_f.html"></include> -->
+			<include src="./common/footer.html"></include>
+			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/footer.html"></include> -->
+			
+		</div>
+		<script>
+			// var mySwiper
+			$(function(){
+				
+			})
+			
+			var that
+			var vm = new Vue({
+				el: '#body',
+				data: {
+					datas:''
+				},
+				created: function() {
+					
+					that=this
+					// if(getCookie('logintoken')){
+					// 	that.token = getCookie('logintoken')
+					// 	// userMsg = JSON.parse(getCookie('userMsg'))
+					// }
+					that.getdata()
+				},
+				methods: {
+					order_del: function(num, item) {
+						//询问框
+					
+						layer.confirm('是否删除选中的订单？', {
+							btn: ['确定', '取消'] //按钮
+						}, function() {
+							
+							var datas = {
+								goods_order_ids:item.goods_order_id
+								
+							}
+							if(num==-1){
+								datas = {
+									goods_order_ids:del_dis
+									
+								}
+							}
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
+							setTimeout(function(){
+								that.btnkg=0
+							},1500)
+							_post('/Order.GoodsOrder/deleteOrder', datas, function(res) {
+								if (res.status == 200) {
+									layer.msg('操作成功');
+									setTimeout(function(){
+										history.go(-1)
+									},1000)
+								}
+							})
+						}, function() {
+					
+						});
+					},
+					
+					gettime:function(time){
+						return gettime(time,'-')
+					},
+					getimg_fuc:function(img){
+						return getimg(img)
+					},
+					order_off:function(item){
+						layer.confirm('是否取消该订单？', {
+							btn: ['确定', '取消'] //按钮
+						}, function() {
+							
+							var datas = {
+								goods_order_id:item.goods_order_id
+								
+							}
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
+							setTimeout(function(){
+								that.btnkg=0
+							},1500)
+							_post('/Order.GoodsOrder/offOrder', datas, function(res) {
+								if (res.status == 200) {
+									// console.log(res.data.list)
+									layer.msg('操作成功');
+									setTimeout(function(){
+										that.getdata(1)
+									},1000)
+								}
+							})
+						}, function() {
+						
+						});
+					},
+					order_get:function(item){
+						var datas = {
+							goods_order_id:item.goods_order_id
+							
+						}
+						if(that.btnkg==1){
+							return
+						}
+						that.btnkg=1
+						setTimeout(function(){
+							that.btnkg=0
+						},1500)
+						_post('/Order.GoodsOrder/orderFinish', datas, function(res) {
+							if (res.status == 200) {
+								layer.msg('操作成功');
+								setTimeout(function(){
+									that.getdata(1)
+								},1000)
+							}
+						})
+					},
+					open_fp:function(item){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '发布需求',
+						  shadeClose: true,
+							scrollbar: false,
+						  shade: 0.8,
+						  area: ['500px', '500px'],
+						  content: './tk_sq_kb.html?id='+item.goods_order_id + '&order_code=' + item.order_code ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
+						}); 
+					},
+					getdata:function(){
+						//cshhr_pc
+						var datas = {
+							goods_order_id: getNowCanshu().id
+							
+						}
+						_get('/Order.GoodsOrder/myView', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								that.datas= res.data
+								
+							}
+						})
+					},
+					search_fuc:function(item) {
+						console.log(item)
+						that.search_key=item
+					},
+					setswiper:function(index){
+						console.log(index)
+						that.banner_index=index
+						// mySwiper.swipeTo(index, 1000, false)
+					},
+					getgimg:function(img) {
+						var img1 = img.split("^")
+						// console.log(img1[0])
+						return img1[0]
+					},
+					
+					formatter:function(value) {
+					    if(!value){
+					    	return value
+					    }
+					    if (value >= 10000 && value < 10000000) {
+					      value = (value / 10000).toFixed(1) + "万";
+					    } else if (value >= 10000000) {
+					      value = (value / 10000000).toFixed(1) + "千万";
+					    }
+					    return value;
+					},
+					
+				}
+			})
+			
+		</script>
+	</body>
+</html>

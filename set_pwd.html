@@ -114,61 +114,38 @@
 							} else {
 								that.btnkg = 1
 							}
-							// uni.showToast({
-							// 	icon: 'none',
-							// 	title: '发送成功'
-							// })
-							layer.msg('发送成功')
-							that.codetime()
-							that.btnkg = 0
-							return
-							var jkurl = '/login/index'
-							var data = {
-								type:that.login_type==0?2:that.login_type==2?1:1,
-								phone: that.tel
-							}
-							service.P_post(jkurl, data).then(res => {
-								that.btnkg = 0
-								console.log(res)
-								if (res.code == 1) {
-									var datas = res.data
-									console.log(typeof datas)
-							
-									if (typeof datas == 'string') {
-										datas = JSON.parse(datas)
+							$.ajax({
+								type: "post",
+								url: IPurl+'/Member.Member/sendSms',
+								data: {
+									mobile: that.tel
+								},
+								success: function(res) {
+									// console.log(res);
+									if(typeof(res)=='string'){
+										res=JSON.parse(res)
 									}
-							
-									uni.showToast({
-										icon: 'none',
-										title: '发送成功'
-									})
-									console.log(res)
-									// that.verification_key = res.data.data.key
-									that.codetime()
-							
-								} else {
-									if (res.msg) {
-										uni.showToast({
-											icon: 'none',
-											title: res.msg
-										})
+									if (res.status == 200) {
+										vm_myzhaq.verify_id=res.key
+										layer.msg('发送成功')
+										that.codetime()
+										that.btnkg = 0
 									} else {
-										uni.showToast({
-											icon: 'none',
-											title: '操作失败'
-										})
+										if(res.msg){
+											layer.msg(res.msg)
+										}else{
+											layer.msg('操作失败')
+										}
 									}
+							
+								},
+								error: function(err) {
+									layer.msg('请求失败')
+									console.log(err)
 								}
-							}).catch(e => {
-								that.btnkg = 0
-								console.log(e)
-								uni.showToast({
-									icon: 'none',
-									title: '操作失败'
-								})
 							})
 							
-						
+							
 						},
 						codetime:function() {
 							var that = this
@@ -205,7 +182,7 @@
 								return;
 							}
 							if (that.pwd.length<6) {
-								layer.msg('请输入6-46个字符的密码')
+								layer.msg('请输入6-16个字符的密码')
 								
 								return;
 							}
@@ -226,12 +203,25 @@
 								code: that.code,
 								password: that.pwd
 							}
-							// console.log(datas)
-							layer.msg('操作成功')
-							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+							var datas = {
+								mobile: that.tel,
+								verify: that.code,
+								verify_id: that.verify_id,
+								password:that.pwd,
+								re_password:that.pwd1,
+							}
+							var jkurl='/Member.Member/uppass'
+							
+							_post(jkurl,datas,function(res){
+								 layer.msg('操作成功')
+								 // var loginCodes=JSON.parse(storage_fuc.getItem('psd'))
+								 let newPsd = {phone: that.tel,psd: that.pwd}
+								 localStorage.setItem('psd',JSON.stringify(newPsd))
+								 setTimeout(function(){
+								 	// parent.layer.close('layer_pwd');
+								 	parent.layer.closeAll();
+								 },1000)
+							})
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

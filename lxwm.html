@@ -223,14 +223,15 @@
 
 
 			<!-- 中间内容部分 -->
-			<div class="lxwmContent_ct">
+			<div id="lxwmContent_ct" class="lxwmContent_ct">
 				<div class="lxwmbg_ct">
 				</div>
 				<div class="titles_ct w1200">
 					<span>公司介绍</span>
 					<span>COMPANY EVENTS</span>
 				</div>
-				<div class="gsjs_ct w1200 flex">
+				<!-- <div class="gsjs_ct w1200 flex fwb_box" v-html="datas.content"> -->
+				<div class=" w1200 fwb_box" v-html="datas.content">
 					<div class="houseImg_ct">
 						<img src="img/lxwmf_ct_.jpg">
 					</div>
@@ -270,7 +271,8 @@
 					<span>服务介绍</span>
 					<span>COMPANY EVENTS</span>
 				</div>
-				<div class="fwjs_ct">
+				<!-- <div class="fwjs_ct"> -->
+				<div class="w1200 fwb_box" v-html="datas0.content">
 					<p>
 						筑采的不良资产处置平台是以SaaS云服务方式提供一站式催收服务。该平台主要有两类用户，
 						一类是债权委托机构，另一类是催收机构和律所。这两类机构用户在平台注册认证后，
@@ -310,9 +312,9 @@
 						<img src="img/lxwmtel_ct.jpg">
 						<span>热线电话</span>
 						<div class="lxwmtel_ct flex">
-							<span>总线 : 010-68016922</span>
-							<span>传真 : 68011950</span>
-							<span>网站 : www.baidu.com.cn</span>
+							<span>总线 : {{BaseConfig.base.business_mobile}}</span>
+							<!-- <span>传真 : 68011950</span> -->
+							<span>网站 : www..zhucaiguanjia.com</span>
 						</div>
 					</div>
 				</div>
@@ -320,7 +322,8 @@
 					<span>合作洽谈</span>
 					<span>COMPANY EVENTS</span>
 				</div>
-				<div class="hzqt_ct w1200 flex">
+				<!-- <div class="hzqt_ct w1200 flex"  v-html="datas0.content"> -->
+				<div class="w1200 fwb_box"  v-html="datas1.content">
 					<img src="img/lxwmbank_ct.jpg">
 				</div>
 			</div>
@@ -330,5 +333,74 @@
 			<include src="./common/footer.html"></include>
 
 		</div>
+		<script>
+			var that
+			var vm_main = new Vue({
+				el: '#lxwmContent_ct',
+				data: {
+					BaseConfig:{},
+					ConfigLink:{},
+					datas:'',
+					datas0:'',
+					datas1:'',
+					
+				},
+				created: function() {
+					that=this
+					this.BaseConfig=JSON.parse(storage_fuc.getItem("BaseConfig"))
+					this.ConfigLink=JSON.parse(storage_fuc.getItem("ConfigLink"))
+					// ConfigLink
+					// that = this
+					this.getdata()
+					this.getdata0()
+					this.getdata1()
+				},
+				methods: {
+					getdata: function(key) {
+						var datas = {
+							keyword: 'gsjs_pc'
+							
+						}
+						_get('/Config.Protocol/view', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								that.datas= res.data
+								
+							}
+						})
+					},
+					getdata0: function(key) {
+						var datas = {
+							keyword: 'fwjs_pc'
+							
+						}
+						_get('/Config.Protocol/view', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								that.datas0= res.data
+								
+							}
+						})
+					},
+					getdata1: function(key) {
+						var datas = {
+							keyword: 'hzqt_pc'
+							
+						}
+						_get('/Config.Protocol/view', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								that.datas1= res.data
+								
+							}
+						})
+					},
+					getimg_fuc:function(img){
+						return getimg(img)
+					},
+			
+				}
+			})
+		</script>
 	</body>
 </html>

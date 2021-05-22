@@ -6,22 +6,29 @@
 		<div class="h_main_m">
 			<div class="h_search dis_flex ais">
 				<input class="flex_1 h_search_int" type="text" placeholder="请输入商品名称" v-model="search_key" />
-				<div class="h_search_btn flex_0 dis_flex aic ju_c cpointer"><i class="iconfont icon-sousuo"></i>搜索</div>
+				<div class="h_search_btn flex_0 dis_flex aic ju_c cpointer" @click="jump('cjcg.html?header_cur=1&keyword='+search_key)"><i class="iconfont icon-sousuo"></i>搜索</div>
 			</div>
 			<div class="h_main_m_key dis_flex fww">
 				<span v-for="(item,index) in h_main_m_key" @click="search_fuc(item)">{{item}}</span>
 			</div>
 		</div>
 		<div class="h_main_r dis_flex aic ">
-			<a class="header_usertx bg_div" href="grzx.html">
-				<div style="background-image: url(img/logo_min.png);"></div>
+			<a class="header_usertx bg_div" href="grzx.html?my_cur=40">
+				<div v-if="token" :style="'background-image: url('+getimg_fuc(user_datas.avatar)+');'"></div>
+				<!-- <div v-else style="background-image: url(img/logo_min.png);"></div> -->
+				<div v-else :style="'background-image: url('+getimg_fuc(BaseConfig.member.default_avatar)+');'"></div>
 			</a>
 			<div>
 				<div class="top_hyy">欢迎您访问筑采管家~</div>
-				<div class="dis_flex">
+				<div v-if="token" class="dis_flex aic">
+					<div  class="login_header cpointer" @click="jump('grzx.html?my_cur=40')">{{user_datas.username}}</div>
+					<div class="logout_btn" @click="logout_fuc">退出</div>
+				</div>
+				<div class="dis_flex" v-if="!token">
 					<a class="top_login dis_flex aic ju_c" href="login.html?type=1">登录</a>
 					<a class="top_login1 dis_flex aic ju_c" href="login.html?type=-1">快速注册</a>
 				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -40,23 +47,53 @@
 				'仿古砖'
 			],
 			search_key:'',
-			
+			user_datas:{},
+			BaseConfig:{},
+			token:''
 		},
 		created: function() {
-			
-			// that=this
-			// if(getCookie('logintoken')){
-			// 	that.token = getCookie('logintoken')
-			// 	// userMsg = JSON.parse(getCookie('userMsg'))
-			// }
-			
+			this.BaseConfig=JSON.parse(storage_fuc.getItem("BaseConfig"))
+			if(this.BaseConfig.goods.goods_search_word.length>0){
+				this.h_main_m_key=this.BaseConfig.goods.goods_search_word.split(',')
+			}
+			if(storage_fuc.getItem("user")){
+				this.user_datas=JSON.parse(storage_fuc.getItem("user"))
+				this.token=storage_fuc.getItem("token")
+			}
+			if(getNowCanshu().keyword){
+				this.search_key=decodeURIComponent(getNowCanshu().keyword)
+			}
 		},
 		methods: {
+			getimg_fuc:function(img){
+				return getimg(img)
+			},
 			search_fuc:function(item) {
 				console.log(item)
 				this.search_key=item
+				jump('cjcg.html?header_cur=1&keyword='+vm_header1.search_key)
 			},
-			
+			jump:function(url){
+				// if(!vm_header1.search_key){
+				// 	layer.msg('请输入搜索内容')
+				// 	return
+				// }
+				jump(url)
+			},
+			logout_fuc:function(img){
+				layer.confirm('是否退出登录', {
+					btn: ['确定', '取消'] //按钮
+				}, function() {
+					// layer.msg('操作成功');
+					storage_fuc.removeItem("user")
+					storage_fuc.removeItem("token")
+					storage_fuc.removeItem("goodslist_ct")
+					storage_fuc.removeItem("xaddress")
+					window.location.replace('index.html')
+				}, function() {
+				
+				});
+			},
 		}
 	})
 </script>

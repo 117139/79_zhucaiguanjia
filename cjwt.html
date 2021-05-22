@@ -52,7 +52,7 @@
 				cursor: pointer;
 			}
 
-			.contentLeft_ct>ul>li:nth-child(n+12) span {
+			.contentLeft_ct>ul>li:nth-child(n+14) span {
 				cursor: default;
 			}
 
@@ -111,11 +111,25 @@
 								<span @click="listsBtn(index)"
 									:class="{listActive_ct:ind==index, listTitle_ct:item.istitle}">{{item.txt}}</span>
 							</li>
+							
+							<li>
+								<span class="listTitle_ct">联系我们</span>
+							</li>
+							<li>
+								<span >业务咨询 :{{BaseConfig.base.business_mobile}}</span>
+							</li>
+							<li>
+								<span >售后服务 :{{BaseConfig.base.shop_mobile}}</span>
+							</li>
+							<li>
+								<span >邮箱 : {{BaseConfig.base.email}}</span>
+							</li>
+							
 						</ul>
 					</div>
 					<div class="contentRight_ct">
 						<div class="rightTitle_ct">{{rightTitle}}</div>
-						<div>
+						<div class="fwb_box" v-html="datas.content">
 							<img src="img/content.jpg">
 						</div>
 					</div>
@@ -127,6 +141,7 @@
 		</div>
 
 		<script type="text/javascript">
+			var that
 			var app = new Vue({
 				el: '#app_ct',
 				data: {
@@ -136,62 +151,64 @@
 							istitle: 1
 						},
 						{
-							txt: '关于我们'
+							txt: '关于我们',
+							key:'gywm'
 						},
 						{
-							txt: '隐私协议'
+							txt: '隐私协议',
+							key:'ysxy'
 						},
 						{
-							txt: '常见问题'
+							txt: '常见问题',
+							key:'cjwt'
 						},
 						{
-							txt: '会员问题'
+							txt: '会员问题',
+							key:'hywt'
 						},
 						{
-							txt: '会员介绍'
+							txt: '会员介绍',
+							key:'hyjs'
 						},
 						{
 							txt: '特色服务',
 							istitle: 1
 						},
 						{
-							txt: '快速下单'
+							txt: '快速下单',
+							key:'ksxd'
 						},
 						{
 							txt: '售后说明',
 							istitle: 1
 						},
 						{
-							txt: '发票说明'
+							txt: '发票说明',
+							key:'fpsm'
 						},
 						{
-							txt: '售后政策'
+							txt: '售后政策',
+							key:'shzc'
 						},
 						{
-							txt: '取消订单'
+							txt: '取消订单',
+							key:'qxdd'
 						},
 						{
-							txt: '在线支付'
+							txt: '在线支付',
+							key:'zxzf'
 						},
-						{
-							txt: '联系我们',
-							istitle: 1
-						},
-						{
-							txt: '业务咨询 : 051871-85080'
-						},
-						{
-							txt: '售后服务 : 051871-85080'
-						},
-						{
-							txt: '邮箱 : 051871-85080'
-						}
+						
 					],
 					// 列表点击后样式判断
 					ind: 1,
-					rightTitle: '关于我们'
+					rightTitle: '关于我们',
+					BaseConfig:'',
+					datas:''
 				},
 				created() {
+					that=this
+					this.BaseConfig=JSON.parse(storage_fuc.getItem("BaseConfig"))
 					var url = decodeURI(window.location.href);
 					var urlindex = url.indexOf('=');
 					console.log(urlindex)
@@ -201,18 +218,34 @@
 						this.$nextTick(function() {
 							this.ind = url
 							this.rightTitle = this.lists_ct[url].txt
+							this.getdata(this.lists_ct[url].key)
 						})
 					}
 				},
 				methods: {
+					//获取内容详情
+					getdata: function(key) {
+						var datas = {
+							keyword: key
+							
+						}
+						_get('/Config.Protocol/view', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								that.datas= res.data
+								
+							}
+						})
+					},
 					listsBtn:function(index) {
-						if (index <= 10) {
+						if (index <= 12) {
 							if (this.lists_ct[index].istitle) {
 								this.ind = index + 1
 							} else {
 								this.ind = index
 							}
 							this.rightTitle = this.lists_ct[this.ind].txt
+							this.getdata(this.lists_ct[this.ind].key)
 						}
 					}
 				}

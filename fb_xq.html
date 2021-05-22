@@ -67,7 +67,7 @@
 					<div class="set_li_name">紧急程度：</div>
 					
 					<select class="yjfk_wt_list" @change="xm_jj_fuc" v-model="xm_jj_lv">
-						<option v-for="(item,index) in xm_jj_lvs" :value="item.id">{{item.name}}</option>
+						<option v-for="(item,index) in xm_jj_lvs" :value="index">{{item.name}}</option>
 					</select>
 					<!-- <input type="text" id="test1"  v-model="code" placeholder="请选择"/> -->
 				</div>
@@ -101,12 +101,14 @@
 					<div class="dis_flex fww flex_1" style="padding: 0 10px;">
 						<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
 							<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
-							<div :style="'background-image: url('+item+');'"></div>
+							<div :style="'background-image: url('+getimg(item)+');'"></div>
 						</div>
 						<div class="up_img" v-if="yjfk_img.length<9">
 							<img src="./img/upimg_03.jpg" alt="">
 							<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
-							<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+							<form id="form">
+								<input id="scheaderimg" type="file" name="file" @change="uploadImg($event)">
+							</form>
 						</div>
 					</div>
 				</div>
@@ -175,7 +177,7 @@
 							{name:'不紧急',id:1},
 							{name:'紧急',id:2},
 						],
-						xm_jj_lv:1,
+						xm_jj_lv:0,
 						xm_fbf: '',
 						tel:'',
 						// xm_add:'',
@@ -206,6 +208,12 @@
 						// });
 					},
 					methods: {
+						getimg:function(img){
+							// if(!img){
+							// 	return
+							// }
+							return getimg(img)
+						},
 						formatter(type, val) {
 						    if (type === 'year') {
 						        return `${val}年`;
@@ -231,7 +239,7 @@
 						  this.show_area = false;
 						},
 						conf:function(res) {
-						  alert( JSON.stringify( res ) )
+						  // alert( JSON.stringify( res ) )
 						  this.show_area = false;
 						  var area1 = ''
 						  this.areaarr = ['', '', '']
@@ -251,42 +259,42 @@
 						},
 						uploadImg:function(file){
 							var  _this=this
-							var reader = new FileReader();
-							reader.readAsDataURL(file.target.files[0]); // 读出 base64
-							reader.onloadend = function () {
-							      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-							     var dataURL = reader.result;//base64
-							     // 显示图片
-							     // $('#showImg').attr('src',dataURL);
-									 _this.yjfk_img.push(dataURL)
-									 
-									
-							};
-							return
-							var fd=new FormData()
-							fd.append('file',file)
-							// var datas={
-							// 	file:file
-							// }
-							console.log(file)
 							$.ajax({
 								type: "POST",
 								url: IPurl+'/Base/upload',
-								data: fd,
-								async:false,
-								cache: true,
+								headers:{
+									"Authorization":storage_fuc.getItem("token")||'',
+								},
+								// beforeSend: function(request) {      //使用beforeSend
+								// 	request.setRequestHeader("Authorization", storage_fuc.getItem("token"));
+								// },
+								
+								data: new FormData($('#form')[0]),
+								// async:false,
+								cache: false,
 								processData: false,
 								contentType: false,//不去设置Content-Type请求头
+								// enctype: 'multipart/form-data',    //需要正确设置此项
+								
 								success: function(res) {
 									// console.log(res);
 									if(typeof(res)=='string'){
 										res=JSON.parse(res)
 									}
-									if (res.error == 0) {
+									if(res.status == 101){
+										parent.location.href="login.html?type=1"
+										return
+									}
+									if (res.status == 200) {
 									console.log(res)
 										layer.msg('上传成功')
+										 _this.yjfk_img.push(res.data)
 									} else {
-										layer.msg('获取数据失败')
+										if(res.msg){
+											layer.msg(res.msg)
+										}else{
+											layer.msg('操作失败')
+										}
 									}
 							
 								},
@@ -360,26 +368,48 @@
 							}
 							
 							
-							
+							var imgs=that.yjfk_img
+							if(imgs.length>1){
+								for(var i=0;i<imgs.length;i++){
+									imgs[i]={
+										url:imgs[i],
+										title:''
+									}
+								}
+								imgs=JSON.stringify(imgs)
+							}
 							var datas = {
 								title: that.xm_name,
-								work_time:that.xm_time,
+								work_time:that.xm_jj_lvs[that.xm_jj_lv].name,
 								service_name: that.xm_fbf,
 								mobile:that.tel,
 								province:that.areaarr[0],
 								city:that.areaarr[1],
 								district:that.areaarr[2],
-								end_time:that.zm_time,
-								pay_time:that.jf_time,
-								desc_pic:that.yjfk_img,
+								end_time:that.gettime(that.zm_time),
+								pay_time:that.gettime(that.jf_time),
+								desc_pic:imgs,
 								desc_exp:that.xm_tdjs,
 							}
 							console.log(datas)
-							layer.msg('操作成功')
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
 							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+								that.btnkg=0
+							},1500)
+							_post('/Article.ArticleNeed/add',datas,function(res){
+								 if (res.status == 200){
+									 // console.log(res.data.list)
+									 layer.msg('操作成功')
+									 setTimeout(function(){
+									 	// parent.layer.close('layer_pwd');
+									 	parent.layer.closeAll();
+									 },1000)
+								 }
+							})
+							
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

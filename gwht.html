@@ -88,6 +88,9 @@
 			}
 		</style>
 		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<div class="box">
@@ -98,22 +101,16 @@
 				筑采管家购物合同
 			</div>
 			<div class="httxt_ct">
-				<p>算法两款手机辐射大免费看</p>
-				<span>1.反倒是,零分今年混搭,风格阿斯顿今年疯狂拉升你尽快,发货尬的数量富士康的经费卡号江苏回复u的看法马孔金瓯
-				反倒是零分今年混搭风格阿斯顿今年疯狂拉升你尽快发货尬的,数量富士康的经费卡号江苏回复u的看法马孔金瓯
-				反倒是零分,今年混搭风格阿斯顿今年疯,狂拉升你尽快,发货尬的,数量富士康的经费卡号江苏回复u的看法马孔金瓯
-				反倒是零,分今年混搭风格阿斯顿今年疯狂拉升,你尽快发货尬的数量富士康的经费卡号江苏回复u的看法马孔金瓯
-				反倒是零,分今年混,搭风格阿斯顿今年疯狂拉升你尽快,发货尬的数量富士康的经费卡号江苏回复u的看法马孔金瓯
-				反倒是零分今年混搭风格阿斯顿今年,疯狂拉升你尽快发货尬的数量富士康的经费卡号江苏回复u的看法马孔金瓯</span>
+				<p>{{nr.shop_protocol_content}}</p>
 			</div>
 			<div class="htuser_ct flex ju_c ">
 				<div class="htj_ct flex aic ju_c">
-					甲方（雇主） : 小猴上述
+					甲方（雇主） : {{name}}
 					<img src="img/tyhz.png" v-show="ty">
 				</div>
 				<div class="hty_ct flex aic ju_c">
-					<span>乙方（服务商）: 筑采有限责任公司</span>
-					<span>企业名称 : 筑采有限责任公司</span>
+					<span>乙方（服务商）: {{nr.shop_protocol_service_name}}</span>
+					<span>企业名称 : {{nr.shop_protocol_company_name}}</span>
 					<img src="img/tyhz.png" >
 				</div>
 			</div>
@@ -124,18 +121,39 @@
 		</div>
 		
 		<script type="text/javascript">
+			var that;
 			var app = new Vue({
 				el: '.box',
 				data: {
-					ty: false
+					ty: false,
+					nr: {},
+					name: ''
+				},
+				created() {
+					that = this
+					if(localStorage.BaseConfig){
+						that.nr = JSON.parse(localStorage.getItem('BaseConfig')).shop_protocol
+					}
+					if(localStorage.user){
+						that.name = JSON.parse(localStorage.getItem('user')).real_name
+					}
 				},
 				methods: {
 					closes(i){
 						let index = parent.layer.getFrameIndex(window.name)
-						parent.layer.close(index);
+						// parent.layer.close(index);
 						if(i==2){
 							this.ty = true
+							var datas = {}
+							_post('Member.Member/setShopProtocol',datas,function(res){
+								console.log(res)
+								layer.msg(res.msg)
+							})
+							localStorage.setItem('qsgwht',true)
 						}
+						setTimeout(function(){
+							parent.layer.close(index);
+						},500)
 					}
 				}
 			})

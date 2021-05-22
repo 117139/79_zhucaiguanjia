@@ -216,12 +216,12 @@
 				font-size: 16px;
 				color: #333333;
 			}
-			.qdshdz_ct>div{
+			.qdshdz_ct>.qddiv{
 				margin-top: 16px;
 				width: 285px;
 				height: 110px;
 			}
-			.qdshdz_ct>div img{
+			.qdshdz_ct>.qddiv img{
 				max-width: 100%;
 				height: 100%;
 			}
@@ -270,6 +270,11 @@
 				color: #6c9ff0;
 				padding-left: 21px;
 			}
+			.qdfpxx_ct>div span:nth-last-child(2){
+				font-size: 12px;
+				color: #6c9ff0;
+				padding-left: 21px;
+			}
 			.qdyhj_ct{
 				margin-top: 22px;
 			}
@@ -303,6 +308,8 @@
 				border: 1px solid #fff;
 			}
 			.yhjimg_ct2{
+				background: url(img/yhjbg2.png) no-repeat;
+			}.yhjimg_ct3{
 				background: url(img/yhjbg2.png) no-repeat;
 			}
 			.yhjL_ct{
@@ -341,6 +348,8 @@
 				padding-right: 15px;
 			}
 			.yhjimg_ct2 div,.yhjimg_ct2 span,.yhjimg_ct2>.yhjR_ct>div>span{
+				color: #999999;
+			}.yhjimg_ct3 div,.yhjimg_ct3 span,.yhjimg_ct3>.yhjR_ct>div>span{
 				color: #999999;
 			}
 			.qdtop{
@@ -434,6 +443,29 @@
 				background-color: rgba(250,250,250,0.5);
 				padding: 2px;
 			}
+			
+			.yshdz_ct div{
+				font-size: 12px;
+			}
+			.yshdz_ct>div{
+				padding-top: 20px;
+			}
+			.onediv_ct{
+				width: 105px;
+				text-align: right;
+				padding-right: 10px;
+			}
+			.twodiv_ct{
+				width: 650px;
+				border: 1px solid #d3d3d3;
+				line-height: 40px;
+				padding: 0 20px;
+			}
+			.twodiv_ct>input{
+				width: 100%;
+				height: 100%;
+			}
+			
 		</style> 
 		
 	</head>
@@ -471,27 +503,27 @@
 				<div class="cheadT_ct flex aic ju_b">
 					<span>购物清单</span>
 					<div class="flex aic ju_b cp_ct">
-						<span>返回修改购物清单</span>
+						<span onclick="window.location.href='my_gwc.html'">返回修改购物清单</span>
 						<span>》</span>
 					</div>
 				</div>
 				<div class="qdbor_ct">
 					<div class="qdbz_ct flex aic">
 						<span>备注 : </span>
-						<input type="" name="" id="" value="" placeholder="备注信息事先跟客服沟通"/>
+						<input type="" name="" id="" value="" placeholder="备注信息事先跟客服沟通" v-model="bznr" />
 					</div>
 					<div class="qdpsfs_ct flex aic ju_b">
 						<div>
 							<span>配送方式</span>
-							<button class="cp_ct" :class="{btnAct: psfs == 'kd'}" @click="psfs = 'kd'">快递</button>
-							<button class="cp_ct" :class="{btnAct: psfs == 'smqj'}" @click="psfs = 'smqj'">上门自取</button>
+							<button class="cp_ct" :class="{btnAct: psfs == 1}" @click="psfs = 1">快递</button>
+							<button class="cp_ct" :class="{btnAct: psfs == 2}" @click="psfs = 2">上门自取</button>
 						</div>
-						<div class="flex aic" v-show="psfs == 'smqj'">
-							<p id="parentgs">北京大兴分公司</p>
-							<p>北京市北京大兴区啊吧啊吧啊吧</p>
-							<p id="parentIframe">李逵</p>
-							<p id="parentcode">151****5555</p>
-							<p class="cp_ct" @click="open_tk(-1)">修改自提点</p>
+						<div class="flex aic" v-show="psfs == 2">
+							<p>{{ztd.a}}</p>
+							<p :title="ztd.province+ztd.city+ztd.district+ztd.address">{{ztd.province}}{{ztd.city}}{{ztd.district}}{{ztd.address}}</p>
+							<p>{{ztd.member_name}}</p>
+							<p>{{ztd.mobile}}</p>
+							<p class="cp_ct" @click="open_tk(-1)">{{ztd.a?'修改自提点':'请选择'}}</p>
 						</div>
 					</div>
 					<div class="qdsptit_ct flex aic">
@@ -499,82 +531,97 @@
 						<div>数量</div>
 						<div>单价</div>
 						<div>小计</div>
-						<div>库存</div>
+						<div v-show="xjlist">库存</div>
 					</div>
-					<div class="spLists_ct flex aic" v-for="item in 3">
-						<div class="spimg_ct flex aic ju_c"><img src="img/gwcgoods.jpg" ></div>
-						<p>绥化不锈钢阀门厂家-din15不锈钢</p>
-						<p>规格 : 3A/0.45KW</p>
-						<p>数量</p>
-						<p>单价</p>
-						<p>小计</p>
-						<p>有货</p>
+					<div class="spLists_ct flex aic ju_c" style="font-weight: bold;color: #616161;" v-show="goods.length == 0">
+						暂无商品~~
+					</div>
+					<div class="spLists_ct flex aic" v-for="item,index in goods">
+						<div class="spimg_ct flex aic ju_c"><img :src=" IPurl1 + item.goods_pic[0].url" ></div>
+						<p>{{item.goods_name}}</p>
+						<p>规格 : {{item.goods_sku}}</p>
+						<p>{{item.goods_sum}}</p>
+						<p>{{item.goods_price}}</p>
+						<p>{{item.goods_price * item.goods_sum}}</p>
+						<p>{{item.goods_all_sum}}</p>
 					</div>
 				</div>
-				<div class="qdshdz_ct">
+				<div class="qdshdz_ct" v-show="psfs == 1">
 					<span>收货地址</span>
-					<div class="flex aic ju_c cp_ct">
+					<div class="qddiv flex aic ju_c cp_ct" @click="goshdz" v-show="!hasxaddress">
 						<img src="img/tjdd.jpg" >
+					</div>
+					<div class="yshdz_ct" v-show="hasxaddress">
+						<div class="flex aic">
+							<div class="onediv_ct">收货地 : </div>
+							<div class="twodiv_ct cpointer" @click="goshdz">
+								{{shd}}
+							</div>
+						</div>
+						<div class="flex aic">
+							<div class="onediv_ct">联系人 : </div>
+							<div class="twodiv_ct">
+								<input type="text" placeholder="请输入联系人姓名" v-model="dzdata.address_username">
+							</div>
+						</div>
+						<div class="flex aic">
+							<div class="onediv_ct">联系电话 : </div>
+							<div class="twodiv_ct">
+								<input type="number" placeholder="请输入联系人电话" v-model="dzdata.address_mobile">
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="qdzffs_ct">
 					<span>支付方式</span>
 					<div>
-						<button type="button" class="cp_ct" :class="{btnfsact: zffs == 'zx'}" @click="zffs = 'zx'">在线支付</button>
-						<button type="button" class="cp_ct" :class="{btnfsact: zffs == 'yh'}" @click="zffs = 'yh'">银行转账</button>
+						<button type="button" class="cp_ct" :class="{btnfsact: zffs == 'wx'}" @click="zffs = 'wx'">在线支付</button>
+						<button type="button" class="cp_ct" :class="{btnfsact: zffs == 'yhk'}" @click="zffs = 'yhk'">银行转账</button>
 					</div>
 				</div>
 				<div class="qdfpxx_ct">
 					<span>发票信息</span>
 					<div class="flex aic">
 						<span>发票类型 : </span>
-						<span class="cp_ct">请选择</span>
+						<span class="cp_ct" @click="fplx" v-show="!fp_msg.receipt_header_type">请选择</span>
+						<span class="cp_ct" @click="fplx" v-show="fp_msg.receipt_header_type">
+							{{fp_msg.receipt_header_type==2?'个人发票':'单位发票'}}
+						</span>
 					</div>
 				</div>
-				<div class="qdyhj_ct">
+				<div class="qdyhj_ct" v-show="yhjlist.data.length>0">
 					<span>优惠券</span>
 					<div>
 						<div class="flex">
-							<div class="yhjimg_ct cp_ct flex aic ju_b"
-							v-for="item,index in 3"
-							:class="{actyhj_ct:index==yhj}"
-							@click="yhj=index">
+							<div ref="wawa"
+							class="yhjimg_ct cp_ct flex aic ju_b"
+							v-for="item,index in yhjlist.data"
+							:class="{actyhj_ct:index==yhj,yhjimg_ct2:item.status==0,yhjimg_ct3:item.time_status==0}"
+							@click="xzyhj(index)">
 								<div class="yhjL_ct flex aic ju_c">
 									<span>满</span>
 									<span>减</span>
 									<span>券</span>
 								</div>
 								<div class="yhjR_ct">
-									<div><span>￥33.00</span>订单金额满30阿巴阿巴</div>
-									<div>2021.02.19-2021.03.22</div>
+									<div><span>￥{{item.cut_money}}</span>订单金额满{{item.max_money}}可用</div>
+									<div>{{gettime(item.start_time)}}-{{gettime(item.end_time)}}</div>
 								</div>
-								<div class="qxyhj" v-show="index == yhj" @click.stop="yhj=null">取消选中</div>
-							</div>
-							<div class="yhjimg_ct yhjimg_ct2 cp_ct flex aic ju_b"
-							v-for="item,index in 3">
-								<div class="yhjL_ct flex aic ju_c">
-									<span>满</span>
-									<span>减</span>
-									<span>券</span>
-								</div>
-								<div class="yhjR_ct">
-									<div><span>￥33.00</span>订单金额满30阿巴阿巴</div>
-									<div>2021.02.19-2021.03.22</div>
-								</div>
+								<div class="qxyhj" v-show="index == yhj" @click.stop="yhj=null,dyje=0,yhjzs=0">取消选中</div>
 							</div>
 						</div>
-						<p>金额抵用￥<span>75.00</span>优惠券1张</p>
+						<p>金额抵用￥<span>{{dyje}}</span>优惠券{{yhjzs}}张</p>
 					</div>
 				</div>
-				<div class="cheadT_ct qdtop flex aic ju_b">
+				<!-- <div class="cheadT_ct qdtop flex aic ju_b">
 					<span>积分</span>
 					<div class="flex aic ju_b">
-						<span class="cp_ct">了解什么是积分</span>
+						<span class="cp_ct" @click="tocjwt">了解什么是积分</span>
 					</div>
 				</div>
 				<div class="qdjf_ct">
 					<div class="kyjf_ct flex aic">
-						<p>共<span>0</span>积分，本次可用1000×</p>
+						<p>共<span>{{user.integral}}</span>积分，本次可用1000×</p>
 						<button class="cp_ct">-</button>
 						<p>0</p>
 						<button class="cp_ct">+</button>
@@ -583,38 +630,163 @@
 					<div>
 						<span>不符合积分使用规则，无可用积分</span>
 					</div>
-				</div>
+				</div> -->
 				<div class="qdjs_ct">
-					<p><span>总共3商品，商品总额 : </span>￥1143.00</p>
-					<p><span>优惠券 : </span>￥33.00</p>
-					<p><span>立减 : </span>￥0.00</p>
-					<p><span>抵扣积分 : </span>￥0.00</p>
-					<p><span>应付金额 : </span>￥1143.00</p>
+					<p><span>总共{{goods.length}}商品，商品总额 : </span>￥{{spze}}.00</p>
+					<p><span>优惠券 : </span>￥{{dyje}}</p>
+					<!-- <p><span>立减 : </span>￥0.00</p> -->
+					<!-- <p><span>抵扣积分 : </span>￥0.00</p> -->
+					<p><span>应付金额 : </span>￥{{goodsze}}.00</p>
 				</div>
-				<button class="cp_ct cpointer" onclick="jump('./jst.html')">结算</button>
+				<button class="cp_ct cpointer" @click="jump">结算</button>
 				<div style="clear: both;"></div>
 			</div>
-			
 		</div>
 		
 		
 		<include src="./common/footer.html"></include>
 		<script type="text/javascript">
+			var fapiao = '';
+			var fptype = '';
+			var urldata = '';
+			var clear = false;
+			var abc = '';
+			var that;
 			var app = new Vue({
 				el: '#tjddCot_ct',
 				data: {
 					// 配送方式
-					psfs: 'kd',
+					psfs: 1,
 					// 支付方式
-					zffs: 'zx',
+					zffs: 'wx',
 					// 优惠券
-					yhj: null
+					yhj: null,
+					yhjlist: {
+						data: []
+					},
+					// 抵用金额
+					dyje: 0,
+					// 优惠券张数
+					yhjzs: 0,
+					goods: [],
+					IPurl1: IPurl1,
+					fp_msg: {},
+					user: {},
+					// 商品总额
+					spze: '',
+					// 备注内容
+					bznr:'',
+					xjlist: true,
+					// 自提点
+					ztd: {},
+					timer1: null,
+					timer2: null,
+					timer3: null,
+					shd:'请选择收货地',
+					// 地址数据
+					dzdata: {},
+					// 本身是否有地址缓存
+					hasxaddress: false
+				},
+				created() {
+					that = this
+					if(!storage_fuc.getItem("user")){
+						window.location.replace('login.html')
+						return
+					}
+					urldata =  getNowCanshu()
+					if(urldata.id){
+						this.xjlist = false
+						this.getXjlist(urldata.id)
+					}else{
+						this.xjlist = true
+						if(localStorage.goodslist_ct){
+							this.goods = JSON.parse(localStorage.getItem('goodslist_ct'))
+						}
+					}
+					// 获取积分   隐藏
+					// if(localStorage.user){
+					// 	this.user = JSON.parse(localStorage.getItem('user'))
+					// }
+					
+					if(localStorage.xaddress){
+						that.hasxaddress = true
+						layer.load(1);
+						that.timer3 = setInterval(function(){
+							that.dzdata = JSON.parse(localStorage.getItem('xaddress'))
+							that.shd = that.dzdata.province + that.dzdata.city + that.dzdata.district + that.dzdata.address
+						},100)
+						setTimeout(function(){
+						  layer.closeAll('loading');
+						  clearInterval(that.timer3)
+						}, 500);
+					}
+					
 				},
 				computed:{
+					goodsze:function(){
+						var num = 0
+						for (let i = 0; i < this.goods.length; i++) {
+							num += this.goods[i].goods_price * this.goods[i].goods_sum
+						}
+						this.spze = num
+						if(this.yhj != null){
+							return num - this.yhjlist.data[this.yhj].cut_money
+						}else{
+							return num
+						}
+					}
+				},
+				mounted() {
+					// 获取优惠券
+					var list = [];
+					var goods_ids = [];
+					for (var i = 0; i < this.goods.length; i++) {
+						goods_ids.push(this.goods[i].goods_id)
+					}
+					var datas = {
+						type: 0,
+						goods_ids: goods_ids,
+						// max_money: ,
+						// limit: ,
+						// page: 
+					}
+					_get('Member.MemberCoupon/index',datas,function(res){
+						list = res.data.list
+						that.$set(that.yhjlist,"data", list)
+					})
 				},
 				methods: {
+					gettime:function(time){
+						return gettime(time,'-')
+					},
+					// 选择收货地址
+					goshdz:function(){
+						window.location = 'grzx.html?my_cur=41&xaddress=1'
+					},
+					// 获取询价列表
+					getXjlist:function(id){
+						var that = this 
+						var datas = {
+							member_quote_id: id		//主键ID
+						}
+						_get('ShopService.Quote/view',datas,function(res){
+							console.log(res.data.goods)
+							that.goods = res.data.goods
+						})
+					},
+					// 选择、修改 自提点
 					open_tk(num){
-					     //页面层
+						this.timer1 = setInterval(function(){
+							if(abc != ''){
+								that.ztd = abc
+								clearInterval(that.timer1)
+							}
+						},500)
+						_get('Order.PickAddress/index',{},function(res){
+							localStorage.setItem('ztd', JSON.stringify(res.data.list))
+						})
+					     // 页面层
 					     if(num==-1){
 					      layer_pwd=layer.open({
 					        type: 2,
@@ -622,9 +794,136 @@
 					        shadeClose: true,
 					        shade: 0.8,
 					        area: ['720px', '520px'],
-					        content: './set_zt_address.html' //iframe的url
+					        content: './set_zt_address.html',//iframe的url
 					      }); 
 					     }
+					},
+					// 发票类型
+					fplx:function(){
+						clearInterval(that.timer2)
+						fptype = fapiao.receipt_header_type
+						this.timer2 = setInterval(function(){
+							console.log(that.fp_msg)
+							if(clear == true){
+								clearInterval(that.timer2)
+							}
+							if(fptype != fapiao.receipt_header_type){
+								that.fp_msg = fapiao
+								clearInterval(that.timer2)
+							}
+						},1000)
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '自提地址',
+						  shadeClose: true,
+						  shade: 0.8,
+						  area: ['720px', '520px'],
+						  content: './tk_sq_kb.html',
+						});
+					},
+					// 选择优惠券
+					xzyhj:function(index){
+						if(this.$refs.wawa[index].className=='yhjimg_ct cp_ct flex aic ju_b'){
+							this.yhj=index
+							this.yhjzs=1
+							this.dyje = this.yhjlist.data[index].cut_money
+						}
+					},
+					// 了解积分跳常见问题
+					tocjwt:function(){
+						window.location = 'cjwt.html?index=3'
+					},
+					// 结算
+					jump:function(){
+						var dzxx = {}
+						var receipt_type = 0		//是否开发票
+						if(that.psfs == 1){
+							// console.log(JSON.stringify(that.dzdata))
+							// return
+							if (JSON.stringify(that.dzdata)=='{}') {
+								layer.msg('请选择收货地址')
+								return
+							}
+							if (that.dzdata.address_username == '') {
+								layer.msg('请输入联系人姓名')
+								return
+							}
+							if (that.dzdata.address_mobile == '' || !(/^1\d{10}$/.test(that.dzdata.address_mobile))) {
+								layer.msg('手机号有误')
+								return
+							}
+							dzxx = that.dzdata
+							dzxx.member_name = that.dzdata.address_username
+							dzxx.mobile = that.dzdata.address_mobile
+						}else if(that.psfs == 2){
+							if (JSON.stringify(that.ztd)=='{}') {
+								layer.msg('请输选择自提点')
+								return
+							}
+							dzxx = that.ztd
+						}
+						if(JSON.stringify(that.fp_msg) == '{}'){
+							receipt_type = 0
+						}else{
+							receipt_type = 1
+						}
+						var idarr = [];
+						// console.log(this.goods)
+						if(this.xjlist){
+							for (var i = 0; i < this.goods.length; i++) {
+								idarr.push(this.goods[i].member_cart_id)
+							}
+						}else{
+							console.log(this.goods)
+							for (var i = 0; i < this.goods.length; i++) {
+								idarr.push(this.goods[i].member_quote_goods_id)
+							}
+						}
+						// console.log(idarr)
+						// 获取优惠券id
+						var member_coupon_id = ''
+						if(this.yhj != null){
+							member_coupon_id = this.yhjlist.data[this.yhj].member_coupon_id
+						}
+						 
+						var datas = {
+							member_cart_ids: idarr, //购物车id
+							member_quote_id: urldata.id,  //询价单id
+							member_tip: this.bznr,  //客户备注
+							send_type: this.psfs,	//配送方式 快递|1,上门自提|2
+							province: dzxx.province,		//收货地址省
+							city: dzxx.city,		//收货地址市
+							district: dzxx.district,		//收货地址区
+							address: dzxx.address,		//详细地址
+							member_name: dzxx.member_name,		//收货人
+							mobile: dzxx.mobile,		//客户联系方式
+							receipt_type: receipt_type,		//发票类型 不开发票|0|warning,电子普通发票|1|primary
+							receipt_header_type: that.fp_msg.receipt_header_type,	//发票抬头 商家发票|1,个人发票|2
+							receipt_header_name: that.fp_msg.receipt_header_name,		//发票单位名称
+							receipt_header_code: that.fp_msg.receipt_header_code,		//发票纳税人识别号
+							member_coupon_id: member_coupon_id,	//优惠券id
+						}
+						console.log(datas)
+						if(this.xjlist){
+							_post('Order.GoodsOrder/cartMakeOrder',datas,function(res){
+								console.log(res)
+								if(res.status == 200){
+									 window.location = './jst.html?order_code='+res.data.order_code + "&pay_money=" + res.data.pay_money + "&type=" + that.zffs
+								}
+								layer.msg(res.msg)
+							})
+						}else{
+							_post('Order.GoodsOrder/quoteMakeOrder',datas,function(res){
+								console.log(res)
+								if(res.status == 200){
+									 window.location = './jst.html?order_code='+res.data.order_code + "&pay_money=" + res.data.pay_money
+								}
+								layer.msg(res.msg)
+							})
+						}
+						localStorage.removeItem('goodslist_ct')
+						localStorage.removeItem('xaddress')
+						localStorage.removeItem('ztd')
 					}
 				}
 			})

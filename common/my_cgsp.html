@@ -6,22 +6,25 @@
 	</div>
 	<div class="w100" style="padding: 20px 34px;">
 		<div class="goods_list dis_flex fww">
-			<a href="xqy.html?id=1" class="goods_li goods_li1" v-for="(item,index) in 10">
-				<div class="goods_li_img bg_div bg_div_hover">
-					<div style="background-image: url(./img/cjcg_img_03.jpg);"></div>
+			<a href="javascript:;" class="goods_li goods_li1" v-for="(item,index) in cg_datas">
+				<img class="cg_del_btn" src="./img/img_del.png" alt="" @click.stop="del_cg(item)">
+				<div class="goods_li_img bg_div bg_div_hover" @click="jump('xqy.html?id='+item.goods_id)">
+					<div v-if="item.goods_pic.length>0" :style="'background-image: url('+getimg_fuc(item.goods_pic[0].url)+');'"></div>
 				</div>
-				<div class="goods_li_msg">
-					<div class="w100 oh1 goods_li_name" title="绥化不锈钢阀门厂家-din15不锈钢">绥化不锈钢阀门厂家-din15不锈钢绥化不锈钢阀门厂家-din15不锈钢</div>
-					<div class="goods_li_pp dis_flex aic">西门子品牌<img src="img/ppsj_19.jpg" ></div>
-					<div class="goods_li_jg">￥<span>60.00</span>元</div>
+				<div class="goods_li_msg" @click="jump('xqy.html?id='+item.goods_id)">
+					<div class="w100 oh1 goods_li_name" :title="item.goods_name">{{item.goods_name}}</div>
+					<div class="goods_li_pp dis_flex aic">{{item.cate_brand_name}}<img src="img/ppsj_19.jpg" v-if="item.cate_brand_name"></div>
+					<div class="goods_li_jg">￥<span>{{item.goods_price}}</span>元</div>
 				</div>
 			</a>
 		</div>
-		<div class="list_page tac dis_flex">
-			<div class="flex_1"></div>
+		
+		<div class="w100" v-if="cg_datas.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无商品</div>
+		<div v-if="cg_datas.length>0" class="list_page tac dis_flex">
+			<!-- <div class="flex_1"></div>
 				<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
-			<div class="flex_1"></div>
-			<!-- <div class="m-style M-box2"></div> -->
+			<div class="flex_1"></div> -->
+			<div class="m-style M-box3_cg"></div>
 		</div>
 		
 	</div>
@@ -38,38 +41,90 @@
 		
 	})
 	var layer_pwd,layer_tel
-	var vm_myzhaq = new Vue({
+	var vm_mycg = new Vue({
 			el: '#myzhaq',
 			data: {
-			
+				cg_datas:[]
 			},
 			created: function() {
 				console.log('vm_myzhaq')
 			
 			},
+			mounted:function(){
+				
+				this.getdata(1)
+			},
 			methods: {
-				open_tk(num){
-					//页面层
-					if(num==0){
-						layer_pwd=layer.open({
-						  type: 2,
-						  title: '修改密码',
-						  shadeClose: true,
-						  shade: 0.8,
-						  area: ['580px', '380px'],
-						  content: './set_pwd.html' //iframe的url
-						}); 
-					}else{
-						layer_tel=layer.open({
-						  type: 2,
-						  title: '修改手机号',
-						  shadeClose: true,
-						  shade: 0.8,
-						  area: ['420px', '300px'],
-						  content: './set_tel.html' //iframe的url
-						}); 
-					}
+				del_cg(item){
+					layer.confirm('是否删除该数据？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						
+						var datas = {
+							member_goods_history_id:item.member_goods_history_id
+							
+						}
+						
+						if(vm_mycg.btnkg==1){
+							return
+						}
+						vm_mycg.btnkg=1
+						setTimeout(function(){
+							vm_mycg.btnkg=0
+						},1500)
+						_post('/Member.MemberGoodsHistory/delete', datas, function(res) {
+							if (res.status == 200) {
+								layer.msg('操作成功');
+								setTimeout(function(){
+									vm_mycg.getdata(1)
+								},1000)
+							}
+						})
+					}, function() {
 					
+					});
+				},
+				jump(url){
+					jump(url)
+				},
+				getimg_fuc:function(img){
+					return getimg(img)
+				},
+				getdata:function(page) {
+					///Member.MemberCollect/index
+					
+					if(page==1){
+						this.cg_datas=[]
+					}
+					var datas={
+							limit:10,
+							page:page||1,
+						}
+					var jkurl='/Member.MemberGoodsHistory/index'
+					
+					_get(jkurl, datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_mycg.cg_datas=res.data.list
+							 if(page==1){
+								 $('.M-box3_cg').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_mycg.getdata(page)
+								 	}
+								 });
+							 }
+						 }
+					})
 				},
 				tab_yjfk_fuc:function(item) {
 					console.log(item)

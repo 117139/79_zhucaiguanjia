@@ -338,42 +338,20 @@
 				<div class="tcxz_ct">
 					<p>套餐选择</p>
 					<div class="tcbox_ct flex ju_b">
-						<div class="czbox_ct flex aic ju_a"
-						@click="taocan = 'by'"
-						:class="{tcactice:taocan=='by'}">
+						<div class="czbox_ct flex aic ju_a cpointer"
+						v-for="item,index in viplist" :key="item.vip_id"
+						:class="{tcactice:taocan == index}"
+						@click="btn(index)">
 							<div class="czbs_ct flex aic ju_c">
 								<img src="img/hycz.png" >
 								<span>超值</span>
 							</div>
-							<div>包月</div>
-							<div>￥<span>50</span></div>
-							<div>1月充值50</div>
-						</div>
-						<div class="czbox_ct flex aic ju_a"
-						@click="taocan = 'jd'"
-						:class="{tcactice:taocan=='jd'}">
-							<div class="czbs_ct flex aic ju_c">
-								<img src="img/hycz.png" >
-								<span>超值</span>
-							</div>
-							<div>季度</div>
-							<div>￥<span>618</span></div>
-							<div>季度充值618</div>
-						</div>
-						<div class="czbox_ct flex aic ju_a"
-						@click="taocan = 'bn'"
-						:class="{tcactice:taocan=='bn'}">
-							<div class="czbs_ct flex aic ju_c">
-								<img src="img/hycz.png" >
-								<span>超值</span>
-							</div>
-							<div>包年</div>
-							<div>￥<span>1198</span></div>
-							<div>1年充值1198</div>
+							<div>{{item.vip_name}}</div>
+							<div>￥<span>{{item.vip_price}}</span></div>
+							<div>{{item.vip_desc}}</div>
 						</div>
 					</div>
 				</div>
-				
 				<div class="zffs">
 					<p>支付方式</p>
 					<div class="zfxbox_ct flex">
@@ -386,30 +364,90 @@
 						<div class="zffscon_ct flex">
 							<div>
 								<div class="flex aic ju_c">
-									<img src="img/hywxsm.png" >
+									<img :src="wxewm" >
 								</div>
 								<p>请打开微信扫描上方二维码</p>
 							</div>
 							<div class="yfje_ct">
 								<p>应付金额</p>
-								<p><span>{{taocan=='by'?'50':(taocan=='jd'?'618':'1198')}}</span>元</p>
+								<p><span>{{yfje}}</span>元</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
-			
 			<include src="./common/footer_f.html"></include>
 			<include src="./common/footer.html"></include>
 		</div>
 		<script type="text/javascript">
+			var that;
 			var app = new Vue({
 				el: '#qnhzCot_ct',
 				data: {
-					taocan: 'jd'
+					taocan: 0,
+					viplist: [],
+					yfje: '',
+					timer: null,
+					timer1: null,
+					wxewm: '',
+					vipendtime: ''
+				}, 
+				created() {
+					that = this
+					that.getvipindex()
+					
+					login_m(function(res){
+						that.vipendtime = res.data.vip_end_time
+					})
+					
+					that.timer = setInterval(function(){
+						login_m(function(res){
+							if(that.vipendtime != res.data.vip_end_time){
+								layer.msg('付款成功')
+								clearInterval(that.timer)
+								clearInterval(that.timer1)
+								setTimeout(function(){
+									history.go(-1)
+								},500)
+							}
+						})
+					},1000)
 				},
 				methods:{
+					getvipindex:function(){
+						_get('Vip.Vip/index',{},function(res){
+							if(res.status == 200){
+								that.viplist = res.data.list
+								that.yfje = that.viplist[that.taocan].vip_price
+								that.getwxcode()
+							}
+						})
+					},
+					getwxcode:function(){
+						var datas = {vip_id: that.viplist[that.taocan].vip_id}
+						$.ajax({
+							type: 'GET',
+							url: IPurl+'Vip.VipOrder/wechatNativeQrcode',
+							data: datas,
+							headers:{
+								"Authorization":storage_fuc.getItem("token")||'',
+							},
+							success: function(res){
+								console.log(res)
+								if(res.status == 200){
+									that.wxewm = res.data
+								}
+							}
+						})
+					},
+					btn(index){
+						clearInterval(that.timer1)
+						that.taocan = index
+						that.yfje = that.viplist[that.taocan].vip_price
+						that.timer1 = setInterval(function(){
+							that.getwxcode()
+						},1000)
+					}
 				}
 			})
 		</script>

@@ -24,7 +24,7 @@
 				<input class="yjfk_wt_list" type="text" placeholder="请输入项目名称" v-model="xm_name" />
 				<div class="yjfk_xz_name">商品名称：</div>
 				<input class="yjfk_wt_list" type="text" placeholder="请输入商品名称" v-model="goods_name" />
-				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c">搜索</div>
+				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c" @click="getdata_xj(1)">搜索</div>
 				<!-- <div class="my_search_btn my_search_btn2 dis_flex aic ju_c">重置</div> -->
 			</div>
 			
@@ -42,18 +42,21 @@
 						</tr>
 					</thead>
 					<tbody class="yjfk_table_body">
-						<tr v-for="(item,index) in yjfk_list">
-							<td>项目{{index+1}}</td>
-							<td>2020.10.06</td>
-							<td>2</td>
-							<td>2</td>
+						<tr v-for="(item,index) in xj_list">
+							<td>{{item.quote_name}}</td>
+							<td>{{gettime(item.create_time)}}</td>
+							<td>{{item.goods_sum}}</td>
+							<td>{{item.goods_now_sum}}</td>
 							<td>
-								2105.02.03
+								{{gettime(item.solve_time)}}
 							</td>
 							<td>
-								<div v-if="index==0">待报价</div>
-								<div v-else-if="index==1">已下单</div>
-								<div v-else>已退回</div>
+								<div v-if="item.order_status==1">已下单</div>
+								<div v-else-if="item.status==0">待报价</div>
+								<div v-else-if="item.status==1">已报价</div>
+								<div v-else-if="item.status==2">已退回</div>
+								<div v-else-if="item.status==3">已撤回</div>
+								<div v-else></div>
 							</td>
 							<td>
 								<a @click="see_fp_fuc(item)" href="javascript:;" style="color:#3DB8FF;">查看详情</a>
@@ -61,7 +64,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<div class="dis_flex_c aic ju_c yjfk_null_box">
+				<div v-if="xj_list.length==0" class="dis_flex_c aic ju_c yjfk_null_box">
 					<div class="yjfk_null bg_div">
 						<div style="background-image: url(./img/yjfk_null.png);"></div>
 					</div>
@@ -86,28 +89,28 @@
 				<div class="fwb">
 					询价单信息
 				</div>
-				<div class="xj_status flex_1">询价单状态：待报价</div>
-				<a class="fb_xuqiu_btn dis_flex aic ju_c" @click="qx_xj_fuc">撤销询价</a>
+				<div class="xj_status flex_1">询价单状态：{{datas.status==0?'待报价':datas.status==1?'已报价':datas.status==2?'已退回':'已撤回'}}</div>
+				<a v-if="datas.status==0" class="fb_xuqiu_btn dis_flex aic ju_c" @click="qx_xj_fuc">撤销询价</a>
 			</div>
 			<div>
 				<table class="xjd_table_dd">
 					<tr>
-						<td>询价单号：XJ202104255527</td>
-						<td>询价单名称：1	</td>
-						<td>询价时间：2021-04-25 17:59:04	</td>
-						<td>收货地：北京市北京市东城区东华门街道weeee</td>
+						<td>询价单号：{{datas.quote_code}}</td>
+						<td>询价单名称：{{datas.quote_name}}	</td>
+						<td>询价时间：{{gettime(datas.create_time)}}	</td>
+						<td>收货地：{{datas.province}}{{datas.city}}{{datas.district}}{{datas.address}}</td>
 					</tr>
 					<tr>
-						<td>联系人：1111</td>
-						<td>联系电话：18300000000	</td>
-						<td>要求到货时间：2021-04-29</td>
+						<td>联系人：{{datas.quote_username}}</td>
+						<td>联系电话：{{datas.mobile}}	</td>
+						<td>要求到货时间：{{datas.take_status==1?'正常订单':datas.take_status==2?'加急订单':'及时配送订单'}}</td>
 						<td></td>
 					</tr>
 					<tr>
-						<td colspan="4">其他说明：111</td>
+						<td colspan="4">其他说明：{{datas.other_desc}}</td>
 					</tr>
 					<tr>
-						<td colspan="4">客服备注：</td>
+						<td colspan="4">客服备注：{{datas.mark}}</td>
 					</tr>
 				</table>
 					
@@ -118,39 +121,48 @@
 				<div class="fwb">
 					询价商品清单
 				</div>
-				<a class="fb_xuqiu_btn dis_flex aic ju_c" href="">去支付</a>
+				<a v-if="datas.status==1" class="fb_xuqiu_btn dis_flex aic ju_c" :href="'tjdd.html?id='+datas.member_quote_id">去支付</a>
 			</div>
 			<table class=" order_table">
 				<thead class="yjfk_table_tit">
 					<tr>
 						<td>序号</td>
-						<td>商品名称</td>
-						<td>平台商品名称</td>
+						<td style="max-width: 350px;">商品名称</td>
+						<!-- <td>平台商品名称</td> -->
 						<td>品牌</td>
-						<td>商品描述</td>
+						<td style="max-width: 150px;">商品描述</td>
+						<td>价格</td>
 						<td>数量</td>
 						<td>单位</td>
 						<td>小计</td>
 						<td>预计到货 周期(天）</td>
+						<!-- <td>到货时间</td> -->
 					</tr>
 				</thead>
 				<tbody class="yjfk_table_body ">
-					<tr class="c9" v-for="(item,index) in yjfk_list">
+					<tr class="c9" v-for="(item,index) in datas.goods">
 						<td>{{index+1}}</td>
-						<td>钳子</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>1</td>
+						<td>{{item.goods_name}}</td>
+						<!-- <td>{{item.goods_name}}</td> -->
+						<td>{{item.brand_name}}</td>
+						<td>{{item.goods_desc}}</td>
+						<td>{{item.goods_price}}</td>
+						<td>{{item.goods_sum}}</td>
 						<td>个</td>
 						<td>
-							10
+							{{item.all_price}}
 						</td>
+						<td>
+							{{item.take_day}}
+						</td>
+						<!-- <td v-if="index==0" :rowspan="datas.goods.length">
+							{{datas.take_status==1?'正常订单':datas.take_status==2?'加急订单':'及时配送订单'}}
+							
+						</td> -->
 					</tr>
 				</tbody>
 			</table>
-			<div class="dis_flex_c aic ju_c yjfk_null_box">
+			<div v-if="datas.goods.length==0" class="dis_flex_c aic ju_c yjfk_null_box">
 				<div class="yjfk_null bg_div">
 					<div style="background-image: url(./img/yjfk_null.png);"></div>
 				</div>
@@ -193,47 +205,142 @@
 		
 		
 	})
-	
-	var vm_myyjfk = new Vue({
+	var _this=this
+	var vm_myxj = new Vue({
 			el: '#myyjfk',
 			data: {
 				
 				tab_yjfk_id:0,
 				xjtime_list:[
 					{
-						name:'近三个月询价单',
+						name:'全部',
 						id:0
+					},{
+						name:'最近一个月',
+						id:1
 					},
 					{
-						name:'今年内询价单',
-						id:1
+						name:'最近三个月',
+						id:2
+					},
+					{
+						name:'最近六个月',
+						id:3
+					},
+					{
+						name:'最近一年',
+						id:4
 					},
 				],
 				xjtime_id:0,
 				
 				xm_name:'',
 				goods_name:'',
-				yjfk_list:[1,1,1,],
+				xj_list:[],
 				xq_kg:false,
-				fb_type:1,
-				fb_content:'',
-				yjfk_img:[],
-				yjfk_fb_user:'',
-				yjfk_fb_tel:''
+				
+			},
+			watch:{
+				
+				xjtime_id:function(val){
+					console.log(val)
+					if(val){
+						this.getdata_xj(1)
+					}
+				}
 			},
 			created: function() {
 				console.log('vm_myyjfk')
-			
+				
+			},
+			mounted:function(){
+				_this=this
+				this.getdata_xj(1)
+				
 			},
 			methods: {
+				gettime:function(time){
+					return gettime(time,'-')
+				},
+				getimg_fuc:function(img){
+					return getimg(img)
+				},
+				getdata_xj:function(page){
+					var datas={
+						limit:10,
+						page:page||1,
+						time_type:this.xjtime_id,
+						quote_name:this.xm_name,
+						goods_name:this.goods_name,
+						status:this.tab_yjfk_id==2?'1':this.tab_yjfk_id==3?'0':this.tab_yjfk_id==4?'2':this.tab_yjfk_id==5?'3':'',//待报价|0|,已报价|1|,已退回|2|,已撤回|3|
+						order_status:this.tab_yjfk_id==1?'1':'', //下单状态 未下单|0|,已下单|1|
+						
+					}
+					var jkurl='/ShopService.Quote/index'
+					layer.load(1,{
+						shade: [0.2,'#000'] //0.1透明度的白色背景
+					});
+					setTimeout(function(){
+					  layer.closeAll('loading');
+					},500);
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_myxj.xj_list=res.data.list
+							 if(page==1){
+								 $('.M-box_fp').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_myxj.getdata_xj(page)
+								 	}
+								 });
+							 }
+						 }
+					})
+				},
 				see_fp_fuc: function(item){
-					this.xq_kg=true
+					// this.xq_kg=true
+					var datas={
+						member_quote_id: item.member_quote_id
+					}
+					var _this=this
+					this.datas=''
+					_get('/ShopService.Quote/view', datas, function(res) {
+						if (res.status == 200) {
+							_this.datas= res.data
+							_this.xq_kg=true
+							
+						}
+					})
 				},
 				qx_xj_fuc:function(){
+					var _this=this
 					layer.confirm('是否撤销询价？', {
 						btn: ['确定', '取消'] //按钮
 					}, function() {
-						layer.msg('操作成功');
+						
+						var datas={
+							member_quote_id: _this.datas.member_quote_id
+						}
+						
+						_post('/ShopService.Quote/cancel', datas, function(res) {
+							if (res.status == 200) {
+								layer.msg('操作成功');
+								setTimeout(function(){
+									window.location.href=""
+								})
+								
+							}
+						})
 					}, function() {
 									
 					});
@@ -241,6 +348,7 @@
 				tab_yjfk_fuc:function(item) {
 					console.log(item)
 					this.tab_yjfk_id=item
+					this.getdata_xj(1)
 				}
 				
 			}

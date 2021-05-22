@@ -1,6 +1,6 @@
 
 <style type="text/css">
-			*,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;color: #000000;}
+			*,ul,li,p,a{padding: 0;margin: 0;list-style: none;outline: none;}
 			
 			.couponsbox_ct{
 				border-top: 1px solid #EDEDED;
@@ -96,7 +96,7 @@
 							padding: 2px;
 						}
 		</style>
-<div  id="myyjfk" class="w100">
+<div  id="myyjfk" class="w100" v-cloak>
 	<div class="dis_flex aic ju_b my_r_box_tit_z">
 		<div>
 			<i class="iconfont icon-youhuiquan"></i>我的优惠券
@@ -106,20 +106,22 @@
 		<form>
 			<div class="my_search dis_flex aic">
 				<div class="yjfk_xz_name">我的优惠券：</div>
-				<select class="yjfk_wt_list" @change="yjfk_wenti" v-model="wenti_list_id">
+				<!-- <select class="yjfk_wt_list" @change="getdata_yh(1)" v-model="wenti_list_id"> -->
+				<select class="yjfk_wt_list" v-model="wenti_list_id">
 					<option v-for="(item,index) in wenti_list" :value="item.id">{{item.name}}</option>
 				</select>
 				<div class="yjfk_xz_name">优惠券类型：</div>
-				<select class="yjfk_wt_list" @change="yjfk_wenti" v-model="status_list_id">
+				<!-- <select class="yjfk_wt_list" @change="getdata_yh(1)" v-model="status_list_id"> -->
+				<select class="yjfk_wt_list" v-model="status_list_id">
 					<option v-for="(item,index) in status_list" :value="item.id">{{item.name}}</option>
 				</select>
 			</div>
 			<div class="w100">
 				
-				<div class="w100 couponsbox_ct flex">
+				<div v-if="yh_datas.length>0" class="w100 couponsbox_ct flex">
 					<div class="yhjimg_ct cp_ct flex aic ju_b"
-					v-for="item,index in 4"
-					:class="{actyhj_ct:index==yhj}"
+					v-for="item,index in yh_datas"
+					:class="{yhjimg_ct2:item.status==0||item.time_status==0}"
 					@click="yhj=index">
 						<div class="yhjL_ct flex aic ju_c">
 							<span>满</span>
@@ -128,17 +130,19 @@
 						</div>
 						<div class="yhjR_ct">
 							<div>
-								<p>￥33.00</p>
-								<p>订单金额满300减33元</p>
+								<p>￥{{item.cut_money}}</p>
+								<p>订单金额满{{item.max_money}}减{{item.cut_money}}元</p>
 							</div>
 							<div class="flex">
-								<p>2021.02.19-2021.03.22</p>
-								<a class="dis_flex aic ju_c" href="./xqy.html">去使用</a>
+								<p>{{gettime(item.start_time)}}-{{gettime(item.end_time)}}</p>
+								<a v-if="item.status==1&&item.time_status==1" class="dis_flex aic ju_c" href="cjcg.html?header_cur=1">去使用</a>
+								<a v-else-if="item.status==0" class="dis_flex aic ju_c" href="javascript:;">已使用</a>
+								<a v-else-if="item.time_status==0" class="dis_flex aic ju_c" href="javascript:;">已过期</a>
 							</div>
 						</div>
-						<div class="qxyhj" v-show="index == yhj" @click.stop="yhj=null">取消选中</div>
+						<!-- <div class="qxyhj" v-show="index == yhj" @click.stop="yhj=null">取消选中</div> -->
 					</div>
-					<div class="yhjimg_ct yhjimg_ct2 cp_ct flex aic ju_b"
+					<!-- <div class="yhjimg_ct yhjimg_ct2 cp_ct flex aic ju_b"
 					v-for="item,index in 4">
 						<div class="yhjL_ct flex aic ju_c">
 							<span>满</span>
@@ -152,22 +156,23 @@
 							</div>
 							<div class="flex">
 								<p>2021.02.19-2021.03.22</p>
-								<a class="dis_flex aic ju_c" href="./xqy.html">去使用</a>
+								<a class="dis_flex aic ju_c" href="./cicg.html">去使用</a>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 				
 				
 				
 			</div>
 			
-			<!-- <div class="list_page tac dis_flex">
+			<div class="w100" v-if="yh_datas.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
+			<div v-if="yh_datas.length>0" class="list_page tac dis_flex">
 				<!-- <div class="flex_1"></div>
 					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
-				<div class="flex_1"></div> --
-				<div class="m-style M-box2"></div>
-			</div> -->
+				<div class="flex_1"></div> -->
+				<div class="m-style M-box_yh"></div>
+			</div>
 		</form>
 	</div>
 </div>
@@ -185,62 +190,48 @@
 		
 		
 		
-		// $('.M-box2').pagination({
-		// 		totalData:100,
-		// 		showData:10,
-		// 		coping: true,
-		// 		// mode: 'fixed',
-		// 		// homePage: '首页',
-		// 		// endPage: '末页',
-		// 		prevContent: '上页',
-		// 		nextContent: '下页',
-		// 		callback: function (api) {
-		// 			//console.log(api.getCurrent())
-		// 			var page=api.getCurrent()
-		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
-		// 		}
-		// }); 
+		
 		
 		
 	})
 	
-	var vm_myyjfk = new Vue({
+	var vm_myyh = new Vue({
 			el: '#myyjfk',
 			data: {
 				yhj: null,
 				tab_yjfk_id:0,
 				wenti_list:[
 					{
-						name:'全部优惠券10个',
+						name:'全部优惠券0个',
+						id:0
+					},
+					{
+						name:'可用优惠券0个',
 						id:1
 					},
 					{
-						name:'可用优惠券5个',
+						name:'已用优惠券0个',
 						id:2
 					},
 					{
-						name:'已用优惠券3个',
+						name:'过期优惠券0个',
 						id:3
 					},
-					{
-						name:'过期优惠券2个',
-						id:4
-					},
 				],
-				wenti_list_id:1,
+				wenti_list_id:0,
 				status_list:[
 					{
 						name:'不限',
-						id:1
+						id:0
 					},
 					{
 						name:'满减',
-						id:2
+						id:1
 					},
 				],
-				status_list_id:1,
+				status_list_id:0,
 				yjfk_text:'',
-				yjfk_list:[1,1,1,],
+				yh_datas:[],
 				yjfk_fabu:false,
 				fb_type:1,
 				fb_content:'',
@@ -252,134 +243,82 @@
 				console.log('vm_myyjfk')
 			
 			},
+			mounted:function(){
+				
+				this.getdata_yh(1)
+			},
+			watch:{
+				
+				wenti_list_id:function(val){
+					this.getdata_yh(1)
+				},
+				status_list_id:function(val){
+					this.getdata_yh(1)
+				},
+			},
 			methods: {
-				yjfk_fb_fuc:function(e){
-					var _this=this
-					if(!_this.fb_content){
-						layer.msg('请输入文字说明')
-						return
-					}
-					if(!_this.yjfk_fb_user){
-						layer.msg('请输入您的姓名')
-						return
-					}
-					if(!_this.yjfk_fb_tel){
-						layer.msg('请输入您的手机号')
-						return
-					}
-					if (_this.yjfk_fb_tel == '' || !(/^1\d{10}$/.test(_this.yjfk_fb_tel))) {
-						layer.msg('手机号有误')
-						return
-					}
+				gettime:function(time){
+					return gettime(time,'.')
+				},
+				getdata_yh:function(page){
 					var datas={
-						fb_content:_this.fb_content,
-						yjfk_fb_user:_this.yjfk_fb_user,
-						yjfk_img:_this.yjfk_img.join(','),
-						yjfk_fb_tel:_this.yjfk_fb_tel,
+						limit:30,
+						page:page||1,
+						type:this.wenti_list_id,
+						coupon_type:this.status_list_id
 					}
-					console.log(datas)
-					layer.msg('操作成功')
-				},
-				uploadImg:function(file){
-					var  _this=this
-					var reader = new FileReader();
-					reader.readAsDataURL(file.target.files[0]); // 读出 base64
-					reader.onloadend = function () {
-					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-					     var dataURL = reader.result;//base64
-					     // 显示图片
-					     // $('#showImg').attr('src',dataURL);
-							 _this.yjfk_img.push(dataURL)
-							 
-							
-					};
-					return
-					var fd=new FormData()
-					fd.append('file',file)
-					// var datas={
-					// 	file:file
-					// }
-					console.log(file)
-					$.ajax({
-						type: "POST",
-						url: IPurl+'/Base/upload',
-						data: fd,
-						async:false,
-						cache: true,
-						processData: false,
-						contentType: false,//不去设置Content-Type请求头
-						success: function(res) {
-							// console.log(res);
-							if(typeof(res)=='string'){
-								res=JSON.parse(res)
-							}
-							if (res.error == 0) {
-							console.log(res)
-								layer.msg('上传成功')
-							} else {
-								layer.msg('获取数据失败')
-							}
-					
-						},
-						error: function(err) {
-							layer.msg('获取数据失败')
-							console.log(err)
-						}
-					})
-					
-				},
-				getint_img:function(e){
-					var _this=this
-					// 检查是否是图片
-					// var filePath = $(this).val()
-					// console.log(e.target.files[0])
-					// var fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();//获取文件后缀名
-					// //检查后缀名
-					// if( !fileFormat.match(/.png|.jpg|.jpeg/) ) {
-					//       layer.msg('文件格式必须为：png/jpg/jpeg');
-					//       return;  
-					// }
-					// console.log(e.target.files[0])
-					//获取并记录图片的base64编码
-					var reader = new FileReader();
-					reader.readAsDataURL(e.target.files[0]); // 读出 base64
-					reader.onloadend = function () {
-					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-					     var dataURL = reader.result;//base64
-					     // 显示图片
-					     // $('#showImg').attr('src',dataURL);
-							 _this.yjfk_img.push(dataURL)
-							 var datas={
-							 	flie:dataURL
-							 }
-							 _post('/Base/upload',datas,function(){
-								 if(typeof(res)=='string'){
-								 	res=JSON.parse(res)
-								 }
-								 if (res.error == 0) {
-								 console.log(res)
-								 	layer.msg('上传成功')
-								 } else {
-								 	layer.msg('获取数据失败')
-								 }
-							 },function(err){
-								 layer.msg('获取数据失败')
-								 console.log(err)
-							 })
-							
-					};
-				},
-				up_img_del:function(index){
-					var _this=this
-					layer.confirm('是否删除该图片？', {
-					  btn: ['确定','取消'] //按钮
-					}, function(){
-					  layer.msg('操作成功');
-						_this.yjfk_img.splice(index, 1)
-					}, function(){
-					  
+					var jkurl='/Member.MemberCoupon/index'
+					layer.load(1,{
+						shade: [0.2,'#000'] //0.1透明度的白色背景
 					});
-					
+					setTimeout(function(){
+					  layer.closeAll('loading');
+					},500);
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_myyh.yh_datas=res.data.list
+							 if(page==1){
+								// vm_myyh.wenti_list=[
+								//  	{
+								//  		name:'全部优惠券'+res.count_sum.sumA+'个',
+								//  		id:0
+								//  	},
+								//  	{
+								//  		name:'可用优惠券'+res.count_sum.sumB+'个',
+								//  		id:1
+								//  	},
+								//  	{
+								//  		name:'已用优惠券'+res.count_sum.sumC+'个',
+								//  		id:2
+								//  	},
+								//  	{
+								//  		name:'过期优惠券'+res.count_sum.sumD+'个',
+								//  		id:3
+								//  	},
+								//  ],
+								 Vue.set(vm_myyh.wenti_list[0],'name','全部优惠券'+res.data.count_sum.sumA+'个')
+								 Vue.set(vm_myyh.wenti_list[1],'name','可用优惠券'+res.data.count_sum.sumB+'个')
+								 Vue.set(vm_myyh.wenti_list[2],'name','已用优惠券'+res.data.count_sum.sumC+'个')
+								 Vue.set(vm_myyh.wenti_list[3],'name','过期优惠券'+res.data.count_sum.sumD+'个')
+								 $('.M-box_yh').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_myyh.getdata_yh(page)
+								 	}
+								 });
+							 }
+						 }
+					})
 				},
 				yjfk_wenti:function(e){
 				  console.log(e); //得到select原始DOM对象

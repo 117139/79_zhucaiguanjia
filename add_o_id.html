@@ -72,22 +72,23 @@
 					data: {
 						kd_type: '',
 						kd_id: '',
+						order_code:''
 					},
 					created: function() {
 						console.log('vm_myzhaq')
-					
+						this.order_code=getNowCanshu().order_code
 					},
 					methods: {
 						
 						sub:function(){
 							var that=this
 							
-							if (!that.code) {
+							if (!that.kd_type) {
 								layer.msg('请输入快递种类')
 								
 								return;
 							}
-							if (!that.code) {
+							if (!that.kd_id) {
 								layer.msg('请输入快递种类')
 								
 								return;
@@ -95,16 +96,29 @@
 						
 							
 							var datas = {
-								kd_type: that.kd_type,
-								kd_id: that.kd_id,
+								order_code:this.order_code,
+								express_name: that.kd_type,
+								express_code: that.kd_id,
 								// password: that.pwd
 							}
-							console.log(datas)
-							layer.msg('操作成功')
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
 							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+								that.btnkg=0
+							},1500)
+							_post('/Order.GoodsOrderRefund/setRefundInfo', datas, function(res) {
+								if (res.status == 200) {
+									layer.msg('操作成功')
+									setTimeout(function(){
+										// parent.layer.close('layer_pwd');
+										parent.layer.closeAll();
+									},1000)
+								}
+							})
+							console.log(datas)
+							
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

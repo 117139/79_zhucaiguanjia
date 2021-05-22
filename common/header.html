@@ -1,31 +1,66 @@
-<div class="header_top">
+<div id='h_header' class="header_top">
 	<div class="w1200 header_top_main dis_flex aic ju_b">
 		<div>筑采管家AHUCAIGU.COM</div>
 		<div class="dis_flex aic">
-			<div>你好，<a class="login_header" href="login.html?type=1">请登录</a></div>
-			<span class="sg_header"></span>
-			<a class="a_header" href="login.html?type=-1">免费注册</a>
+			<div v-if="token">你好，<a class="login_header" href="grzx.html?my_cur=40">{{user_datas.username}}</a></div>
+			<div v-else>你好，<a class="login_header" href="login.html?type=1">请登录</a></div>
+			<span v-if="!token" class="sg_header"></span>
+			<a v-if="!token" class="a_header" href="login.html?type=-1">免费注册</a>
 			<span class="sg_header"></span>
 			<a class="a_header" href="./grzx.html?my_cur=40">我的筑采</a>
 			<span class="sg_header"></span>
-			<a class="a_header dis_flex aic" href=""><img src="img/header_tel.png" alt="">400-0650-2828</a>
+			<a v-if="BaseConfig.base" class="a_header dis_flex aic" href=""><img src="img/header_tel.png" alt="">{{BaseConfig.base.business_mobile}}</a>
 			<span class="sg_header"></span>
 			<a class="a_header" href="./cjwt.html?index=1">关于我们</a>
 			<span class="sg_header"></span>
-			<a class="a_header d_ewm" href="javascript:;">
+			<a v-if="BaseConfig.base" class="a_header d_ewm" href="javascript:;">
 				手机筑采
 				<div>
-					<img src="./img/footer_ewm.png" alt=手机筑采" title="手机筑采">
+					<img :src="getimg_fuc(BaseConfig.base.mobile_qrcode)" alt="手机筑采" title="手机筑采">
 					<span>手机筑采</span>
 				</div>
 			</a>
 			<span class="sg_header"></span>
-			<a class="a_header d_ewm" href="javascript:;">官方微信
+			<a v-if="BaseConfig.base" class="a_header d_ewm" href="javascript:;">官方微信
 				<div>
-					<img src="./img/footer_ewm.png" alt="官方微信" title="官方微信">
+					<img :src="getimg_fuc(BaseConfig.base.auth_qrcode)" alt="官方微信" title="官方微信">
 					<span>官方微信</span>
 				</div>
 			</a>
 		</div>
 	</div>
 </div>
+
+<script>
+
+	$(function(){
+		
+		
+		
+	})
+	var layer_pwd,layer_tel
+	var h_header = new Vue({
+			el: '#h_header',
+			data: {
+				user_datas:{},
+				BaseConfig:{},
+				token:''
+			},
+			created: function() {
+				console.log('h_header')
+				this.BaseConfig=JSON.parse(storage_fuc.getItem("BaseConfig"))
+				if(storage_fuc.getItem("user")){
+					this.user_datas=JSON.parse(storage_fuc.getItem("user"))
+					this.token=storage_fuc.getItem("token")
+				}
+			},
+			mounted:function(){
+				
+			},
+			methods: {
+				getimg_fuc:function(img){
+					return getimg(img)
+				},
+			}
+		})
+</script>

@@ -3,31 +3,51 @@
 		<div>
 			<i class="iconfont icon-shoucang1"></i>我的收藏
 		</div>
-		<!-- <div v-if="yjfk_fabu==true" class="yjfk_back" @click="yjfk_fabu=false">返回上一级</div> -->
 	</div>
 	<div class="w100">
-		<div class="my_r_tit dis_flex ais">
-			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==0?'cur':''" @click="tab_yjfk_fuc(0)">全部商品</div>
-			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==1?'cur':''" @click="tab_yjfk_fuc(1)">降价3个</div>
-			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==2?'cur':''" @click="tab_yjfk_fuc(2)">失效0个</div>
+		<div class="my_r_tit dis_flex ais mb20">
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="sc_type==1?'cur':''" @click="sc_type_fuc(1)">商品</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="sc_type==2?'cur':''" @click="sc_type_fuc(2)">圈内服务</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="sc_type==3?'cur':''" @click="sc_type_fuc(3)">圈内需求</div>
+		</div>
+		<div v-if="sc_type==1" class="my_r_tit dis_flex ais">
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==1?'cur':''" @click="tab_yjfk_fuc(1)">全部商品</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==2?'cur':''" @click="tab_yjfk_fuc(2)">降价{{sum.down_sum?sum.down_sum:0}}个</div>
+			<div class="my_r_tit_tab dis_flex aic ju_c"  :class="tab_yjfk_id==3?'cur':''" @click="tab_yjfk_fuc(3)">失效{{sum.off_sum?sum.off_sum:0}}个</div>
 		</div>
 		
 		<div class="my_fw_list">
-			<div class="my_fw_li dis_flex ju_b ais" v-for="(item,index) in my_fw_list">
-				<div class="sc_img flex_0 bg_div bg_div_hover">
-					<div style="background-image: url(./img/cjcg_img_05.jpg);"></div>
+			<div v-if="sc_type==1" class="my_fw_li dis_flex ju_b ais" v-for="(item,index) in sc_datas">
+				<div class="sc_img flex_0 bg_div bg_div_hover" @click="jump('xqy.html?id='+item.goods_id)">
+					<div v-if="item.goods_pic.length>0" :style="'background-image: url('+getimg_fuc(item.goods_pic[0].url)+');'"></div>
 				</div>
-				<div class="flex_1 dis_flex_c ju_b">
-					<div class="sc_li_name">DCA 电锤不调速Z1C-FF-26 750W</div>
-					<div class="sc_li_pri">￥381.00</div>
+				<div class="flex_1 dis_flex_c ju_b"  @click="jump('xqy.html?id='+item.goods_id)">
+					<div class="sc_li_name">{{item.goods_name}}</div>
+					<div class="sc_li_pri">￥{{item.goods_price}}</div>
 				</div>
 				<div class="dis_flex_c aic ju_c flex_0">
-					<div class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer"  @click="add_car(item)">加入购物车</div>
-					<div class="sc_li_cz_btn dis_flex aic ju_c cpointer"  @click="un_sc_fuc(item)">移除</div>
+					<!-- <div class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer"  @click="add_car(item)">加入购物车</div> -->
+					<div class="order_li_cz order_li_cz_btn dis_flex aic ju_c cpointer" @click="jump('xqy.html?id='+item.goods_id)">加入购物车</div>
+					<div class="sc_li_cz_btn dis_flex aic ju_c cpointer"  @click="un_sc_fuc(item.goods_id)">移除</div>
 				</div>
 			</div>
+			
+			<div v-if="sc_type!=1" class="my_fw_li dis_flex ju_b ais" v-for="(item,index) in sc_datas">
+				<!-- <div class="sc_img flex_0 bg_div bg_div_hover" @click="jump('xqy.html?id='+item.goods_id)">
+					<div v-if="item.goods_pic.length>0" :style="'background-image: url('+getimg_fuc(item.goods_pic[0].url)+');'"></div>
+				</div> -->
+				<div class="flex_1 dis_flex_c ju_b"  @click="jump_fuc(item)">
+					<div class="sc_li_name">{{item.title}}</div>
+					<div class="sc_li_pri" style="font-size: 16px;">{{item.area}}{{item.province}}{{item.city}}{{item.district}}</div>
+				</div>
+				<div class="dis_flex_c aic ju_c flex_0">
+					<div v-if="sc_type==2" class="sc_li_cz_btn dis_flex aic ju_c cpointer"  @click="un_sc_fuc(item.article_service_id)">移除</div>
+					<div v-if="sc_type==3" class="sc_li_cz_btn dis_flex aic ju_c cpointer"  @click="un_sc_fuc(item.article_need_id)">移除</div>
+				</div>
+			</div>
+			<div class="w100" v-if="sc_datas.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
 		</div>
-		<div class="list_page tac dis_flex">
+		<div v-show="sc_datas.length>0" class="list_page tac dis_flex">
 			
 			<div class="m-style M-box3_sc"></div>
 		</div>
@@ -61,39 +81,118 @@
 		
 	})
 	
-	var vm_myyjfk = new Vue({
+	var vm_mysc = new Vue({
 			el: '#myyjfk',
 			data: {
-			
-				tab_yjfk_id:0,
-				my_fw_list:[
-					{},
-					{},
-					{},
-				]
+				sc_type:1,
+				tab_yjfk_id:1,
+				sc_datas:[],
+				sum:''
 			},
 			created: function() {
-				console.log('vm_myyjfk')
-			
+				console.log('我的收藏')
+			},
+			mounted:function(){
+				
+				this.getdata(1)
 			},
 			methods: {
+				jump(url){
+					jump(url)
+				},
+				jump_fuc:function(item){
+					if(this.sc_type==2){
+						jump('qnhz_xq.html?header_cur=2&id='+item.article_service_id+'&hz_type='+0)
+					}else{
+						jump('qnhz_xq.html?header_cur=2&id='+item.article_need_id+'&hz_type='+1)
+					}
+				},
+				getimg_fuc:function(img){
+					return getimg(img)
+				},
+				getdata:function(page) {
+					///Member.MemberCollect/index
+					var datas={
+						limit:10,
+						page:page||1,
+						type:this.sc_type
+					}
+					if(page==1){
+						this.sc_datas=[]
+					}
+					if(this.sc_type==1){
+						datas={
+							limit:10,
+							page:page||1,
+							type:this.sc_type,
+							goods_type:this.tab_yjfk_id
+						}
+					}
+					var jkurl='/Member.MemberCollect/index'
+					
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_mysc.sc_datas=res.data.list
+							 if(vm_mysc.sc_type==1){
+								 vm_mysc.sum=res.data.sum
+							 }
+							 if(page==1){
+								 $('.M-box3_sc').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_mysc.getdata(page)
+								 	}
+								 });
+							 }
+						 }
+					})
+				},
 				add_car:function(){
 					layer.msg('操作成功')
 				},
-				un_sc_fuc:function(){
+				un_sc_fuc:function(id){
 					
 					layer.confirm('是否移除该商品？', {
 						btn: ['确定', '取消'] //按钮
 					}, function() {
-						layer.msg('移除成功')
+						var datas={
+							object_id:id,
+							type:vm_mysc.sc_type
+						}
+						jkurl='/Member.MemberCollect/deleteCollect'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								 layer.msg('操作成功')
+								 setTimeout(function(){
+									 vm_mysc.getdata()
+								 },1000)
+							 }
+						})
 					}, function() {
 									
 					});
 				},
-			
+				sc_type_fuc:function(item) {
+					console.log(item)
+					this.sc_type=item
+					this.getdata(1)
+				},
 				tab_yjfk_fuc:function(item) {
 					console.log(item)
 					this.tab_yjfk_id=item
+					this.getdata(1)
 				}
 				
 			}

@@ -59,8 +59,8 @@
 					<div class="ztadd_xz_box" :class="zt_add_cur==index?'cur':''"></div>
 					<div class="flex_1">
 						<div class="ztadd_name">{{item.name}}</div>
-						<div class="ztadd_add">北京市北京市大兴区海鑫北京9号</div>
-						<div class="ztadd_tel">联系方式：010-0521642</div>
+						<div class="ztadd_add">{{item.province}}{{item.city}}{{item.district}}{{item.address}}</div>
+						<div class="ztadd_tel">联系方式：{{item.mobile}}</div>
 					</div>
 				</div>
 			</div>
@@ -85,8 +85,6 @@
 			
 			$(function(){
 				
-				
-				
 			})
 			
 			var vm_myzhaq = new Vue({
@@ -96,43 +94,13 @@
 						code: '',
 						zt_add_cur: '-1',
 						zd_key:'',
-						zt_add_list:[
-							{
-								name:'北京大兴分公司'
-							},
-							{
-								name:'河北石家庄分公司'
-							},
-							{
-								name:'北京顺义分公司'
-							},
-							{
-								name:'河北唐山分公司'
-							},
-							{
-								name:'天津北方五金城分公司'
-							},
-							{
-								name:'天津北辰分公司'
-							},
-							{
-								name:'河北保定分公司'
-							},
-							{
-								name:'河北燕郊分公司'
-							},
-							{
-								name:'北京通州分公司'
-							},
-							{
-								name:'河北廊坊分公司'
-							},
-						],
+						zt_add_list:[],
 						show_kg:true
 					},
 					created: function() {
-						console.log('vm_myzhaq')
-					
+						var ztd = JSON.parse(localStorage.getItem('ztd'))
+						this.zt_add_list = ztd
+						// console.log(ztd)
 					},
 					watch:{
 						zd_key:function(val){
@@ -201,6 +169,18 @@
 							}
 							// console.log(datas)
 							layer.msg('操作成功')
+							
+							
+							var ztddata = {
+								a: _this.zt_add_list[_this.zt_add_cur].name,
+								province: _this.zt_add_list[_this.zt_add_cur].province,
+								city: _this.zt_add_list[_this.zt_add_cur].city,
+								district: _this.zt_add_list[_this.zt_add_cur].district,
+								address: _this.zt_add_list[_this.zt_add_cur].address,
+								member_name: _this.name,
+								mobile: _this.code
+							}
+							parent.abc = ztddata
 							setTimeout(function(){
 								// parent.layer.close('layer_pwd');
 								parent.layer.closeAll();

@@ -27,7 +27,7 @@
 				margin: 0;
 				list-style: none;
 				outline: none;
-			} 
+			}
 
 			#zncgContent_ct {
 				background-color: #f7f7f7;
@@ -107,6 +107,13 @@
 				width: 650px;
 			}
 
+			.gsxmm_ct div {
+				width: 650px;
+				border: 1px solid #d3d3d3;
+				line-height: 40px;
+				padding: 0 20px;
+			}
+
 			.lxr input,
 			.lxr select {
 				width: 270px;
@@ -128,26 +135,27 @@
 				margin: 0 0 0 28px;
 			}
 
-			.cgfs>a {
+			.cgfs>div {
 				color: #94b4e9;
+				cursor: pointer;
 			}
 
-			.cgfs>a>img {
+			.cgfs>div>img {
 				max-width: 15px;
 				max-height: 15px;
 				vertical-align: middle;
 				margin-right: 10px;
 			}
 
-			.cgfs>a:first-of-type {
+			.cgfs>div:first-of-type {
 				margin: 0 24px 0 17px;
 			}
 
-			.cgfs>a:last-of-type>img {
+			.cgfs>div:last-of-type>img {
 				transform: rotate(180deg);
 			}
 
-			.cgfs>a>span {
+			.cgfs>div>span {
 				vertical-align: middle;
 			}
 
@@ -228,12 +236,18 @@
 				top: -2px;
 				margin-left: 12px;
 			}
-
+			.spmc{
+				max-width: 207px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+			 }
 			.spbm>input {
-				width: 180px;
+				width: 200px;
 				height: 26px;
 				border: 1px solid #d5d5d5;
 				padding: 0 10px;
+				text-align: center;
 			}
 
 			.spmc>img {
@@ -333,17 +347,35 @@
 				color: #eb5f33;
 				font-size: 16px;
 			}
-			.firstTr_ct{
-				height:98px;
+
+			.firstTr_ct {
+				height: 98px;
 			}
-			.firstTr_ct>div{
-				 width: 13px;
-				 height: 13px;
-				 border: 1px solid #999999;
+
+			.firstTr_ct>div {
+				width: 13px;
+				height: 13px;
+				border: 1px solid #999999;
 			}
-			.firstTr_ct>div>i{
-				
+
+			.firstTr_ct>div>i {}
+
+			.up_img {
+				width: 130px;
+				height: 20px;
 			}
+
+			.up_img input {
+				height: 18px;
+				opacity: 1;
+				display: none;
+			}
+			.xj{
+			    max-width: 80px;
+			    white-space:nowrap;
+			    overflow:hidden;
+			    text-overflow:ellipsis;
+			   }
 		</style>
 		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
@@ -356,10 +388,10 @@
 				</div>
 				<include src="./common/header1.html"></include>
 				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
-			
-			
+
+
 				<!-- header -->
-			
+
 				<include src="./common/header_header.html"></include>
 			</div>
 
@@ -371,8 +403,10 @@
 				<div class="w1200">
 					<div class="swiper-container swiper_hz1">
 						<div class="swiper-wrapper">
-							<div class="swiper-slide" v-for="(item,index) in 3">
-								<img src="img/ppzq_03.jpg" alt="">
+							<div class="swiper-slide" v-for="(item,index) in banner">
+								<a :href="item.url_link?item.url_link:'###'" class="bg_div" style="width: 100%;height: 240px;display: block;">
+									<div  :style="'background-image: url('+getimg_fuc(item.pic)+');'"></div>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -384,7 +418,10 @@
 					<div class="tabs_ct">
 						<div class="gsxmm_ct flex ">
 							<span class="cpointer">收货地 : </span>
-							<input  @click="open_tk()" class="cpointer" type="text" placeholder="请选择收货地" v-model="sh_add" readonly="">
+							<div @click="open_tk" class="cpointer">
+								{{shd}}
+							</div>
+							<!-- <input @click="open_tk" class="cpointer" type="text" placeholder="请选择收货地" v-model="shd" readonly> -->
 							<!-- <select name="">
 								<option value="" disabled selected hidden>请输入收货地址</option>
 								<option value="0">0</option>
@@ -393,36 +430,40 @@
 						</div>
 						<div class="gsxmm_ct flex">
 							<span>公司/项目名 : </span>
-							<input type="text" placeholder="请输入公司/项目名称">
+							<input type="text" placeholder="请输入公司/项目名称" v-model="gsm">
 						</div>
 						<div class="lxr flex">
 							<span>联系人 : </span>
-							<input type="text" placeholder="请输入联系人姓名">
+							<input type="text" placeholder="请输入联系人姓名" v-model="dzdata.address_username">
 							<span>联系电话 : </span>
-							<input type="text" placeholder="请输入联系人电话">
+							<input type="text" placeholder="请输入联系人电话" v-model="dzdata.address_mobile">
 							<span>到货时间 : </span>
-							<select name="">
-								<option value="0">正常订单</option>
-								<option value="1">加急订单</option>
-								<option value="2">及时配送订单</option>
+							<select name="" v-model="status">
+								<option value="1">正常订单</option>
+								<option value="2">加急订单</option>
+								<option value="3">及时配送订单</option>
 							</select>
 						</div>
 						<div class="flex">
 							<span>其他说明 : </span>
-							<textarea rows="" cols="" placeholder="请输入其他说明内容"></textarea>
+							<textarea rows="" cols="" placeholder="请输入其他说明内容" v-model="desc"></textarea>
 						</div>
 						<div class="cgfs flex">
 							<span>采购方式 : </span>
 							<span>1.直接录入，型号/产品/品牌，可以直接匹配到相应产品</span>
 							<span>2.下载模板，填写好后上传即可</span>
-							<a href="">
+							<div @click="xzmb">
 								<img src="img/down.jpg" alt="">
 								<span>下载模板</span>
-							</a>
-							<a href="">
+							</div>
+							<div class="up_img" @click="scan">
 								<img src="img/down.jpg" alt="">
 								<span>上传清单 ( 表格 ) </span>
-							</a>
+								<form id="form">
+									<input id="scheaderimg" type="file" name="file" ref='input' @change="uploadImg($event)"
+										accept=".xlsx">
+								</form>
+							</div>
 						</div>
 					</div>
 					<table class="table_ct" border="" cellspacing="" cellpadding="">
@@ -434,45 +475,51 @@
 								<th>库存</th>
 								<th>单价</th>
 								<th>数量</th>
-								<th>小计</th>
+								<th >小计</th>
 								<th></th>
 							</tr>
 						</thead>
 					</table>
+					<table class="table_ct" border="" cellspacing="" cellpadding="" v-show="datalist.length == 0">
+						<thead class="thead_ct" style="background-color: #fff;">
+							<tr>
+								<th>暂无数据</th>
+							</tr>
+						</thead>
+					</table>
 					<div class="scrollBox">
-						<table class="table_ct" border="" cellspacing=""
-							cellpadding="">
+						<table class="table_ct" border="" cellspacing="" cellpadding="">
 							<tbody class="tbody_ct">
-								<tr v-for="item,index in datalist">
+								<tr v-for="item,index in datalist" :key="index">
 									<td class="flex aic ju_c firstTr_ct">
-										<div class="flex aic ju_c cpointer"
-										@click="dxbtn(index)">
+										<div class="flex aic ju_c cpointer" @click="dxbtn(index)">
 											<i v-show="item.dx" class="iconfont icon-duigou cEE0913"></i>
 										</div>
-										<span>{{index+1}}</span>
+										<span class="cpointer" @click="dxbtn(index)">{{index+1}}</span>
 									</td>
 									<td class="spbm">
-										<input type="" name="" id="" value="" placeholder="请输入商品编码" />
+										<input @click="dxbtn(index)" type="text" placeholder="请输入商品编码" readonly class="cpointer"
+											v-model="item.goods_code" />
 									</td>
 									<td class="spmc">
-										<img src="img/goods.jpg">
-										<span>神牛 刨奔</span>
+										<img :src="IPurl1+item.goods_pic[0].url">
+										<span>{{item.goods_name}}</span>
 									</td>
 									<td>
-										<span>库存充足</span>
+										<span>{{item.goods_all_sum}}</span>
 									</td>
 									<td class="dj">
-										<span>￥{{item.dj}}</span>
+										<span>￥{{item.goods_price}}</span>
 									</td>
 									<td class="sl">
-										<input type="" name="" id="" :value="item.sl" />
+										<input type="number" v-model="item.goods_sum" />
 									</td>
-									<td>
-										<span>￥{{item.dj * item.sl}}</span>
+									<td class="xj">
+										<span>￥{{item.goods_price * item.goods_sum}}</span>
 									</td>
 									<td class="cz">
 										<button class="cpointer" @click="del(index)">删除</button>
-										<img  class="cpointer" src="img/gwc.jpg">
+										<!-- <img class0="cpointer" src="img/gwc.jpg"> -->
 									</td>
 								</tr>
 							</tbody>
@@ -482,91 +529,362 @@
 						<div class="botmL_ct flex">
 							<div class="flex aic">
 								<div class="flex aic ju_c cpointer"
-								style="width:13px;height:13px;border:1px solid #999999;margin: 0 8px 0 35px;"
-								@click="qxbtn">
+									style="width:13px;height:13px;border:1px solid #999999;margin: 0 8px 0 35px;"
+									@click="qxbtn">
 									<i v-show="qx" class="iconfont icon-duigou cEE0913"></i>
 								</div>
-								<span>全选</span>
+								<span class="cpointer" @click="qxbtn">全选</span>
 							</div>
-							<button  class="cpointer xbtns_ct">删除选中商品</button>
-							<button  class="cpointer xbtns_ct" @click="addsp">继续添加商品</button>
+							<button class="cpointer xbtns_ct" @click="delxzsp">删除选中商品</button>
+							<button class="cpointer xbtns_ct" @click="addsp">继续添加商品</button>
 						</div>
 						<div class="botmR_ct">
 							<span>已选商品</span>
 							<span> : ￥{{yxspjg}}</span>
-							<button  class="cpointer">提交询价</button>
-							<button  class="cpointer">加入购物车</button>
+							<button class="cpointer" @click="tjxj">提交询价</button>
+							<button class="cpointer" @click="jrgwc">加入购物车</button>
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 			<include src="./common/footer.html"></include>
 		</div>
 		<script type="text/javascript">
+			var that;
 			var mySwiper
-			$(function(){
+			$(function() {
 				mySwiper = new Swiper('.swiper_hz1', {
 					autoplay: false,
-					loop:false
+					loop: false
 				})
-				
-				
 			})
 			var app = new Vue({
 				el: '#zncgContent_ct',
 				data: {
+					// 收货地
+					shd: '请选择收货地',
+					// 公司名
+					gsm: '',
+					// 其他说明
+					desc: '',
+					// 要求到货时间
+					status: 1,
 					// 全选
-					qx:false,
+					qx: false,
 					// 已选商品价格
-					yxspjg: '0.00',
-					datalist: [
-						{dx:false,sl:1,dj:8.30},
-						{dx:true,sl:1,dj:8.30},
-						{dx:false,sl:1,dj:8.30},
-						{dx:false,sl:1,dj:8.30},
-						{dx:false,sl:1,dj:8.30},
-					],
-					sh_add:'北京市北京东城区1号大院'
+					// 商品列表
+					datalist: [],
+					// 地址数据
+					dzdata: {},
+					yjfk_img: [],
+					timer3: null,
+					
+					
+					
+					banner:[]
 				},
-				methods:{
-					qxbtn:function(){
-						this.qx = !this.qx
-						if(this.qx){
-							for (var i = 0; i < this.datalist.length; i++) {this.datalist[i].dx = true}
-						}else{
-							for (var i = 0; i < this.datalist.length; i++) {this.datalist[i].dx = false}
+				created() {
+					that = this
+					that.get_banner()
+					// 获取收货人信息
+					if (localStorage.xaddress) {
+						that.hasxaddress = true
+						layer.load(1);
+						that.timer3 = setInterval(function() {
+							that.dzdata = JSON.parse(localStorage.getItem('xaddress'))
+							that.shd = that.dzdata.province + that.dzdata.city + that.dzdata.district + that
+								.dzdata.address
+						}, 100)
+						setTimeout(function() {
+							layer.closeAll('loading');
+							clearInterval(that.timer3)
+						}, 500);
+					}
+					// 获取商品列表
+					that.getgoodlist()
+				},
+				computed: {
+					// 已选商品价格
+					yxspjg: function() {
+						let num = 0
+						for (let i = 0; i < this.datalist.length; i++) {
+							if (this.datalist[i].dx) {
+								num += this.datalist[i].goods_price * this.datalist[i].goods_sum
+							}
+						}
+						return num
+					}
+				},
+				methods: {
+					get_banner:function(){
+						var datas={
+							place_type:5
+						}
+						_get('/Config.Banner/index',datas,function(res){
+							 if (res.status == 200){
+								 console.log(res.data.list)
+								 that.banner=res.data.list
+							 }
+						})
+					},
+					getimg_fuc:function(img){
+						return getimg(img)
+					},
+					getgoodlist:function(){
+						if (localStorage.goodslist_ct) {
+							var dataArr = JSON.parse(localStorage.getItem('goodslist_ct'))
+							let newArr = []
+							dataArr.map(function(item) {
+								newArr.push(
+									Object.assign(item, {
+										dx: false
+									})
+								)
+							})
+							that.datalist = newArr
 						}
 					},
-					dxbtn(index){
-						this.datalist[index].dx = !this.datalist[index].dx
+					qxbtn: function() {
+						that.qx = !that.qx
+						if (that.qx) {
+							for (var i = 0; i < that.datalist.length; i++) {
+								that.datalist[i].dx = true
+							}
+						} else {
+							for (var i = 0; i < that.datalist.length; i++) {
+								that.datalist[i].dx = false
+							}
+						}
+					},
+					dxbtn: function(index) {
+						that.datalist[index].dx = !that.datalist[index].dx
 						var ind = 0
-						for (var i = 0; i < this.datalist.length; i++) {
-							if(this.datalist[i].dx){
+						for (var i = 0; i < that.datalist.length; i++) {
+							if (that.datalist[i].dx) {
 								ind += 1
 							}
 						}
-						if(ind == this.datalist.length && ind !== 0){
-							this.qx = true
-						}else{
-							this.qx = false
+						if (ind == that.datalist.length && ind !== 0) {
+							that.qx = true
+						} else {
+							that.qx = false
 						}
 					},
-					del(index){
-						this.datalist.splice(index,1)
+					// 删除
+					del: function(index) {
+						var dataArr = JSON.parse(localStorage.getItem('goodslist_ct'))
+						dataArr.splice(index, 1)
+						localStorage.setItem('goodslist_ct', JSON.stringify(dataArr))
+						that.getgoodlist()
+						var arr1 = 0
+						for (var i = 0; i < that.datalist.length; i++) {
+							if(that.datalist[i].dx = true){
+								arr1 += 1
+							}
+						}
+						if(arr1 == that.datalist.length){
+							that.qx = true
+						}
 					},
-					addsp:function(){
-						this.datalist.push({dx:false,sl:3,dj:5})
+					// 继续添加商品
+					addsp: function() {
+						var xjarr = [];
+						for (var i = 0; i < this.datalist.length; i++) {
+							xjarr.push(this.datalist[i].member_cart_id)
+						}
+						localStorage.setItem('xjarr', JSON.stringify(xjarr))
+						window.location = './my_gwc.html'
 					},
-					open_tk:function(id){
-						layer_pwd=layer.open({
-						  type: 2,
-						  title: '编辑收货地址',
-						  shadeClose: true,
-						  shade: 0.8,
-						  area: ['400px', '400px'],
-						  content: './add_new.html?type=3&id='+id //iframe的url
+					// 选择地址
+					open_tk: function() {
+						window.location = './grzx.html?my_cur=41&xaddress=1'
+						// layer_pwd=layer.open({
+						//   type: 2,
+						//   title: '编辑收货地址',
+						//   shadeClose: true,
+						//   shade: 0.8,
+						//   area: ['400px', '400px'],
+						//   content: './add_new.html?type=3&id='+id //iframe的url
+						// })
+					},
+					// 下载模板
+					xzmb: function() {
+						var BaseConfig = JSON.parse(localStorage.BaseConfig)
+						var url = BaseConfig.base.default_excel_template
+						// window.location = IPurl1 + url
+						window.open(IPurl1 + url)
+					},
+					// 上传模板
+					scan:function(){
+						if(storage_fuc.getItem("user")){
+							that.$refs.input.click()
+						}else{
+							window.location.replace('login.html')
+							return
+						}
+					},
+					uploadImg: function(file) {
+						var _this = this
+						$.ajax({
+							type: "POST",
+							url: IPurl + '/Base/upload',
+							headers: {
+								"Authorization": storage_fuc.getItem("token") || '',
+							},
+							// beforeSend: function(request) {      //使用beforeSend
+							// 	request.setRequestHeader("Authorization", storage_fuc.getItem("token"));
+							// },
+							data: new FormData($('#form')[0]),
+							// async:false,
+							cache: false,
+							processData: false,
+							contentType: false, //不去设置Content-Type请求头
+							// enctype: 'multipart/form-data',    //需要正确设置此项
+							success: function(res) {
+								// console.log(res);
+								if (typeof(res) == 'string') {
+									res = JSON.parse(res)
+								}
+								if (res.status == 101) {
+									parent.location.href = "login.html?type=1"
+									return
+								}
+								if (res.status == 200) {
+									console.log(res)
+									layer.msg('上传成功')
+									var datas = {
+										excel: res.data
+									}
+									console.log(datas)
+									_post('ShopService.Quote/importData', datas, function(res) {
+										if (res.status == 200) {
+											localStorage.setItem('goodslist_ct', JSON.stringify(
+												res.data))
+											window.location.reload()
+										}
+									})
+									_this.yjfk_img.push(res.data)
+								} else {
+									if (res.msg) {
+										layer.msg(res.msg)
+									} else {
+										layer.msg('操作失败')
+									}
+								}
+							},
+							error: function(err) {
+								layer.msg('获取数据失败')
+								console.log(err)
+							}
 						})
+					},
+					// 删除选中商品
+					delxzsp: function() {
+						var dataArr = JSON.parse(localStorage.getItem('goodslist_ct'))
+						var newDataArr = []
+						for (var i = 0; i < this.datalist.length; i++) {
+							if (!this.datalist[i].dx) {
+								newDataArr.push(this.datalist[i])
+							}
+						}
+						localStorage.setItem('goodslist_ct', JSON.stringify(newDataArr))
+						this.datalist = JSON.parse(localStorage.getItem('goodslist_ct'))
+					},
+					// 提交询价   生成询价单接口
+					tjxj: function() {
+						
+						if(storage_fuc.getItem("user")){
+							login_m(function(res){
+								console.log(res)
+								that.user_datas=res.data
+								that.token=res.token
+							})
+						}else{
+							window.location.replace('login.html')
+							return
+						}
+						
+						if (JSON.stringify(that.dzdata) == '{}') {
+							layer.msg('请选择收货地址')
+							return
+						}
+						if (that.gsm == '') {
+							layer.msg('请输入公司/项目名称')
+							return
+						}
+						if (that.dzdata.address_username == '') {
+							layer.msg('请输入联系人姓名')
+							return
+						}
+						if (that.dzdata.address_mobile == '' || !(/^1\d{10}$/.test(that.dzdata.address_mobile))) {
+							layer.msg('手机号有误')
+							return
+						}
+						if (that.desc == '') {
+							layer.msg('请输入备注内容')
+							return
+						}
+						var goodss = []
+						for (var i = 0; i < this.datalist.length; i++) {
+							if (this.datalist[i].dx) {
+								goodss.push(this.datalist[i])
+							}
+						}
+						if (goodss.length == 0) {
+							layer.msg('请选择商品')
+							return
+						}
+						goodss = JSON.stringify(goodss)
+						var datas = {
+							member_address_id: this.dzdata.member_address_id,
+							quote_name: this.gsm,
+							quote_username: this.dzdata.address_username,
+							mobile: this.dzdata.address_mobile,
+							other_desc: this.desc,
+							take_status: this.status,
+							goods: goodss
+						}
+						_post('ShopService.Quote/add', datas, function(res) {
+							console.log('生成询价单', res)
+							layer.msg(res.msg)
+						})
+					},
+					// 加入购物车
+					jrgwc: function() {
+						
+						if(storage_fuc.getItem("user")){
+							login_m(function(res){
+								console.log(res)
+								that.user_datas=res.data
+								that.token=res.token
+							})
+						}else{
+							window.location.replace('login.html')
+							return
+						}
+						
+						var dataarr = []
+						for (var i = 0; i < this.datalist.length; i++) {
+							if (this.datalist[i].dx) {
+								dataarr.push(this.datalist[i])
+							}
+						}
+						if (dataarr.length == 0) {
+							layer.msg('请选择商品')
+							return
+						}
+						for (var i = 0; i < dataarr.length; i++) {
+							var datas = dataarr[i]
+							_post('Member.MemberCart/add', datas, function(res) {
+								layer.msg(res.msg)
+								if (res.status == 200) {
+									setTimeout(function() {
+										window.location = './my_gwc.html'
+									}, 500)
+								}
+							})
+						}
 					}
 				}
 			})

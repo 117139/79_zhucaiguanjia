@@ -14,17 +14,19 @@
 		<form>
 			<div class="my_search dis_flex aic">
 				<div class="yjfk_xz_name">问题类型：</div>
-				<select class="yjfk_wt_list" @change="yjfk_wenti" v-model="wenti_list_id">
+				<select class="yjfk_wt_list" v-model="wenti_list_id">
 					<option v-for="(item,index) in wenti_list" :value="item.id">{{item.name}}</option>
 				</select>
 				<div class="yjfk_xz_name">状态：</div>
-				<select class="yjfk_wt_list" @change="yjfk_status" v-model="status_list_id">
+				<select v-if="tab_yjfk_id==0" class="yjfk_wt_list" v-model="status_list_id">
 					<option v-for="(item,index) in status_list" :value="item.id">{{item.name}}</option>
 				</select>
+				
+				<input  v-if="tab_yjfk_id!=0" class="yjfk_wt_list" type="text" :value="status_list[tab_yjfk_id].name" readonly />
 				<div class="yjfk_xz_name">文字描述：</div>
 				<input class="yjfk_wt_list" type="text" placeholder="请输入文字描述" v-model="yjfk_text" />
-				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c">搜索</div>
-				<div class="my_search_btn my_search_btn2 dis_flex aic ju_c">重置</div>
+				<div class="my_search_btn my_search_btn1 dis_flex aic ju_c" @click="ss_yjfk_fuc">搜索</div>
+				<div class="my_search_btn my_search_btn2 dis_flex aic ju_c" @click="cc_yjfk_fuc">重置</div>
 			</div>
 			
 			<div class="order_li_box">
@@ -44,41 +46,51 @@
 					</thead>
 					<tbody class="yjfk_table_body">
 						<tr v-for="(item,index) in yjfk_list">
-							<td>{{index+1}}</td>
-							<td>210521050{{index+1}}</td>
-							<td>功能问题</td>
-							<td>这是一点描述</td>
+							<td>{{index+1+(page-1)*10}}</td>
+							<td>{{item.code}}</td>
+							<td>
+								<span v-if="item.type==1">功能问题</span>
+								<span v-if="item.type==2">商品问题</span>
+								<span v-if="item.type==3">物流问题</span>
+								<span v-if="item.type==4">服务问题</span>
+								<span v-if="item.type==0">其他问题</span>
+							</td>
+							<td>{{item.content}}</td>
 							<td>
 								<div class="dis_flex fww yjfk_imgs">
-									<div class="bg_div" v-for="(item1,index1) in 9">
-										<div style="background-image: url(./img/cjcg_img_05.jpg);"></div>
+									<div class="bg_div" v-for="(item1,index1) in item.pic">
+										<div :style="'background-image: url('+getimg(item1.url)+');'"></div>
 									</div>
 								</div>
 							</td>
-							<td>状态</td>
-							<td>2105.02.03</td>
 							<td>
-								<div style="max-width: 150px;">这是一段回复</div></td>
-							<td>2020.03.02</td>
+								<span v-if="item.status==0">未回复</span>
+								<span v-if="item.status==1">已回复</span>
+							</td>
+							<td>{{gettime(item.create_time)}}</td>
+							<td>
+								<div style="max-width: 150px;">{{item.msg}}</div></td>
+							<td>{{gettime(item.feedback_time)}}</td>
 						</tr>
 					</tbody>
 				</table>
+				<div v-show="yjfk_list.length>0" class="list_page tac dis_flex">
+					<!-- <div class="flex_1"></div>
+						<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
+					<div class="flex_1"></div> -->
+					<div class="m-style M-box_yjfk"></div>
+				</div>
 				<div class="dis_flex_c aic ju_c yjfk_null_box">
-					<div class="yjfk_null bg_div">
+					<div v-show="yjfk_list.length==0" class="yjfk_null bg_div">
 						<div style="background-image: url(./img/yjfk_null.png);"></div>
 					</div>
-					<div>您还没有提交意见反馈</div>
+					<div v-show="yjfk_list.length==0">您还没有提交意见反馈</div>
 					<div @click="yjfk_fabu=true" class="go_yjfk_btn dis_flex aic ju_c">意见反馈</div>
 				</div>
 				
 			</div>
 			
-			<div class="list_page tac dis_flex">
-				<!-- <div class="flex_1"></div>
-					<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
-				<div class="flex_1"></div> -->
-				<div class="m-style M-box2"></div>
-			</div>
+			
 		</form>
 	</div>
 	<div v-else class="w100">
@@ -97,12 +109,15 @@
 			<div class="dis_flex fww w100">
 				<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
 					<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
-					<div :style="'background-image: url('+item+');'"></div>
+					<div :style="'background-image: url('+getimg(item)+');'"></div>
 				</div>
 				<div class="up_img" v-if="yjfk_img.length<9">
 					<img src="./img/upimg_03.jpg" alt="">
 					<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
-					<input id="scheaderimg" type="file" @change="uploadImg($event,true)">
+					<!-- <input id="scheaderimg" type="file" @change="uploadImg($event,true)"> -->
+					<form id="form">
+						<input id="scheaderimg" type="file" name="file" @change="uploadImg($event)">
+					</form>
 				</div>
 			</div>
 			<div class="dis_flex aic yjfk_fb_user">
@@ -120,7 +135,6 @@
 	
 	
 <script>
-	console.log(111)
 	// 意见反馈
 	
 	$(function(){
@@ -128,26 +142,6 @@
 		setTimeout(function(){
 		  layer.closeAll('loading');
 		}, 300);
-		
-		
-		
-		// $('.M-box2').pagination({
-		// 		totalData:100,
-		// 		showData:10,
-		// 		coping: true,
-		// 		// mode: 'fixed',
-		// 		// homePage: '首页',
-		// 		// endPage: '末页',
-		// 		prevContent: '上页',
-		// 		nextContent: '下页',
-		// 		callback: function (api) {
-		// 			//console.log(api.getCurrent())
-		// 			var page=api.getCurrent()
-		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
-		// 		}
-		// }); 
-		
-		
 	})
 	
 	var vm_myyjfk = new Vue({
@@ -178,7 +172,7 @@
 					},
 					{
 						name:'其他问题',
-						id:5
+						id:0
 					},
 				],
 				wenti_list_id:'',
@@ -190,16 +184,16 @@
 					},
 					{
 						name:'已接收',
-						id:1
+						id:0
 					},
 					{
-						name:'以回复',
-						id:2
+						name:'已回复',
+						id:1
 					},
 				],
 				status_list_id:'',
 				yjfk_text:'',
-				yjfk_list:[1,1,1,],
+				yjfk_list:[],
 				yjfk_fabu:false,
 				fb_type:1,
 				fb_content:'',
@@ -211,7 +205,79 @@
 				console.log('vm_myyjfk')
 			
 			},
+			mounted:function(){
+				
+				this.getdatalist(1)
+			},
 			methods: {
+				ss_yjfk_fuc:function(){
+					this.getdatalist(1)
+				},
+				cc_yjfk_fuc:function(){
+					this.wenti_list_id=''
+					this.status_list_id=''
+					this.yjfk_text=''
+					this.getdatalist(1)
+				},
+				json_p:function(img){
+					// if(!img){
+					// 	return
+					// }
+					return json_p(img)
+				},
+				gettime:function(img){
+					if(!img){
+						return
+					}
+					return gettime(img,'.')
+				},
+				getimg:function(img){
+					// if(!img){
+					// 	return
+					// }
+					return getimg(img)
+				},
+				getdatalist: function(page){
+					var datas={
+						limit:10,
+						page:page||1,
+						type:this.wenti_list_id,
+						status:this.status_list_id,
+						content:this.yjfk_text,
+					}
+					var jkurl='/ShopService.Feedback/index'
+					layer.load(1,{
+						shade: [0.2,'#000'] //0.1透明度的白色背景
+					});
+					setTimeout(function(){
+					  layer.closeAll('loading');
+					},500);
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_myyjfk.yjfk_list=res.data.list
+							 if(page==1){
+								 vm_myyjfk.page=1
+								 $('.M-box_yjfk').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_myyjfk.getdatalist(page)
+										vm_myyjfk.page=page
+								 	}
+								 });
+							 }
+						 }
+					})
+				},
 				yjfk_fb_fuc:function(e){
 					var _this=this
 					if(!_this.fb_content){
@@ -230,53 +296,74 @@
 						layer.msg('手机号有误')
 						return
 					}
-					var datas={
-						fb_content:_this.fb_content,
-						yjfk_fb_user:_this.yjfk_fb_user,
-						yjfk_img:_this.yjfk_img.join(','),
-						yjfk_fb_tel:_this.yjfk_fb_tel,
+					var imgs=_this.yjfk_img
+					if(imgs.length>1){
+						for(var i=0;i<imgs.length;i++){
+							imgs[i]={
+								url:imgs[i],
+								title:''
+							}
+						}
+						imgs=JSON.stringify(imgs)
 					}
-					console.log(datas)
-					layer.msg('操作成功')
+					var datas={
+						type:_this.fb_type,
+						content:_this.fb_content,
+						real_name:_this.yjfk_fb_user,
+						pic:imgs,
+						mobile:_this.yjfk_fb_tel,
+					}
+					var jkurl='/ShopService.Feedback/add'
+					
+					_post(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 layer.msg('提交成功')
+							 setTimeout(function(){
+								 _this.yjfk_fabu=false
+								 _this.getdatalist(1)
+							 },1000)
+						 }
+					})
 				},
 				uploadImg:function(file){
 					var  _this=this
-					var reader = new FileReader();
-					reader.readAsDataURL(file.target.files[0]); // 读出 base64
-					reader.onloadend = function () {
-					      // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-					     var dataURL = reader.result;//base64
-					     // 显示图片
-					     // $('#showImg').attr('src',dataURL);
-							 _this.yjfk_img.push(dataURL)
-							 
-							
-					};
-					return
-					var fd=new FormData()
-					fd.append('file',file)
-					// var datas={
-					// 	file:file
-					// }
-					console.log(file)
 					$.ajax({
 						type: "POST",
 						url: IPurl+'/Base/upload',
-						data: fd,
-						async:false,
-						cache: true,
+						headers:{
+							"Authorization":storage_fuc.getItem("token")||'',
+						},
+						// beforeSend: function(request) {      //使用beforeSend
+						// 	request.setRequestHeader("Authorization", storage_fuc.getItem("token"));
+						// },
+						
+						data: new FormData($('#form')[0]),
+						// async:false,
+						cache: false,
 						processData: false,
 						contentType: false,//不去设置Content-Type请求头
+						// enctype: 'multipart/form-data',    //需要正确设置此项
+						
 						success: function(res) {
 							// console.log(res);
 							if(typeof(res)=='string'){
 								res=JSON.parse(res)
 							}
-							if (res.error == 0) {
+							if(res.status == 101){
+								parent.location.href="login.html?type=1"
+								return
+							}
+							if (res.status == 200) {
 							console.log(res)
 								layer.msg('上传成功')
+								 _this.yjfk_img.push(res.data)
 							} else {
-								layer.msg('获取数据失败')
+								if(res.msg){
+									layer.msg(res.msg)
+								}else{
+									layer.msg('操作失败')
+								}
 							}
 					
 						},
@@ -352,6 +439,14 @@
 				tab_yjfk_fuc:function(item) {
 					console.log(item)
 					this.tab_yjfk_id=item
+					if(item==1){
+						this.status_list_id=0
+					}else if(item==2){
+						this.status_list_id=1
+					}else{
+						this.status_list_id=''
+					}
+					this.getdatalist(1)
 				}
 				
 			}

@@ -82,7 +82,7 @@
 				
 				
 			})
-			
+			var that
 			var vm_myzhaq = new Vue({
 					el: '#myzhaq',
 					data: {
@@ -92,14 +92,14 @@
 						yztime: 60,
 						pwd: '',
 						pwd1: '',
+						verify_id:''
 					},
 					created: function() {
 						console.log('vm_myzhaq')
-					
+					that = this
 					},
 					methods: {
 						getCode:function() {
-							var that = this
 						
 							if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
 								layer.msg('手机号有误')
@@ -110,61 +110,42 @@
 							} else {
 								that.btnkg = 1
 							}
+							$.ajax({
+								type: "post",
+								url: IPurl+'/Member.Member/sendSms',
+								data: {
+									mobile: that.tel
+								},
+								success: function(res) {
+									// console.log(res);
+									if(typeof(res)=='string'){
+										res=JSON.parse(res)
+									}
+									if (res.status == 200) {
+										vm_myzhaq.verify_id=res.key
+										layer.msg('发送成功')
+										that.codetime()
+										that.btnkg = 0
+									} else {
+										if(res.msg){
+											layer.msg(res.msg)
+										}else{
+											layer.msg('操作失败')
+										}
+									}
+							
+								},
+								error: function(err) {
+									layer.msg('请求失败')
+									console.log(err)
+								}
+							})
 							// uni.showToast({
 							// 	icon: 'none',
 							// 	title: '发送成功'
 							// })
-							layer.msg('发送成功')
-							that.codetime()
-							that.btnkg = 0
-							return
-							var jkurl = '/login/index'
-							var data = {
-								type:that.login_type==0?2:that.login_type==2?1:1,
-								phone: that.tel
-							}
-							service.P_post(jkurl, data).then(res => {
-								that.btnkg = 0
-								console.log(res)
-								if (res.code == 1) {
-									var datas = res.data
-									console.log(typeof datas)
 							
-									if (typeof datas == 'string') {
-										datas = JSON.parse(datas)
-									}
 							
-									uni.showToast({
-										icon: 'none',
-										title: '发送成功'
-									})
-									console.log(res)
-									// that.verification_key = res.data.data.key
-									that.codetime()
-							
-								} else {
-									if (res.msg) {
-										uni.showToast({
-											icon: 'none',
-											title: res.msg
-										})
-									} else {
-										uni.showToast({
-											icon: 'none',
-											title: '操作失败'
-										})
-									}
-								}
-							}).catch(e => {
-								that.btnkg = 0
-								console.log(e)
-								uni.showToast({
-									icon: 'none',
-									title: '操作失败'
-								})
-							})
-							
-						
 						},
 						codetime:function() {
 							var that = this
@@ -184,6 +165,7 @@
 						},
 						sub:function(){
 							var that=this
+							// 17831126290
 							if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
 								layer.msg('手机号有误')
 								
@@ -195,39 +177,27 @@
 								
 								return;
 							}
-							// if (!that.pwd) {
-							// 	layer.msg('请输入密码')
-								
-							// 	return;
-							// }
-							// if (that.pwd.length<6) {
-							// 	layer.msg('请输入6-46个字符的密码')
-								
-							// 	return;
-							// }
 							
-							// if (!that.pwd1) {
-							// 	layer.msg('请再次输入密码')
-								
-							// 	return;
-							// }
-							// if (that.pwd != that.pwd1) {
-							// 	layer.msg('两次密码不一致')
-								
-							// 	return;
-							// }
 							
 							var datas = {
-								phone: that.tel,
-								code: that.code,
-								// password: that.pwd
+								mobile: that.tel,
+								verify: that.code,
+								verify_id: that.verify_id
 							}
+							var jkurl='/Member.Member/updateMobile'
+							
+							_post(jkurl,datas,function(res){
+								 layer.msg('操作成功')
+								 var loginCodes=JSON.parse(storage_fuc.getItem('psd'))
+								 let newPsd = {phone: that.tel,psd: loginCodes.psd}
+								 localStorage.setItem('psd',JSON.stringify(newPsd))
+								 setTimeout(function(){
+								 	// parent.layer.close('layer_pwd');
+								 	parent.layer.closeAll();
+								 },1000)
+							})
 							// console.log(datas)
-							layer.msg('操作成功')
-							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+							
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

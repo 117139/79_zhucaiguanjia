@@ -20,7 +20,7 @@
 		<script src="js/pagination/jquery.pagination.js"></script>
 	</head>
 	<body>
-		<div  v-cloak id="body" class="">
+		<div v-cloak id="body" class="">
 			<div class="w100" style="height: 187px;">
 				<div class="header_top">
 					<include src="./common/header.html"></include>
@@ -28,42 +28,54 @@
 				</div>
 				<include src="./common/header1.html"></include>
 				<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/header1.html"></include> -->
-			
-			
+
+
 				<!-- header -->
-			
+
 				<include src="./common/header_header.html"></include>
 			</div>
 			<div class="html_main">
 				<div class="w1200">
 					<div class="xz_tit dis_flex aic ju_b">
-						<div><a href="index.html">首页</a>＞<a href="#" style="color: rgb(235, 95, 51);">场景采购</a></div>
-						<a class="">共145件相关商品</a>
+						<div><a href="index.html">首页</a>＞<a href="#" style="color: rgb(235, 95, 51);">场景采购</a><a class="ml30" v-if="keyword.length>0">搜索：{{keyword}}</a></div>
+						<a class="">共{{zcount}}件相关商品</a>
 						<!-- ＞<a href="#" style="color: #EB5F33;">咨讯详情</a> -->
 					</div>
 					<div class="dis_flex aic fww">
 						<div class="yxz_box dis_flex aic" v-if="cj_xz.length>0" @click="xq_xz_fuc(0)">
 							<div class="yxz_box_text oh1">场景分类:
-								<span v-for="(item,index) in cj_xz">{{item.title}}{{index!=cj_xz.length-1?',':''}}</span>
+								<span
+									v-for="(item,index) in cj_xz">{{item.cate_name}}{{index!=cj_xz.length-1?',':''}}</span>
 							</div><i class="iconfont icon-cuowu"></i>
 						</div>
 						<div class="yxz_box dis_flex aic" v-if="pp_xz.length>0" @click="xq_xz_fuc(1)">
 							<div class="yxz_box_text oh1">品牌分类:
-								<span v-for="(item,index) in pp_xz">{{item.title}}{{index!=pp_xz.length-1?',':''}}</span>
+								<span
+									v-for="(item,index) in pp_xz">{{item.cate_name}}{{index!=pp_xz.length-1?',':''}}</span>
 							</div> <i class="iconfont icon-cuowu"></i>
 						</div>
 						<div class="yxz_box dis_flex aic" v-if="xm_xz.length>0" @click="xq_xz_fuc(2)">
 							<div class="yxz_box_text oh1">项目分类:
-								<span v-for="(item,index) in xm_xz">{{item.title}}{{index!=xm_xz.length-1?',':''}}</span>
+								<span
+									v-for="(item,index) in xm_xz">{{item.cate_name}}{{index!=xm_xz.length-1?',':''}}</span>
+							</div> <i class="iconfont icon-cuowu"></i>
+						</div>
+						<div class="yxz_box dis_flex aic" v-if="xm_xz2.length>0" @click="xq_xz_fuc(22)">
+							<div class="yxz_box_text oh1">
+								<!-- 二级分类: -->
+								<span
+									v-for="(item,index) in xm_xz2">{{item.cate_name}}{{index!=xm_xz2.length-1?',':''}}</span>
 							</div> <i class="iconfont icon-cuowu"></i>
 						</div>
 						<div class="yxz_box dis_flex aic" v-if="jg_xz.length>0" @click="xq_xz_fuc(3)">
 							<div class="yxz_box_text oh1">价格:
-								<span v-for="(item,index) in jg_xz">{{item.title}}{{index!=jg_xz.length-1?',':''}}</span>
+								<span
+									v-for="(item,index) in jg_xz">{{item.title}}{{item.title1>0?'-'+item.title1:'以上'}}{{index!=jg_xz.length-1?',':''}}</span>
 							</div> <i class="iconfont icon-cuowu"></i>
 						</div>
-						
-						<div  v-if="cj_xz.length>0 ||pp_xz.length>0||xm_xz.length>0||jg_xz.length>0" class="xq_all_btn" @click="xq_xz_fuc(-1)">清除筛选</div>
+
+						<div v-if="cj_xz.length>0 ||pp_xz.length>0||xm_xz.length>0||jg_xz.length>0" class="xq_all_btn"
+							@click="xq_xz_fuc(-1)">清除筛选</div>
 					</div>
 					<div v-if="cj_xz.length==0" class="cg_boxs">
 						<div class="cg_box dis_flex ais">
@@ -74,64 +86,67 @@
 								<div class="dis_flex ju_b aic mb20">
 									<div></div>
 									<div class="dis_flex aic">
-										<div v-if="cj_kg==true" @click="cj_kg=false" class="cg_xz_btn dis_flex aic ju_c">收起<i class="iconfont icon-xiaosanjiaoup"></i></div>
-										<div v-if="cj_kg==false" @click="cj_kg=true" class="cg_xz_btn dis_flex aic ju_c">更多<i class="iconfont icon-xiaosanjiaodown"></i></div>
-										<div onclick="more_fuc(0,0)" class="cg_xz_btn dis_flex aic ju_c">多选<i class="iconfont icon-jia"></i></div>
+										<div v-if="cj_kg==true" @click="cj_kg=false"
+											class="cg_xz_btn dis_flex aic ju_c">收起<i
+												class="iconfont icon-xiaosanjiaoup"></i></div>
+										<div v-if="cj_kg==false" @click="cj_kg=true"
+											class="cg_xz_btn dis_flex aic ju_c">更多<i
+												class="iconfont icon-xiaosanjiaodown"></i></div>
+										<div onclick="more_fuc(0,0)" class="cg_xz_btn dis_flex aic ju_c">多选<i
+												class="iconfont icon-jia"></i></div>
 									</div>
 								</div>
-								<div class="dis_flex fww dx_xz_list" :style="cj_kg==false?'height:40px;overflow:hidden':''">
-									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in cj_list" @click="xz_fuc(0,item)">
+								<div class="dis_flex fww dx_xz_list"
+									:style="cj_kg==false?'height:40px;overflow:hidden':''">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in cj_list"
+										@click="xz_fuc(0,item)">
 										<span v-if="cj_more==true" class="dx_xz_li_box dis_flex aic ">
-											<i v-if="item.active" class="iconfont icon-duigou cEE0913" ></i>
+											<i v-if="item.active" class="iconfont icon-duigou cEE0913"></i>
 										</span>
-										<div class="oh1" style="width: 5em;">{{item.title}}</div>
+										<div class="oh1" style="width: 5em;">{{item.cate_name}}</div>
 									</div>
 								</div>
 								<div v-if="cj_more==true" class="dis_flex aic ju_c cgxz_btns">
 									<div class="cgxz_btn dis_flex aic ju_c cpointer" @click="xz_dx_fuc(0)">确定</div>
-									<div class="cgxz_btn1 dis_flex aic ju_c cpointer"onclick="more_fuc(0,1)">取消</div>
+									<div class="cgxz_btn1 dis_flex aic ju_c cpointer" onclick="more_fuc(0,1)">取消</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="cg_boxs" style="margin-top: 20px;">
-						<div  v-if="pp_xz.length==0" class="cg_box dis_flex ais">
+						<div v-if="pp_xz.length==0" class="cg_box dis_flex ais">
 							<div class="cg_xz_l flex_0">
 								<div class="cg_xz_l_li">品牌分类:</div>
 							</div>
 							<div class="cg_xz_r flex_1">
 								<div class="dis_flex ju_b aic mb20">
 									<div class="dis_flex aic ">
-										<div class="cgxz_btn dis_flex aic ju_c">所有品牌</div>
+										<div class="cgxz_btn dis_flex aic ju_c cpointer" @click="get_CateBrand()">所有品牌
+										</div>
 										<div class="cg_pp_list">
-											<span class="cpointer">A</span>
-											<span class="cpointer">B</span>
-											<span class="cpointer">C</span>
-											<span class="cpointer">D</span>
-											<span class="cpointer">E</span>
-											<span class="cpointer">F</span>
-											<span class="cpointer">G</span>
-											<span class="cpointer">H</span>
-											<span class="cpointer">I</span>
-											<span class="cpointer">J</span>
-											<span class="cpointer">K</span>
-											<span class="cpointer">L</span>
-											<span class="cpointer">M</span>
-											<span class="cpointer">N</span>
+											<span class="cpointer" v-for="(item,index) in pp_zm"
+												@click="get_CateBrand(item)">{{item}}</span>
 										</div>
 									</div>
 									<div class="dis_flex aic">
-										<div v-if="pp_kg==true" @click="pp_kg=false" class="cg_xz_btn dis_flex aic ju_c">收起<i class="iconfont icon-xiaosanjiaoup"></i></div>
-										<div v-if="pp_kg==false" @click="pp_kg=true" class="cg_xz_btn dis_flex aic ju_c">更多<i class="iconfont icon-xiaosanjiaodown"></i></div>
-										<div onclick="more_fuc(1,0)" class="cg_xz_btn dis_flex aic ju_c">多选<i class="iconfont icon-jia"></i></div>
+										<div v-if="pp_kg==true" @click="pp_kg=false"
+											class="cg_xz_btn dis_flex aic ju_c">收起<i
+												class="iconfont icon-xiaosanjiaoup"></i></div>
+										<div v-if="pp_kg==false" @click="pp_kg=true"
+											class="cg_xz_btn dis_flex aic ju_c">更多<i
+												class="iconfont icon-xiaosanjiaodown"></i></div>
+										<div onclick="more_fuc(1,0)" class="cg_xz_btn dis_flex aic ju_c">多选<i
+												class="iconfont icon-jia"></i></div>
 									</div>
 								</div>
-								<div class="dis_flex fww dx_xz_list" :style="pp_kg==false?'height:40px;overflow:hidden':''">
-									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in pp_list" @click="xz_fuc(1,item)">
+								<div class="dis_flex fww dx_xz_list"
+									:style="pp_kg==false?'height:40px;overflow:hidden':''">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in pp_list"
+										@click="xz_fuc(1,item)">
 										<span v-if="pp_more==true" class="dx_xz_li_box dis_flex aic ">
-											<i v-if="item.active" class="iconfont icon-duigou cEE0913" ></i>
+											<i v-if="item.active" class="iconfont icon-duigou cEE0913"></i>
 										</span>
-										<div class="oh1" style="width: 5em;">{{item.title}}</div>
+										<div class="oh1" style="width: 5em;">{{item.cate_name}}</div>
 									</div>
 								</div>
 								<div v-if="pp_more==true" class="dis_flex aic ju_c cgxz_btns">
@@ -140,30 +155,48 @@
 								</div>
 							</div>
 						</div>
-						<div  v-if="xm_xz.length==0" class="cg_box dis_flex ais">
+						<div v-if="xm_xz.length==0" class="cg_box dis_flex ais">
 							<div class="cg_xz_l flex_0">
 								<div class="cg_xz_l_li">项目分类:</div>
 							</div>
 							<div class="cg_xz_r flex_1 bt1">
-								
+
 								<div class="dis_flex fww dx_xz_list">
-									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in xm_list"  @click="xz_fuc(2,item)">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in xm_list"
+										@click="xz_fuc(2,item)">
 										<!-- <span class="dx_xz_li_box dis_flex aic "></span> -->
-										<div class="oh1" style="width: 5em;">{{item.title}}</div>
+										<div class="oh1" style="width: 5em;">{{item.cate_name}}</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div  v-if="jg_xz.length==0" class="cg_box dis_flex ais">
+						<div v-if="xm_xz.length>0&&xm_xz2.length==0" class="cg_box dis_flex ais">
+							<div class="cg_xz_l flex_0">
+								<!-- 二级分类 -->
+								<div class="cg_xz_l_li">分类:</div>
+							</div>
+							<div class="cg_xz_r flex_1 bt1">
+
+								<div class="dis_flex fww dx_xz_list">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in xm_list2"
+										@click="xz_fuc(22,item)">
+										<!-- <span class="dx_xz_li_box dis_flex aic "></span> -->
+										<div class="oh1" style="width: 5em;">{{item.cate_name}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div v-if="jg_xz.length==0" class="cg_box dis_flex ais">
 							<div class="cg_xz_l flex_0">
 								<div class="cg_xz_l_li">价格:</div>
 							</div>
 							<div class="cg_xz_r flex_1 bt1">
-								
+
 								<div class="dis_flex dx_xz_list">
-									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in jg_list"  @click="xz_fuc(3,item)">
+									<div class="dx_xz_li dis_flex aic" v-for="(item,index) in jg_list"
+										@click="xz_fuc(3,item)">
 										<!-- <span class="dx_xz_li_box dis_flex aic "></span> -->
-										<div class="oh1 w100" >{{item.title}}</div>
+										<div class="oh1 w100">{{item.title}}{{item.title1>0?'-'+item.title1:'以上'}}</div>
 									</div>
 									<div class="flex_1" style="min-width: 100px;"></div>
 									<div class="dis_flex aic">
@@ -176,325 +209,478 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="cg_jg_sx dis_flex aic ju_b">
 						<div class="dis_flex aic ">
 							<div class="dis_flex aic cg_jg_px cpointer" @click="jg_px_fuc(0)">价格:
-								<img v-if="jg_px==0" src="img/paixu_jiang.png" >
-								<img v-else src="img/paixu_sheng.png" >
+								<img v-if="jg_px==0" src="img/paixu_jiang.png">
+								<img v-else src="img/paixu_sheng.png">
 							</div>
 							<div class="cg_jg_sx_sg">|</div>
 							<div class="dx_xz_li dis_flex aic" style="min-width: 0;" @click="jg_px_fuc(1)">
 								<span class="dx_xz_li_box dis_flex aic ">
-									<i v-if="jg_cx==1" class="iconfont icon-duigou cEE0913" ></i>
+									<i v-if="jg_cx==1" class="iconfont icon-duigou cEE0913"></i>
 								</span>有促销
 							</div>
-							
+
 							<div class="cg_jg_sx_sg">|</div>
-							<div class="dx_xz_li dis_flex aic" style="min-width: 0;"  @click="jg_px_fuc(2)">
+							<div class="dx_xz_li dis_flex aic" style="min-width: 0;" @click="jg_px_fuc(2)">
 								<span class="dx_xz_li_box dis_flex aic ">
-									<i v-if="jg_kc==1" class="iconfont icon-duigou cEE0913" ></i>
+									<i v-if="jg_kc==1" class="iconfont icon-duigou cEE0913"></i>
 								</span>有库存
 							</div>
 						</div>
-						
+
 						<div class="dis_flex aic ">
-							<div class="jg_px_num">共145件相关商品</div>
-							<div class="jg_px_page">
+							<div class="jg_px_num">共{{zcount}}件相关商品</div>
+							<!-- <div class="jg_px_page">
 								<i class="icon-prev iconfont cpointer" @click="set_page(0)"></i>
 								<span>{{page}}</span>
 								<i class="icon-next-m iconfont cpointer" @click="set_page(1)"></i>
 								<span>1/125页</span>
-							</div>
+							</div> -->
 						</div>
 					</div>
-					
-					
+
+
 					<div class="goods_list dis_flex fww">
-						<a href="xqy.html?id=1" class="goods_li" v-for="(item,index) in 10">
+						<a :href="'xqy.html?id='+item.goods_id" class="goods_li" v-for="(item,index) in datas">
 							<div class="goods_li_img bg_div bg_div_hover">
-								<div style="background-image: url(./img/cjcg_img_03.jpg);"></div>
+								<div v-if="item.goods_pic.length>0" :style="'background-image: url('+getimg_fuc(item.goods_pic[0].url)+');'"></div>
 							</div>
 							<div class="goods_li_msg">
-								<div class="w100 oh1 goods_li_name" title="绥化不锈钢阀门厂家-din15不锈钢">绥化不锈钢阀门厂家-din15不锈钢绥化不锈钢阀门厂家-din15不锈钢</div>
-								<div class="goods_li_pp dis_flex aic">西门子品牌<img src="img/ppsj_19.jpg" ></div>
-								<div class="goods_li_jg">￥<span>60.00</span>元</div>
+								<div class="w100 oh1 goods_li_name" :title="item.goods_name">
+									{{item.goods_name}}</div>
+								<div class="goods_li_pp dis_flex aic">{{item.cate_brand_name}}<img src="img/ppsj_19.jpg" v-if="item.cate_brand_name"></div>
+								<div class="goods_li_jg">￥<span>{{item.goods_price}}</span>元</div>
 							</div>
 						</a>
+						<div class="w100" v-if="datas.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无商品</div>
 					</div>
 					<div class="list_page tac dis_flex">
 						<div class="flex_1"></div>
-							<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
+						<a v-if="zcount>15&&datas>zcount" class="dis_flex aic ju_c look_more" @click="getmore">查看更多<span class="dis_flex aic ju_c"><i
+									class="iconfont icon-gengduo1"></i></span></a>
 						<div class="flex_1"></div>
 						<!-- <div class="m-style M-box2"></div> -->
 					</div>
 				</div>
 			</div>
-			
-			
-		
-			
+
+
+
+
 			<include src="./common/footer_f.html"></include>
 			<include src="./common/footer.html"></include>
 			<!-- <include src="http://www.wanbonet.com/suxin/79_zhucaiguanjia/common/footer.html"></include> -->
-			
+
 		</div>
 <script>
-		// var mySwiper
-		$(function(){
-			// $('.M-box2').pagination({
-			// 		totalData:100,
-			// 		showData:10,
-			// 		coping: true,
-			// 		// mode: 'fixed',
-			// 		// homePage: '首页',
-			// 		// endPage: '末页',
-			// 		prevContent: '上页',
-			// 		nextContent: '下页',
-			// 		callback: function (api) {
-			// 			//console.log(api.getCurrent())
-			// 			var page=api.getCurrent()
-			// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
-			// 		}
-			// }); 
+	// var mySwiper
+	$(function() {
+		// $('.M-box2').pagination({
+		// 		totalData:100,
+		// 		showData:10,
+		// 		coping: true,
+		// 		// mode: 'fixed',
+		// 		// homePage: '首页',
+		// 		// endPage: '末页',
+		// 		prevContent: '上页',
+		// 		nextContent: '下页',
+		// 		callback: function (api) {
+		// 			//console.log(api.getCurrent())
+		// 			var page=api.getCurrent()
+		// 			// getdatalist(that,type,cityid,cityid1,page,pagesize)
+		// 		}
+		// }); 
+
+	})
+
+	var that
+	var vm = new Vue({
+		el: '#body',
+		data: {
+			cj_list: [], //场景分类
+			cj_kg: false,
+			cj_more: false,
+			cj_xz: [],
+			pp_zm: [
+				'A', 'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+				'W', 'X', 'Y', 'Z'
+
+			],
+			pp_list: [], //品牌分类
+			pp_kg: false,
+			pp_more: false,
+			pp_xz: [],
+
+			xm_list: [], //项目分类
+			xm_xz: [],
+			xm_list2: [], //项目分类
+			xm_xz2:[], //选择的2级分类
+			jg_list: [], //价格分类
+			jg_xz: [],
+
+			jg_px: 0, // 排序 0 降序  1升
+			jg_cx: 0, //促销
+			jg_kc: 0, // 库存
+
+			datas:[], //商品列表
+			zcount:0,
+			page: 1,
+
+			zgj: '',
+			zdj: '',
 			
-		})
-		
-		var that
-		var vm = new Vue({
-			el: '#body',
-			data: {
-				cj_list: [],    //场景分类
-				cj_kg:false,
-				cj_more:false,
-				cj_xz:[],
-				pp_list: [],   //品牌分类
-				pp_kg:false,
-				pp_more:false,
-				pp_xz:[],
-				
-				xm_list:[],    //项目分类
-				xm_xz:[],
-				jg_list:[],       //价格分类
-				jg_xz:[],
-				
-				jg_px:0, // 排序 0 降序  1升
-				jg_cx:0, //促销
-				jg_kc:0,  // 库存
-				
-				
-				page:1,
-				
-				zgj: '',
-				zdj: ''
-				
+			keyword:'',    //搜索关键字
+
+		},
+		created: function() {
+
+			that = this
+			if(getNowCanshu().keyword){
+				this.keyword=decodeURIComponent(getNowCanshu().keyword)
+			}
+			// that.cj_list=cj_list
+			that.get_CateScene()
+			that.get_pp_zm()
+			that.get_CateBrand()
+			that.get_CateItem()
+			if(!getNowCanshu().goods_cate_scene_id){
+				if(!getNowCanshu().goods_cate_item_id){
+					that.getdata()
+				}
+			}
+			// that.pp_list=pp_list
+			// that.xm_list=xm_list
+			that.jg_list = jg_list
+			console.log('cj_list')
+			// if(getCookie('logintoken')){
+			// 	that.token = getCookie('logintoken')
+			// 	// userMsg = JSON.parse(getCookie('userMsg'))
+			// }
+			header_cur = 1
+		},
+		mounted: function() {
+			header_cur = 1
+		},
+		methods: {
+			getimg_fuc:function(img){
+				return getimg(img)
 			},
-			created: function() {
+			//场景采购
+			get_CateScene: function() {
+				var datas = {
+					limit: 1000,
+					page: 1
+				}
+				_get('/Goods.CateScene/index', datas, function(res) {
+					if (res.status == 200) {
+						console.log(res.data.list)
+						that.cj_list = res.data.list
+						for (var i = 0; i < that.cj_list.length; i++) {
+							if (that.cj_list[i].goods_cate_scene_id == getNowCanshu().goods_cate_scene_id) {
+								that.cj_xz.push(JSON.parse(JSON.stringify(that.cj_list[i])))
+								that.getdata()
+								console.log(that.cj_xz)
+							}
+						}
+					}
+				})
+			},
+			get_pp_zm:function(){
+				var datas={}
 				
-				that=this
-				that.cj_list=cj_list
-				that.pp_list=pp_list
-				that.xm_list=xm_list
-				that.jg_list=jg_list
-				console.log('cj_list')
-				// if(getCookie('logintoken')){
-				// 	that.token = getCookie('logintoken')
-				// 	// userMsg = JSON.parse(getCookie('userMsg'))
-				// }
-				header_cur=1
-			},
-			mounted:function(){
-				header_cur=1
-			},
-			methods: {
-				jgbtn:function(){
-					that.jg_xz=[]
-					that.jg_xz.push({title:this.zdj+'-'+this.zgj,img:'img/index_cjcg_28.jpg'})
-					this.zdj = ''
-					this.zgj = ''
-				},
-				set_page:function(num){
-					if(num==0){
-						if(this.page>1){
-							this.page--
-						}
-					}else{
-						this.page++
-					}
-				},
-				xz_fuc:function(num,item) {
-					console.log(item)
-					if(num==0){
-						if(that.cj_more){
-							if(!item.active){
-								Vue.set(item,'active',true)
-							}else{
-								Vue.set(item,'active',false)
-							}
-						}else{
-							that.cj_xz=[]
-							that.cj_xz.push(item)
-						}
-					}
-					if(num==1){
-						if(that.pp_more){
-							if(!item.active){
-								Vue.set(item,'active',true)
-							}else{
-								Vue.set(item,'active',false)
-							}
-						}else{
-							that.pp_xz=[]
-							that.pp_xz.push(item)
-						}
-					}
-					if(num==2){
-						that.xm_xz=[]
-						that.xm_xz.push(item)
-					}
-					if(num==3){
-						that.jg_xz=[]
-						that.jg_xz.push(item)
-					}
-				},
-				xz_dx_fuc(num){
-					if(num==0){
-						that.cj_xz=[]
-						for(var i=0;i<that.cj_list.length;i++){
-							if(that.cj_list[i].active){
-								that.cj_xz.push(that.cj_list[i])
-								Vue.set(that.cj_list[i],'active',false)
-							}
-						}
-					}
-					if(num==1){
-						that.pp_xz=[]
-						for(var i=0;i<that.pp_list.length;i++){
-							if(that.pp_list[i].active){
-								that.pp_xz.push(that.pp_list[i])
-								Vue.set(that.pp_list[i],'active',false)
-							}
-						}
-					}
-				},
-				xq_xz_fuc:function(num) {
-					if(num==-1){
-						that.cj_xz=[]
-						that.pp_xz=[]
-						that.xm_xz=[]
-						that.jg_xz=[]
-					}
-					if(num==0){
-						that.cj_xz=[]
-					}
-					if(num==1){
-						that.pp_xz=[]
-					}
-					if(num==2){
-						that.xm_xz=[]
-					}
-					if(num==3){
-						that.jg_xz=[]
+				_get('/Goods.CateBrand/firstWord', datas, function(res) {
+					if (res.status == 200) {
+						that.pp_zm=res.data
 						
 					}
-				},
-				jg_px_fuc:function(type){
-					// console.log(index)
-					if(type==0){
-						if(that.jg_px==1){
-							that.jg_px=0
-						}else{
-							that.jg_px=1
-						}
+				})
+			},
+			//品牌
+			get_CateBrand: function(cate_first_word) {
+				var datas = {
+					limit: 1000,
+					page: 1,
+					cate_first_word: cate_first_word
+				}
+				_get('/Goods.CateBrand/index', datas, function(res) {
+					if (res.status == 200) {
+						console.log(res.data.list)
+						that.pp_list = res.data.list
+						// for(var i=0;i<that.cj_list.length;i++){
+						//  if(that.cj_list[i].goods_cate_scene_id==getNowCanshu().goods_cate_scene_id){
+						// 	 that.cj_xz.push(JSON.parse(JSON.stringify(that.cj_list[i])))
+						// 	 console.log( that.cj_xz)
+						//  }
+						// }
 					}
-					if(type==1){
-						if(that.jg_cx==1){
-							that.jg_cx=0
-						}else{
-							that.jg_cx=1
-						}
-					}
-					if(type==2){
-						if(that.jg_kc==1){
-							that.jg_kc=0
-						}else{
-							that.jg_kc=1
-						}
-					}
-					// mySwiper.swipeTo(index, 1000, false)
-				},
-				getgimg:function(img) {
-					var img1 = img.split("^")
-					// console.log(img1[0])
-					return img1[0]
-				},
-				//奢华甄选
-				getshdata:function(){
-					var that=this
-					var datas={
-						apipage:'travel',
-						op:'travel_data_list',
-						type:3,
-						keyword:'shzx'
-					}
-					$.ajax({
-						type: "GET",
-						url: IPurl,
-						data: datas,
-						success: function(res) {
-							// console.log(res);
-							if(typeof(res)=='string'){
-								res=JSON.parse(res)
+				})
+			},
+			//项目
+			get_CateItem: function(cate_first_word) {
+				var datas = {
+					limit: 1000,
+					page: 1,
+					pid:0
+				}
+				_get('/Goods.CateItem/index', datas, function(res) {
+					if (res.status == 200) {
+						console.log(res.data.list)
+						that.xm_list = res.data.list
+						for (var i = 0; i < that.xm_list.length; i++) {
+							if (that.xm_list[i].goods_cate_item_id == getNowCanshu().goods_cate_item_id) {
+								that.xm_xz.push(JSON.parse(JSON.stringify(that.xm_list[i])))
+								that.get_CateItem2(that.xm_xz[0].goods_cate_item_id,1)
+								if(!getNowCanshu().goods_cate_item_id2){
+									that.getdata()
+								}
+								console.log(that.cj_xz)
 							}
-							if (res.error == 0) {
-								var resultd = res.list
-								that.shdata = resultd
-								
-							} else {
-								layer.msg('获取数据失败')
+						}
+					}
+				})
+			},
+			//二级分类
+			get_CateItem2: function(cate_first_word,num) {
+				var datas = {
+					limit: 1000,
+					page: 1,
+					pid:cate_first_word
+				}
+				_get('/Goods.CateItem/index', datas, function(res) {
+					if (res.status == 200) {
+						console.log(res.data.list)
+						that.xm_list2 = res.data.list
+						if(num==1){
+							for (var i = 0; i < that.xm_list2.length; i++) {
+								if (that.xm_list2[i].goods_cate_item_id == getNowCanshu().goods_cate_item_id2) {
+									that.xm_xz2.push(JSON.parse(JSON.stringify(that.xm_list2[i])))
+									console.log(that.cj_xz)
+									that.getdata()
+								}
 							}
-					
-						},
-						error: function(err) {
-							layer.msg('获取数据失败')
-							console.log(err)
 						}
-					})
-				},
-				formatter:function(value) {
-						if(!value){
-							return value
-						}
-						if (value >= 10000 && value < 10000000) {
-							value = (value / 10000).toFixed(1) + "万";
-						} else if (value >= 10000000) {
-							value = (value / 10000000).toFixed(1) + "千万";
-						}
-						return value;
-				},
+					}
+				})
+			},
+
+			jgbtn: function() {
+				that.jg_xz = []
+				that.jg_xz.push({
+					title: this.zdj||0,
+					title1:this.zgj,
+					img: 'img/index_cjcg_28.jpg'
+				})
+				that.getdata()
+				this.zdj = ''
+				this.zgj = ''
+			},
+			set_page: function(num) {
+				if (num == 0) {
+					if (this.page > 1) {
+						this.page--
+					}
+				} else {
+					this.page++
+				}
 				
-			}
-		})
-		function more_fuc(num,num1){
-			if(num==0){
-				if(num1==0){
-					vm.cj_more=true
-					vm.cj_kg=true
-				}else{
-					vm.cj_more=false
-					vm.cj_kg=false
+			},
+			xz_fuc: function(num, item) {
+				console.log(item)
+				if (num == 0) {
+					if (that.cj_more) {
+						if (!item.active) {
+							Vue.set(item, 'active', true)
+						} else {
+							Vue.set(item, 'active', false)
+						}
+					} else {
+						that.cj_xz = []
+						that.cj_xz.push(item)
+						that.getdata()
+					}
 				}
-			}
-			if(num==1){
-				if(num1==0){
-					vm.pp_more=true
-					vm.pp_kg=true
-				}else{
-					vm.pp_more=false
-					vm.pp_kg=false
+
+				if (num == 1) {
+					if (that.pp_more) {
+						if (!item.active) {
+							Vue.set(item, 'active', true)
+						} else {
+							Vue.set(item, 'active', false)
+						}
+					} else {
+						that.pp_xz = []
+						that.pp_xz.push(item)
+						that.getdata()
+					}
 				}
+				if (num == 2) {
+					that.xm_xz = []
+					that.xm_xz2 = []
+					that.xm_xz.push(item)
+					that.get_CateItem2(item.goods_cate_item_id)
+					that.getdata()
+				}
+				if (num == 22) {
+					that.xm_xz2 = []
+					that.xm_xz2.push(item)
+						that.getdata()
+				}
+				if (num == 3) {
+					that.jg_xz = []
+					that.jg_xz.push(item)
+						that.getdata()
+				}
+			},
+			getmore: function(page) {
+				that.getdata(that.page)
+			},
+			//获取数据
+			getdata: function(page) {
+				var datas = {
+					limit: 15,
+					page: page||1,
+					goods_cate_scene_id:that.cj_xz.length>0?that.cj_xz[0].goods_cate_scene_id:'', //场景分类
+					goods_cate_brand_id:that.pp_xz.length>0?that.pp_xz[0].goods_cate_brand_id:'', //品牌分类
+					goods_cate_item_id:that.xm_xz2.length>0?that.xm_xz2[0].goods_cate_item_id:that.xm_xz.length>0?that.xm_xz[0].goods_cate_item_id:'', //商品分类
+					goods_price_start:that.jg_xz.length>0?that.jg_xz[0].title:'', //价格开始
+					goods_price_end:that.jg_xz.length>0?that.jg_xz[0].title1:'', //价格结束
+					goods_price_sort:that.jg_px==0?'desc':'asc', //价格排序 降序|desc| 升序|asc|
+					goods_sum:that.jg_kc||'', //库存状态 有|1| 无|2|
+					goods_discount_status:that.jg_cx||'', //折扣专区 是|1|否|0||
+					keyword:that.keyword||'', //搜索关键字
+				}
+				_get('/Goods.Goods/index', datas, function(res) {
+					if (res.status == 200) {
+						console.log(res.data.list)
+						that.zcount=res.data.count
+						that.datas = res.data.list
+						if(page==1){
+							that.page=2
+						}else{
+							page++
+							that.page=page
+						}
+					}
+				})
+			},
+			xz_dx_fuc(num) {
+				if (num == 0) {
+					that.cj_xz = []
+					for (var i = 0; i < that.cj_list.length; i++) {
+						if (that.cj_list[i].active) {
+							that.cj_xz.push(that.cj_list[i])
+							Vue.set(that.cj_list[i], 'active', false)
+						}
+					}
+				}
+				if (num == 1) {
+					that.pp_xz = []
+					for (var i = 0; i < that.pp_list.length; i++) {
+						if (that.pp_list[i].active) {
+							that.pp_xz.push(that.pp_list[i])
+							Vue.set(that.pp_list[i], 'active', false)
+						}
+					}
+				}
+				that.getdata()
+			},
+			xq_xz_fuc: function(num) {
+				if (num == -1) {
+					that.cj_xz = []
+					that.pp_xz = []
+					that.xm_xz = []
+					that.xm_xz2 = []
+					that.jg_xz = []
+				}
+				if (num == 0) {
+					that.cj_xz = []
+				}
+				if (num == 1) {
+					that.pp_xz = []
+				}
+				if (num == 2) {
+					that.xm_xz = []
+				}
+				if (num == 22) {
+					that.xm_xz2 = []
+				}
+				if (num == 3) {
+					that.jg_xz = []
+
+				}
+				
+				that.getdata()
+			},
+			jg_px_fuc: function(type) {
+				// console.log(index)
+				if (type == 0) {
+					if (that.jg_px == 1) {
+						that.jg_px = 0
+					} else {
+						that.jg_px = 1
+					}
+				}
+				if (type == 1) {
+					if (that.jg_cx == 1) {
+						that.jg_cx = 0
+					} else {
+						that.jg_cx = 1
+					}
+				}
+				if (type == 2) {
+					if (that.jg_kc == 1) {
+						that.jg_kc = 0
+					} else {
+						that.jg_kc = 1
+					}
+				}
+				that.getdata()
+				// mySwiper.swipeTo(index, 1000, false)
+			},
+			getgimg: function(img) {
+				var img1 = img.split("^")
+				// console.log(img1[0])
+				return img1[0]
+			},
+			
+			formatter: function(value) {
+				if (!value) {
+					return value
+				}
+				if (value >= 10000 && value < 10000000) {
+					value = (value / 10000).toFixed(1) + "万";
+				} else if (value >= 10000000) {
+					value = (value / 10000000).toFixed(1) + "千万";
+				}
+				return value;
+			},
+
+		}
+	})
+
+	function more_fuc(num, num1) {
+		if (num == 0) {
+			if (num1 == 0) {
+				vm.cj_more = true
+				vm.cj_kg = true
+			} else {
+				vm.cj_more = false
+				vm.cj_kg = false
 			}
 		}
+		if (num == 1) {
+			if (num1 == 0) {
+				vm.pp_more = true
+				vm.pp_kg = true
+			} else {
+				vm.pp_more = false
+				vm.pp_kg = false
+			}
+		}
+	}
 </script>
 	</body>
 </html>

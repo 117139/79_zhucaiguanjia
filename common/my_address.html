@@ -6,26 +6,31 @@
 		<div class="fb_xuqiu_btn dis_flex aic ju_c" @click="open_tk(0)">新建收货地址</div>
 	</div>
 	<div class="my_fw_list">
-		<div class="dis_flex aic add_list_tit">您现在有<span>2</span>个地址信息，最多可增加<span>40</span>个地址信息</div>
-		<div class="my_fw_li dis_flex ju_b aic" v-for="(item,index) in my_fw_list">
-			<div class="flex_1">
-				<div class="my_fw_li_name">曹德来 <span style="margin-left:30px;">北京市</span> <span v-if="index==0" class="add_curr">默认地址</span></div>
-				<div class="my_fw_li_address">收货地址：北京市丰台区卢沟桥街道</div>
-				<div class="my_fw_li_address">收货人：曹德莱<span style="margin-left:30px;">手机号：17854252352</span></div>
+		<div class="dis_flex aic add_list_tit">您现在有<span>{{zcount}}</span>个地址信息，最多可增加<span>40</span>个地址信息</div>
+		<div class="my_fw_li dis_flex ju_b aic" v-for="(item,index) in datas">
+			<div class="flex_1 cpointer" @click="xz_address(item)">
+				<div class="my_fw_li_name">
+					{{item.address_username}} 
+					<span style="margin-left:30px;">{{item.province}}</span> 
+					<span v-if="item.is_default==1" class="add_curr">默认地址</span>
+				</div>
+				<div class="my_fw_li_address">收货地址：{{item.province}}{{item.city}}{{item.district}}{{item.address}}</div>
+				<div class="my_fw_li_address">收货人：{{item.address_username}}<span style="margin-left:30px;">手机号：{{item.address_mobile}}</span></div>
 				<!-- <div v-if="index==0" class="my_fw_li_time">随时</div>
 				<div v-else class="my_fw_li_time">面议</div> -->
 			</div>
 			<div class="myaddress_czs">
-				<div v-if="index!=0">设为默认地址</div>
-				<div @click="open_tk(1,index)">编辑</div>
-				<div>删除</div>
+				<div v-if="item.is_default!=1" @click="set_add(item)">设为默认地址</div>
+				<div @click="open_tk(1,item.member_address_id)">编辑</div>
+				<div @click="del_add(item)">删除</div>
 			</div>
 			<!-- <div class="my_fw_see dis_flex aic ju_c">查看</div> -->
 		</div>
+		<div v-if="datas.length==0" class="w100" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
 	</div>
 	<div class="list_page tac dis_flex">
 		
-		<div class="m-style M-box3"></div>
+		<div class="m-style M-box_dz"></div>
 	</div>
 </div>
 	
@@ -35,44 +40,68 @@
 	
 	$(function(){
 		
-		
+		console.log('我的地址')
 		
 	})
 	var layer_pwd,layer_tel
 	var vm_myzhaq = new Vue({
 			el: '#myzhaq',
 			data: {
-				my_fw_list:[
-					{},
-					{},
-					{},
-				]
+				zcount:0,
+				datas:[],
+				xaddress:''
 			},
 			created: function() {
-				console.log('vm_myzhaq')
-				
+				console.log('我的地址')
 			},
 			mounted:function(){
-				$('.M-box3').pagination({
-						totalData:100,
-						showData:10,
-						coping: true,
-						// mode: 'fixed',
-						// homePage: '首页',
-						// endPage: '末页',
-						prevContent: '上页',
-						nextContent: '下页',
-						callback: function (api) {
-							//console.log(api.getCurrent())
-							var page=api.getCurrent()
-							// getdatalist(that,type,cityid,cityid1,page,pagesize)
-						}
-				});
-				
-				
+				console.log('xaddress>>>>>>>>>>>>>>>>>>>>>>>>'+getNowCanshu().xaddress)
+				this.xaddress=getNowCanshu().xaddress||0
+				this.getdatalist()
 			},
 			methods: {
-				open_tk(num,id){
+				
+				xz_address(item){
+					if(this.xaddress==1){
+						storage_fuc.setItem('xaddress',JSON.stringify(item))
+						history.go(-1)
+					}
+				},
+				getdatalist:function(page){
+					var that=this
+					var datas={
+						limit:10,
+						page:page||1
+					}
+					var jkurl='/Member.MemberAddress/index'
+					
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 that.zcount=res.data.count
+							 that.datas=res.data.list
+							 if(page==1){
+								 $('.M-box_dz').pagination({
+									totalData: res.data.count,
+									showData: 10,
+									coping: true,
+									// mode: 'fixed',
+									// homePage: '首页',
+									// endPage: '末页',
+									prevContent: '上页',
+									nextContent: '下页',
+									callback: function(api) {
+										console.log(api.getCurrent())
+										var page = api.getCurrent()
+										that.getdatalist(page)
+									}
+								 });
+							 }
+						 }
+					})
+				},
+				//新增或编辑
+				open_tk:function(num,id){
 					//页面层
 					if(num==0){
 						layer_pwd=layer.open({
@@ -80,8 +109,11 @@
 						  title: '新增收货地址',
 						  shadeClose: true,
 						  shade: 0.8,
-						  area: ['400px', '350px'],
-						  content: './add_new.html' //iframe的url
+						  area: ['400px', '410px'],
+						  content: './add_new.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}else{
 						layer_pwd=layer.open({
@@ -89,14 +121,50 @@
 						  title: '编辑收货地址',
 						  shadeClose: true,
 						  shade: 0.8,
-						  area: ['400px', '350px'],
-						  content: './add_new.html?id='+id //iframe的url
+						  area: ['400px', '410px'],
+						  content: './add_new.html?id='+id, //iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}
 					
 				},
-				
-				
+				//删除地址
+				del_add:function(item){
+					var that=this
+					layer.confirm('是否删除该地址？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						var datas={
+							member_address_id:item.member_address_id
+						}
+						_post('/Member.MemberAddress/delete',datas,function(res){
+							 if (res.status == 200){
+								 layer.msg('操作成功')
+								 that.getdatalist()
+							 }
+						})
+					}, function() {
+					
+					});
+					
+				},
+				// 设置默认地址
+				set_add:function(item){
+					var that=this
+					var datas={
+						member_address_id:item.member_address_id,
+						is_default:1
+					}
+					_post('/Member.MemberAddress/update',datas,function(res){
+						 if (res.status == 200){
+							 layer.msg('操作成功')
+							 that.getdatalist()
+						 }
+					})
+					
+				}
 				
 			}
 		})

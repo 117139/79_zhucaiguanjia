@@ -87,10 +87,10 @@
 							</div>
 						</div>
 					</div>
-					<div v-show="my_cur==0" class="my_r_box">
+					<div v-if="my_cur==0" class="my_r_box">
 						<div class="my_r_tit dis_flex ais">
-							<div class="my_r_tit_tab dis_flex aic ju_c" :class="my_r_cur==0?'cur':''"
-								@click="my_r_cur_fuc(0)">全部订单</div>
+							<div class="my_r_tit_tab dis_flex aic ju_c" :class="my_r_cur==''?'cur':''"
+								@click="my_r_cur_fuc('')">全部订单</div>
 							<div class="my_r_tit_tab dis_flex aic ju_c" :class="my_r_cur==1?'cur':''"
 								@click="my_r_cur_fuc(1)">待付款</div>
 							<div class="my_r_tit_tab dis_flex aic ju_c" :class="my_r_cur==2?'cur':''"
@@ -104,19 +104,19 @@
 							<form>
 								<div class="my_search dis_flex aic">
 									<div class="my_search_d1 dis_flex ais ju_b">
-										<input class="my_search_d1_int" type="text" placeholder="订单号/商品名称">
+										<input class="my_search_d1_int" type="text" placeholder="订单号/商品名称" v-model="order_keyword">
 
 										<select class=" my_search_d1_select" v-model="select_id">
 											<option v-for="(item,index) in select_arr" :value="item.id">{{item.name}}
 											</option>
 										</select>
 									</div>
-									<div class="my_search_btn dis_flex aic ju_c">搜索</div>
+									<div class="my_search_btn dis_flex aic ju_c" @click="getdata_order(1)">搜索</div>
 
-									<select class="my_search_d2_select" v-model="select_id1">
+									<!-- <select class="my_search_d2_select" v-model="select_id1">
 										<option v-for="(item,index) in select_arr1" :value="item.id">{{item.name}}
 										</option>
-									</select>
+									</select> -->
 								</div>
 
 								<div class="order_list_tit bgf3 dis_flex aic">
@@ -126,39 +126,42 @@
 									<div class="tac order_list_td4">支付方式</div>
 									<div class="tac order_list_td5">总计（元）</div>
 									<div class="tac order_list_td6">
-										<select class="my_search_d3_select m0a" v-model="tab_type_id">
+										<select class="my_search_d3_select m0a" v-model="my_r_cur">
 											<option v-for="(item,index) in tab_type" :value="item.id">{{item.name}}
 											</option>
 										</select>
 									</div>
 								</div>
-								<div class="dis_flex aic order_list_all">
+								<div v-if="order_list.length>0" class="dis_flex aic order_list_all">
 									<div class="order_list_td1">
-										<div class="dx_xz_li dis_flex aic" @click="order_xz_fuc(-1)">
-											<span class="dx_xz_li_box dis_flex aic ">
+										<div class="dx_xz_li dis_flex aic" >
+											<span class="dx_xz_li_box dis_flex aic " @click="order_xz_fuc(-1)">
 												<i v-if="order_all==true" class="iconfont icon-duigou cEE0913"></i>
 											</span>
-											全选
+											<a @click="order_xz_fuc(-1)">全选</a>
+											<div class="ml30" @click="order_del(-1)">批量删除</div>
 										</div>
+										
 									</div>
 								</div>
 								<div class="order_li_box" v-for="(item,index) in order_list">
 									<div class="order_li_tit dis_flex aic ju_b">
 										<div class="dis_flex aic">
 											<div class="dx_xz_li dis_flex aic" @click="order_xz_fuc(index,item)">
-												<span class="dx_xz_li_box dis_flex aic ">
+												<span v-if="item.order_status==4" class="dx_xz_li_box dis_flex aic ">
 													<i v-if="item.active" class="iconfont icon-duigou cEE0913"></i>
 												</span>
-												2020-023-19
+												{{gettime(item.create_time)}}
 											</div>
-											<div class="order_li_id">订单号：123458401265490132</div>
+											<div class="order_li_id">订单号：{{item.order_code}}</div>
 										</div>
 										<div class="dis_flex aic order_li_del">
-											<span v-if="item.pay==1" style="color: #D24043;">待付款</span>
-											<span v-if="item.pay==2" style="color:#3994D4;">待发货</span>
-											<span v-if="item.pay==3" style="color:#3994D4;">已发货</span>
-											<span v-if="item.pay==4" v-else style="color: #666666;">已签收</span>
-											<i @click="order_del(index,item)" class="iconfont icon-shanchukaobei"></i>
+											<span v-if="item.order_status==1" style="color: #D24043;">待付款</span>
+											<span v-if="item.order_status==2" style="color:#3994D4;">待发货</span>
+											<span v-if="item.order_status==3" style="color:#3994D4;">已发货</span>
+											<span v-if="item.order_status==4" style="color: #666666;">已签收</span>
+											<span v-if="item.order_status==5" style="color: #666666;">已取消</span>
+											<i v-if="item.order_status==4" @click="order_del(index,item)" class="iconfont icon-shanchukaobei"></i>
 										</div>
 									</div>
 									<table class=" order_table">
@@ -166,99 +169,103 @@
 											<td class="order_list_td1" rowspan="1">
 												<div class="dis_flex aic">
 													<div class="order_li_img bg_div">
-														<div style="background-image: url(img/cjcg_img_03.jpg);"></div>
+														<div v-if="item1.goods_pic" :style="'background-image: url('+getimg_fuc(item1.goods_pic)+');'"></div>
 													</div>
 													<div class="order_li_msg">
-														<div class="order_li_msg_name">绥化不锈钢阀门厂家-din15不锈钢</div>
-														<div class="order_li_msg_gg">规格：3A/0.45KW</div>
+														<div class="order_li_msg_name">{{item1.goods_name}}</div>
+														<div class="order_li_msg_gg">规格：{{item1.goods_sku}}</div>
 													</div>
 												</div>
 											</td>
-											<td class="order_list_td2" rowspan="1">￥677.00</td>
-											<td class="order_list_td3" rowspan="1">1</td>
+											<td class="order_list_td2" rowspan="1">￥{{item1.goods_price}}</td>
+											<td class="order_list_td3" rowspan="1">{{item1.goods_sum}}</td>
 											<td v-if="index1==0" class="order_list_td4" :rowspan="item.goods.length">
-												微信支付</td>
+													<span v-if="item.pay_type==1">微信</span>
+													<span v-if="item.pay_type==2">支付宝</span>
+													<span v-if="item.pay_type==3">银行转账</span>
+											</td>
 											<td v-if="index1==0" class="order_list_td5" :rowspan="item.goods.length">
-												￥677.00</td>
+												￥{{item.pay_money}}</td>
 											<td v-if="index1==0" class="order_list_td6" :rowspan="item.goods.length">
 												<div class="dis_flex_c aic ju_a">
-													<a class="order_li_cz" href="">查看详情</a>
-													<a v-if="item.pay==1" class="order_li_cz" href="">去支付</a>
-													<a v-if="item.pay==1" class="order_li_cz" href="">取消订单</a>
-													<a class="order_li_cz order_li_cz1" href="">开发票</a>
+													<a class="order_li_cz" :href="'order_xq.html?id='+item.goods_order_id">查看详情</a>
+													<a v-if="item.order_status==1" class="order_li_cz" :href="'jst.html?order_code='+item.order_code+'&pay_money='+item.pay_money">去支付</a>
+													<span v-if="item.order_status==1" class="order_li_cz cpointer" @click="order_off(item)">取消订单</span>
+													<span v-if="item.order_status==3" class="order_li_cz cpointer" @click="order_get(item)">确认收货</span>
+													<span v-if="item.receipt_type==0" class="order_li_cz order_li_cz1 cpointer" @click="open_fp(item)">开发票</span>
 												</div>
 											</td>
 										</tr>
 									</table>
 								</div>
-
-								<div class="list_page tac dis_flex">
+								<div class="w100" v-if="order_list.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
+								<div v-show="order_list.length>0" class="list_page tac dis_flex">
 									<!-- <div class="flex_1"></div>
 										<a class="dis_flex aic ju_c look_more">查看更多<span class="dis_flex aic ju_c"><i class="iconfont icon-gengduo1"></i></span></a>
 									<div class="flex_1"></div> -->
-									<div class="m-style M-box2"></div>
+									<div class="m-style M-box_order"></div>
 								</div>
 							</form>
 
 						</div>
 					
 					</div>
-					<div v-show="my_cur==1" class="my_r_box">
+					<div v-if="my_cur==1" class="my_r_box">
 						<!-- my_xj.html -->
 						<include src="./common/my_xj.html"></include>
 					</div>
-					<div v-show="my_cur==2" class="my_r_box">
+					<div v-if="my_cur==2" class="my_r_box">
 						<!-- 我的收藏 -->
 						<include src="./common/my_shoucang.html"></include>
 					</div>
 					<!-- 	<div v-show="my_cur==3" class="my_r_box">
 						<include src="./common/my_gwc.html"></include>
 					</div> -->
-					<div v-show="my_cur==4" class="my_r_box">
-						<!-- 我的收藏 -->
+					<div v-if="my_cur==4" class="my_r_box">
+						<!-- 常购 -->
 						<include src="./common/my_cgsp.html"></include>
 					</div>
 					
 					<!-- my_xq.html -->
-					<div v-show="my_cur==10" class="my_r_box">
+					<div v-if="my_cur==10" class="my_r_box">
 						<!-- 我的需求 -->
 						<include src="./common/my_xq.html"></include>
 					</div>
-					<div v-show="my_cur==11" class="my_r_box">
+					<div v-if="my_cur==11" class="my_r_box">
 						<!-- 我的服务 -->
 						<include src="./common/my_fw.html"></include>
 					</div>
-					<div v-show="my_cur==20" class="my_r_box">
+					<div v-if="my_cur==20" class="my_r_box">
 						<!-- 退货服务 -->
 						<include src="./common/my_thfw.html"></include>
 						
 					</div>
-					<div v-show="my_cur==21" class="my_r_box">
+					<div v-if="my_cur==21" class="my_r_box">
 						<!-- 意见反馈 -->
 						<include src="./common/my_yjfk.html"></include>
 					</div>
-					<div v-show="my_cur==30" class="my_r_box">
+					<div v-if="my_cur==30" class="my_r_box">
 						<!-- 发票管理 -->
 						<include src="./common/my_fp_list.html"></include>
 					</div>
-					<div v-show="my_cur==31" class="my_r_box">
+					<div v-if="my_cur==31" class="my_r_box">
 						<!-- 我的积分 -->
 						<include src="./common/my_jf.html"></include>
 					</div>
-					<div v-show="my_cur==32" class="my_r_box">
+					<div v-if="my_cur==32" class="my_r_box">
 						<!-- 我的积分 -->
 						<include src="./common/my_yh_list.html"></include>
 					</div>
 					<!-- my_address.html -->
-					<div v-show="my_cur==40" class="my_r_box">
-						<!-- 地址管理 -->
+					<div v-if="my_cur==40" class="my_r_box">
+						<!-- 我的账号 -->
 						<include src="./common/my_msg.html"></include>
 					</div>
-					<div v-show="my_cur==41" class="my_r_box">
+					<div v-if="my_cur==41" class="my_r_box">
 						<!-- 地址管理 -->
 						<include src="./common/my_address.html"></include>
 					</div>
-					<div v-show="my_cur==42" class="my_r_box">
+					<div v-if="my_cur==42" class="my_r_box">
 						<!-- 账号安全 -->
 						<include src="./common/my_zhaq.html"></include>
 					</div>
@@ -280,10 +287,7 @@
 			var layui
 			var layer, form
 			$(function() {
-				vm.my_cur = getNowCanshu().my_cur || 0
-				if(vm.my_cur==0){
-					vm.my_r_cur=getNowCanshu().my_r_cur || 0
-				}
+				
 				var loading = layer.load(1, {
 					shade: [0.2, '#000'] //0.1透明度的白色背景
 				});
@@ -296,27 +300,14 @@
 				laydate.render({
 				  elem: '#test1' //指定元素
 				});
-				$('.M-box2').pagination({
-					totalData: 100,
-					showData: 10,
-					coping: true,
-					// mode: 'fixed',
-					// homePage: '首页',
-					// endPage: '末页',
-					prevContent: '上页',
-					nextContent: '下页',
-					callback: function(api) {
-						//console.log(api.getCurrent())
-						var page = api.getCurrent()
-						// getdatalist(that,type,cityid,cityid1,page,pagesize)
-					}
-				});
+				
 
 			})
 
 			vm = new Vue({
 				el: '#body',
 				data: {
+					order_keyword:'',
 					select_arr: [{
 							name: '按商品',
 							id: 1
@@ -339,45 +330,29 @@
 					select_id1: 1,
 					tab_type: [{
 							name: '全部',
-							id: 1
+							id: ''
 						},
 						{
 							name: '待支付',
-							id: 2
+							id: 1
 						},
 						{
 							name: '待发货',
-							id: 3
+							id: 2
 						},
 						{
 							name: '待收货',
-							id: 4
+							id: 3
 						},
 						{
 							name: '已完成',
-							id: 5
+							id: 4
 						},
 					],
-					tab_type_id: 1,
-					order_list: [{
-							goods: [1, 1],
-							pay: 1
-						},
-						{
-							goods: [1],
-							pay: 2
-						},
-						{
-							goods: [1, 1, 1],
-							pay: 3
-						},
-						{
-							goods: [1, 1],
-							pay: 4
-						},
-					],
+					tab_type_id: '',
+					order_list: [],
 					order_all: false,
-					my_cur: 0,
+					my_cur: -1,
 					my_r_cur: 0,
 					
 					
@@ -392,18 +367,149 @@
 					
 					// 退货服务
 					tffw_statuc:false,
-					xd_time:''
+					xd_time:'',
+					
+					
+					user_datas:'',
+					token:'',
 				},
 				created: function() {
 
 					that = this
-					// if(getCookie('logintoken')){
-					// 	that.token = getCookie('logintoken')
-					// 	// userMsg = JSON.parse(getCookie('userMsg'))
-					// }
+					// console.log(storage_fuc.getItem("user"))
+					if(storage_fuc.getItem("user")){
+						login_m(function(res){
+							that.user_datas=res.data
+							that.token=res.token
+						})
+						
+					}else{
+						window.location.replace('login.html')
+						return
+					}
+					this.my_cur = getNowCanshu().my_cur || 0
+					if(this.my_cur==0){
+						this.my_r_cur=getNowCanshu().my_r_cur || ''
+					}
+					that.getdata_order(1)
+				},
+				watch:{
 					
+					my_r_cur:function(val){
+						this.getdata_order(1)
+					},
 				},
 				methods: {
+					gettime:function(time){
+						return gettime(time,'-')
+					},
+					getimg_fuc:function(img){
+						return getimg(img)
+					},
+					order_off:function(item){
+						layer.confirm('是否取消该订单？', {
+							btn: ['确定', '取消'] //按钮
+						}, function() {
+							
+							var datas = {
+								goods_order_id:item.goods_order_id
+								
+							}
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
+							setTimeout(function(){
+								that.btnkg=0
+							},1500)
+							_post('/Order.GoodsOrder/offOrder', datas, function(res) {
+								if (res.status == 200) {
+									// console.log(res.data.list)
+									layer.msg('操作成功');
+									setTimeout(function(){
+										that.getdata_order(1)
+									},1000)
+								}
+							})
+						}, function() {
+						
+						});
+					},
+					order_get:function(item){
+						var datas = {
+							goods_order_id:item.goods_order_id
+							
+						}
+						if(that.btnkg==1){
+							return
+						}
+						that.btnkg=1
+						setTimeout(function(){
+							that.btnkg=0
+						},1500)
+						_post('/Order.GoodsOrder/orderFinish', datas, function(res) {
+							if (res.status == 200) {
+								layer.msg('操作成功');
+								setTimeout(function(){
+									that.getdata_order(1)
+								},1000)
+							}
+						})
+					},
+					open_fp:function(item){
+						layer_pwd=layer.open({
+						  type: 2,
+						  title: '发布需求',
+						  shadeClose: true,
+							scrollbar: false,
+						  shade: 0.8,
+						  area: ['500px', '500px'],
+						  content: './tk_sq_kb.html?id='+item.goods_order_id ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
+						}); 
+					},
+					getdata_order:function(page){
+						var datas={
+							limit:10,
+							page:page||1,
+							// type:this.wenti_list_id,
+							order_status:this.my_r_cur,
+							search_keyword:this.order_keyword,
+							search_type:this.select_id
+						}
+						var jkurl='/Order.GoodsOrder/myList'
+						layer.load(1,{
+							shade: [0.2,'#000'] //0.1透明度的白色背景
+						});
+						setTimeout(function(){
+						  layer.closeAll('loading');
+						}, 1000);
+						_get(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 vm.order_list=res.data.list
+								 if(page==1){
+									 $('.M-box_order').pagination({
+									 	totalData: res.data.count,
+									 	showData: 10,
+									 	coping: true,
+									 	// mode: 'fixed',
+									 	// homePage: '首页',
+									 	// endPage: '末页',
+									 	prevContent: '上页',
+									 	nextContent: '下页',
+									 	callback: function(api) {
+									 		console.log(api.getCurrent())
+									 		var page = api.getCurrent()
+									 		vm.getdata_order(page)
+									 	}
+									 });
+								 }
+							 }
+						})
+					},
 					order_xz_fuc: function(num, item) {
 						if (num == -1) {
 							if (!that.order_all) {
@@ -423,7 +529,7 @@
 							}
 							var qx = true
 							for (var i in that.order_list) {
-								if (!that.order_list[i].active) {
+								if (that.order_list[i].order_status==4&&!that.order_list[i].active) {
 									qx = false
 									break
 								}
@@ -441,11 +547,48 @@
 					},
 					order_del: function(num, item) {
 						//询问框
-
-						layer.confirm('是否删除该订单？', {
+						var del_dis=[]
+						for (var i in that.order_list) {
+							if (that.order_list[i].order_status==4&&that.order_list[i].active) {
+								del_dis.push(that.order_list[i].goods_order_id)
+							}
+						}
+						del_dis=del_dis.join(',')
+						console.log('del_dis》》》》》》》》》》》》')
+						console.log(del_dis)
+						if(del_dis.length==0){
+							layer.msg('请选择订单')
+							return
+						}
+						layer.confirm('是否删除选中的订单？', {
 							btn: ['确定', '取消'] //按钮
 						}, function() {
-							layer.msg('操作成功');
+							
+							var datas = {
+								goods_order_ids:item.goods_order_id
+								
+							}
+							if(num==-1){
+								datas = {
+									goods_order_ids:del_dis
+									
+								}
+							}
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
+							setTimeout(function(){
+								that.btnkg=0
+							},1500)
+							_post('/Order.GoodsOrder/deleteOrder', datas, function(res) {
+								if (res.status == 200) {
+									layer.msg('操作成功');
+									setTimeout(function(){
+										that.getdata_order(1)
+									},1000)
+								}
+							})
 						}, function() {
 
 						});
@@ -460,45 +603,14 @@
 					},
 					my_r_cur_fuc: function(item) {
 						that.my_r_cur = item
+						that.getdata_order(1)
 					},
 					getgimg: function(img) {
 						var img1 = img.split("^")
 						// console.log(img1[0])
 						return img1[0]
 					},
-					//奢华甄选
-					getshdata: function() {
-						var that = this
-						var datas = {
-							apipage: 'travel',
-							op: 'travel_data_list',
-							type: 3,
-							keyword: 'shzx'
-						}
-						$.ajax({
-							type: "GET",
-							url: IPurl,
-							data: datas,
-							success: function(res) {
-								// console.log(res);
-								if (typeof(res) == 'string') {
-									res = JSON.parse(res)
-								}
-								if (res.error == 0) {
-									var resultd = res.list
-									that.shdata = resultd
-
-								} else {
-									layer.msg('获取数据失败')
-								}
-
-							},
-							error: function(err) {
-								layer.msg('获取数据失败')
-								console.log(err)
-							}
-						})
-					},
+					
 					formatter: function(value) {
 						if (!value) {
 							return value

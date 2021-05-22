@@ -50,9 +50,9 @@
 	</head>
 	<body>
 		<div id="myzhaq" class="w100 set_list">
-			<div class="dis_flex aic set_li">
+			<div v-if="this.order_num!=0" class="dis_flex aic set_li">
 				<div class="set_li_name">订单编号：</div>
-				<input type="number" v-model="order_num" placeholder="请输入订单编号"/>
+				<input type="number" v-model="order_code" placeholder="请输入订单编号" readonly=""/>
 			</div>
 			<div class="dis_flex aic set_li">
 				<div class="set_li_name">发票类型：</div>
@@ -60,16 +60,16 @@
 			</div>
 			<div class="dis_flex aic set_li">
 				<div class="set_li_name">发票抬头：</div>
-				<div class="set_li_li dis_flex aic ju_c" :class="fp_type==0?'cur':''" @click="fp_type=0">个人发票</div>
+				<div class="set_li_li dis_flex aic ju_c" :class="fp_type==2?'cur':''" @click="fp_type=2">个人发票</div>
 				<div class="set_li_li dis_flex aic ju_c" :class="fp_type==1?'cur':''" @click="fp_type=1">单位发票</div>
 			</div>
 			<div v-if="fp_type==1" class="dis_flex aic set_li">
 				<div class="set_li_name">单位名称：</div>
-				<input type="number" v-model="dw_name" placeholder="请输入单位名称"/>
+				<input type="text" v-model="dw_name" placeholder="请输入单位名称"/>
 			</div>
 			<div v-if="fp_type==1" class="dis_flex aic set_li">
 				<div class="set_li_name">纳税人识别号：</div>
-				<input type="number" v-model="user_sid" placeholder="请输入纳税人识别号"/>
+				<input type="text" v-model="user_sid" placeholder="请输入纳税人识别号"/>
 			</div>
 			
 			<div class="tk_btns dis_flex aic ju_c">
@@ -85,56 +85,69 @@
 				
 				
 			})
-			
+			var that
 			var vm_myzhaq = new Vue({
 					el: '#myzhaq',
 					data: {
 						order_num: '',
-						fp_type:0,
+						fp_type:2,
 						dw_name: '',
-						user_sid:''
+						user_sid:'',
+						order_code: ''
 					},
 					created: function() {
+						that=this
 						console.log('vm_myzhaq')
-					
+						this.order_num=getNowCanshu().id||0
+						this.order_code = getNowCanshu().order_code
 					},
 					methods: {
 						sub:function(){
 							var that=this
-							if (!that.order_num) {
-								layer.msg('请输入订单编号')
-								
-								return
-							}
-							if (!that.dw_name) {
-								layer.msg('请输入单位名称')
-								
-								return
-							}
-							if (!that.dw_name) {
-								layer.msg('请输入单位名称')
-								
-								return
-							}
-							if (!that.user_sid) {
-								layer.msg('请输入纳税人识别号')
-								
-								return
+							
+							if(that.fp_type==1){
+								if (!that.dw_name) {
+									layer.msg('请输入单位名称')
+									
+									return
+								}
+								if (!that.user_sid) {
+									layer.msg('请输入纳税人识别号')
+									
+									return
+								}
 							}
 							
-						
-							
-							var datas = {
-								order_num: that.order_num,
-								code: that.code,
+						if(this.order_num==0){
+							parent.fp_msg={
+								receipt_header_type:that.fp_type,
+								receipt_header_name:that.dw_name,
+								receipt_header_code: that.user_sid
 								// password: that.pwd
 							}
-							// console.log(datas)
-							layer.msg('操作成功')
-							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+							parent.layer.closeAll();
+							return
+						}
+							
+							var datas = {
+								goods_order_id:this.order_num,
+								receipt_header_type:that.fp_type,
+								receipt_header_name:that.dw_name,
+								receipt_header_code: that.user_sid
+								// password: that.pwd
+							}
+							
+							_post('/Order.GoodsOrder/reMakeReceipt', datas, function(res) {
+								if (res.status == 200) {
+									layer.msg('操作成功')
+									setTimeout(function(){
+										// parent.layer.close('layer_pwd');
+										parent.layer.closeAll();
+									},1000)
+									
+								}
+							})
+						
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

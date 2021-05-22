@@ -10,7 +10,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 		<link rel="stylesheet" type="text/css" href="./css/public.css"/>
 		<link rel="stylesheet" type="text/css" href="./js/swiper/css/swiper.css"/>
-		<script src="./js/jquery.min.js"></script>
+		<script src="./js/jquery.min.js"></script>		
 		<script src="js/include.js" type="text/javascript" charset="utf-8"></script>
 		<script src="./js/layer/layer.js"></script>
 		<script src="./js/laydate/laydate.js"></script>
@@ -21,6 +21,11 @@
 		<script src="js/IPurl.js" type="text/javascript" charset="utf-8"></script>
 		<link href="js/pagination/pagination.css" rel="stylesheet" type="text/css" />
 		<script src="js/pagination/jquery.pagination.js"></script>
+		<link rel="stylesheet" type="text/css" href="./js/vant/vantIndex.css"/>
+		<script src="js/vant/vant.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vant/Area.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@vant/touch-emulator"></script>
+		
 		<style>
 			.tk_btns{
 				margin-top: 10px;
@@ -55,44 +60,36 @@
 		<div id="myzhaq">
 			<div class="w100 set_list" style="padding: 10px 50px;">
 				<div class="dis_flex aic set_li">
-					<div class="set_li_name">项目名称：</div>
-					<input type="text" v-model="xm_name" placeholder="请输入项目名称"/>
+					<div class="set_li_name">退货原因：</div>
+					<select name="" v-model="th_yy">
+						<option value="七天无理由退款">七天无理由退款</option>
+						<option value="其他">其他</option>
+					</select>
+					<!-- <input type="text" v-model="th_yy" placeholder="请输入退货原因"/> -->
+				</div>
+				<!-- <div class="dis_flex aic set_li">
+					<div class="set_li_name">紧急程度：</div>
+					
+					<select class="yjfk_wt_list" @change="xm_jj_fuc" v-model="xm_jj_lv">
+						<option v-for="(item,index) in xm_jj_lvs" :value="index">{{item.name}}</option>
+					</select>
+				</div> -->
+				
+				<div class="dis_flex aic set_li">
+					<div class="set_li_name">退货说明：</div>
+					<textarea v-model="th_content"  placeholder="请输入退货说明"></textarea>
 				</div>
 				<div class="dis_flex aic set_li">
-					<div class="set_li_name">合作时间：</div>
-					<input type="text"  v-model="xm_time" placeholder="请输入合作时间"/>
-					<!-- <input type="text" id="test1"  v-model="code" placeholder="请选择"/> -->
-				</div>
-				<div class="dis_flex aic set_li">
-					<div class="set_li_name">发布方：</div>
-					<input type="text" placeholder="请输入" v-model="xm_fbf"/>
-				</div>
-				<div class="dis_flex aic set_li">
-					<div class="set_li_name">联系方式：</div>
-					<input type="text" placeholder="请输入联系方式" v-model="tel"/>
-				</div>
-				<div class="dis_flex aic set_li">
-					<div class="set_li_name">工作区域范围：</div>
-					<!-- <input type="text" placeholder="可输入多个工作区域范围" v-model="xm_qy"/> -->
-					<textarea placeholder="可输入多个工作区域范围" v-model="xm_qy"></textarea>
-				</div>
-				<div class="dis_flex aic set_li">
-					<div class="set_li_name">施工经验：</div>
-					<textarea v-model="xm_sgjy"  placeholder="请输入"></textarea>
-				</div>
-				<div class="dis_flex aic set_li">
-					<div class="set_li_name flex_0"></div>
+					<div class="set_li_name flex_0">退货凭证：</div>
 					
 					<div class="dis_flex fww flex_1" style="padding: 0 10px;">
 						<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
 							<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
 							<div :style="'background-image: url('+getimg(item)+');'"></div>
 						</div>
-						
 						<div class="up_img" v-if="yjfk_img.length<9">
 							<img src="./img/upimg_03.jpg" alt="">
 							<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
-							<!-- <input id="scheaderimg" type="file" @change="uploadImg($event)"> -->
 							<form id="form">
 								<input id="scheaderimg" type="file" name="file" @change="uploadImg($event)">
 							</form>
@@ -100,10 +97,6 @@
 					</div>
 				</div>
 				
-				<div class="dis_flex aic set_li">
-					<div class="set_li_name">团队介绍：</div>
-					<textarea v-model="xm_tdjs"  placeholder="请输入团队介绍"></textarea>
-				</div>
 			</div>
 			
 			<div class="tk_btns dis_flex aic ju_c">
@@ -116,30 +109,27 @@
 			
 			$(function(){
 				
-				//执行一个laydate实例
-				laydate.render({
-				  elem: '#test1' //指定元素
-					,range: true
-				});
-				
+
 			})
-		
 			
 			var vm_myzhaq = new Vue({
 					el: '#myzhaq',
 					data: {
-						xm_name: '',
-						xm_time:'',
-						xm_fbf: '',
-						tel:'',
-						xm_qy:'',
-						xm_sgjy:'',
+						order_code:'',
+						th_yy: '七天无理由退款',
+						xm_jj_lvs:[
+							{name:'不紧急',id:1},
+							{name:'紧急',id:2},
+						],
+						
+						th_content:'',
 						yjfk_img:[],
-						xm_tdjs:'',
 					},
 					created: function() {
 						console.log('vm_myzhaq')
-					
+						this.order_code=getNowCanshu().order_code||''
+					},
+					mounted:function(){
 					},
 					methods: {
 						getimg:function(img){
@@ -148,6 +138,19 @@
 							// }
 							return getimg(img)
 						},
+						formatter(type, val) {
+						    if (type === 'year') {
+						        return `${val}年`;
+						    } else if (type === 'month') {
+						        return `${val}月`
+						    } else if (type === 'day') {
+						        return `${val}日`;
+						    }
+						    return val;
+						},
+						
+						
+						
 						uploadImg:function(file){
 							var  _this=this
 							$.ajax({
@@ -156,10 +159,6 @@
 								headers:{
 									"Authorization":storage_fuc.getItem("token")||'',
 								},
-								// beforeSend: function(request) {      //使用beforeSend
-								// 	request.setRequestHeader("Authorization", storage_fuc.getItem("token"));
-								// },
-								
 								data: new FormData($('#form')[0]),
 								// async:false,
 								cache: false,
@@ -208,52 +207,29 @@
 							});
 							
 						},
-						
 						sub:function(){
 							var that=this
 							
-							if (!that.xm_name) {
-								layer.msg('请输入项目名称')
+							
+							if (!that.th_yy) {
+								layer.msg('请输入退货原因')
 								
 								return;
 							}
-							if (!that.xm_time) {
-								layer.msg('请输入合作时间')
+							if (!that.th_content) {
+								layer.msg('请输入退货说明')
 								
 								return;
 							}
-							if (!that.xm_fbf) {
-								layer.msg('请输入发布方')
+							if(that.yjfk_img.length==0){
 								
-								return;
+									layer.msg('请上传退货凭证 ')
+									
+									return;
 							}
-							if (!that.tel) {
-								layer.msg('请输入联系方式')
-								
-								return;
-							}
-							if (!that.xm_qy) {
-								layer.msg('请输入工作区域范围')
-								
-								return;
-							}
-							if (!that.xm_sgjy) {
-								layer.msg('请输入施工经验')
-								
-								return;
-							}
-							if (!that.xm_tdjs) {
-								layer.msg('请输入团队介绍')
-								
-								return;
-							}
-							// if (that.tel == '' || !(/^1\d{10}$/.test(that.tel))) {
-							// 	layer.msg('手机号有误')
-								
-							// 	return
-							// }
+							
 							var imgs=that.yjfk_img
-							if(imgs.length>1){
+							if(imgs.length>0){
 								for(var i=0;i<imgs.length;i++){
 									imgs[i]={
 										url:imgs[i],
@@ -261,19 +237,16 @@
 									}
 								}
 								imgs=JSON.stringify(imgs)
+							}else {
+								imgs=''
 							}
 							var datas = {
-								title: that.xm_name, //项目名称
-								work_time:that.xm_time,//合作时间
-								service_name: that.xm_fbf,//发布方
-								mobile:that.tel,//联系方式
-								area:that.xm_qy,//工作区域范围
-								desc_exp:that.xm_sgjy,//承包经验
-								desc_pic:imgs,//图片介绍
-								desc_team:that.xm_tdjs,//团队介绍
+								order_code: that.order_code,
+								refund_type: that.th_yy,
+								refund_pic:imgs,
+								refund_content:that.th_content,
 							}
 							console.log(datas)
-							// console.log(datas)
 							if(that.btnkg==1){
 								return
 							}
@@ -281,7 +254,7 @@
 							setTimeout(function(){
 								that.btnkg=0
 							},1500)
-							_post('/Article.ArticleService/add',datas,function(res){
+							_post('/Order.GoodsOrderRefund/add',datas,function(res){
 								 if (res.status == 200){
 									 // console.log(res.data.list)
 									 layer.msg('操作成功')
@@ -294,10 +267,29 @@
 						},
 						quxiao:function(){
 							parent.layer.closeAll();
+						},
+						gettime: function(value) {
+								var seperator1 = "-";
+								value = new Date(value)
+						
+								var year = value.getFullYear();
+								console.log(year)
+								var month = value.getMonth() + 1;
+								var strDate = value.getDate();
+								if (month >= 1 && month <= 9) {
+										month = "0" + month;
+								}
+								if (strDate >= 0 && strDate <= 9) {
+										strDate = "0" + strDate;
+								}
+								var currentdate = year + seperator1 + month + seperator1 + strDate;
+								return currentdate
 						}
 						
 					}
 				})
+			
+			
 		</script>
 	</body>
 </html>

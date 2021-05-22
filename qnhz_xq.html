@@ -99,8 +99,8 @@
 			}
 			.ocent_ct{
 				font-size: 12px;
-				margin: 48px 0;
-				height: 23px;
+				padding: 48px 0;
+				/* height: 23px; */
 				line-height: 23px;
 			}
 			.leTo_ct>button{
@@ -182,18 +182,15 @@
 				color: #333333;
 			}
 			.sgjyImgs_ct,.tdjsImg_ct{
-				margin-top: 25px;
+				margin-top: 10px;
 			}
-			.sgjyImgs_ct img{
-				max-width: 131px;
-				max-height: 131px;
+			.sgjyImgs_ct .xq_img{
+				width: 131px;
+				height: 131px;
 				margin: 0 10px;
 			}
 			.tdjsImg_ct{
-				max-width: 767px;
-				max-height: 165px;
-				line-height: 165px;
-				text-align: center;
+				
 			}
 			.zwjstme_ct{
 				font-size: 12px;
@@ -203,17 +200,17 @@
 				color: #999999;
 			}
 			.xmjs_ct{
-				padding: 16px 70px;
-			}
-			.xmjs_ct p{
-				font-size: 12px;
-				color: #999999;
+				padding: 16px 10px;
 			}
 			.fwxmtel_ct{
 				padding-left: 30px;
 			}
 			[v-cloak]{
 			    display:none !important;
+			}
+			.scicon_img{
+				font-size: 14px;
+				margin-right: 3px;
 			}
 		</style>
 		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
@@ -234,7 +231,7 @@
 			<include src="./common/header_header.html"></include>
 		</div>
 		<!-- 中间内容部分 -->
-		<div id="qnhzCot_ct" v-cloak>
+		<div id="qnhzCot_ct" class="html_main" v-cloak>
 			
 			<!-- <button style="width: 100px;height: 40px;margin: 0 auto;" @click="vip">会员/非会员</button> -->
 			<div class="w1200">
@@ -249,65 +246,51 @@
 					<div class="qnhzLeft_ct">
 						<div class="leTo_ct">
 							<div class="otop_ct">
-								<span>{{isVip?'服务项目':'拆出项目服务'}}</span>
-								<span class="lxrNum_ct" v-show="!isVip">347人联系</span>
-								<span>{{isVip?'预发布':'面议'}}</span>
+								<span>{{datas.title}}</span>
+								<span class="lxrNum_ct" v-show="user_datas.vip_id!=0">{{datas.touch_sum?datas.touch_sum:0}}人联系</span>
+								<span>{{datas.work_time}}</span>
 							</div>
 							<div class="flex ju_b ocent_ct">
-								<div>
+								<div style="max-width: 500px;">
 									<img src="img/qnhzdw.jpg" >
-									<span>北京-朝阳-大屯 北京朝阳大屯亚运村</span>
-									<span class="fwxmtel_ct" v-show="isVip">联系电话 : 178625123512</span>
+									<span>{{datas.area}}  {{datas.province}}  {{datas.city}}  {{datas.district}}</span>
+									<span class="fwxmtel_ct" v-if="user_datas.vip_id!=0">联系电话 : {{datas.mobile}}</span>
 								</div>
-								<div>
-									<button><img src="img/qnhz_sc.jpg" alt="">收藏</button>
-									<button><img src="img/qnhz_jb.jpg" alt="">举报</button>
+								<div v-if="mytype!=1">
+									<button @click="deleteCollect" v-if="datas.is_collect" class="cpointer"><span class="iconfont icon-shoucang scicon_img" style="color: #f00;"></span>已收藏</button>
+									<button @click="collect" v-else class="cpointer"><span class="iconfont icon-shoucang1 scicon_img"></span>收藏</button>
+									<button @click="report_fuc" class="cpointer"><img src="img/qnhz_jb.jpg" alt="">举报</button>
 								</div>
 							</div>
-							<button>合作洽谈</button>
+							<button v-if="user_datas.vip_id!=0" @click="opentel(datas.mobile)" class="cpointer">合作洽谈</button>
 						</div>
 						<div class="leBo_ct">
-							<h6>{{isVip?'自我介绍':'职位描述'}}</h6>
-							<div class="zwjstme_ct" v-show="isVip">
-								<p>招募截止时间<span> : 2020.020.20</span></p>
-								<p>项目交付时间<span> : 2020.2020.20</span></p>
+							<h6>项目描述</h6>
+							<div class="zwjstme_ct" v-if="user_datas.vip_id>0">
+								<p v-if="datas.end_time">招募截止时间<span> : {{gettime(datas.end_time,'-')}}</span></p>
+								<p v-if="datas.pay_time">项目交付时间<span> : {{gettime(datas.pay_time,'-')}}</span></p>
 							</div>
-							<div class="sgjy_ct" v-show="isVip">
-								<span>项目资质</span>
-								<div class="sgjyImgs_ct">
-									<img src="img/qnhzgc1.jpg" alt="">
-									<img src="img/qnhzgc1.jpg" alt="">
-									<img src="img/qnhzgc2.jpg" alt="">
-									<img src="img/qnhzgc2.jpg" alt="">
-									<img src="img/qnhzgc2.jpg" alt="">
-									<img src="img/qnhzgc2.jpg" alt="">
-									<img src="img/qnhzgc2.jpg" alt="">
+							<div class="sgjy_ct"  >
+								<span v-if="hz_type==0">施工经验</span>
+								<span v-else>项目资质</span>
+								<div class="sgjyImgs_ct dis_flex fww">
+									<!-- <img src="img/qnhzgc1.jpg" alt=""> -->
+									<div class="xq_img bg_div" v-for="(item,index) in json_p(datas.desc_pic)">
+										<div :style="'background-image: url('+getimg(item.url)+ ');'"></div>
+									</div>
 								</div>
 							</div>
-							<div class="sgjy_ct" v-show="!isVip">
-								<span>施工经验</span>
-								<div class="sgjyImgs_ct">
-									<img src="img/qnhzgc1.jpg" alt="">
-									<img src="img/qnhzgc2.jpg" alt="">
-								</div>
-							</div>
-							<div class="sgjy_ct" v-show="!isVip">
-								<span>团队介绍</span>
+							<div class="sgjy_ct">
+								<span  v-if="hz_type==0">团队介绍</span>
+								<span v-else>项目介绍</span>
 								<div class="tdjsImg_ct">
-									<a href="kthy.html?header_cur=2">
+									<div v-if="user_datas.vip_id>0" class="xmjs_ct fwb_box" v-html="datas.desc_exp"></div>
+									<!-- <a v-else href="kthy.html?header_cur=2" >
 										<img src="img/vipCont.jpg " >
-									</a>
-									
-								</div>
-							</div>
-							<div class="sgjy_ct" v-show="isVip">
-								<span>项目介绍 : </span>
-								<div class="xmjs_ct">
-									<p>即日起招募北京区域拆除人员，有经验者优先。</p>
-									<p>【平台承诺】</p>
-									<p>一、就近派单，月入数万。二、踏实肯干，沟通良好。三、完活验收，现金结账。</p>
-									<p>【报名微信】微信沟通(电话不接)zzzz19940420</p>
-									<p>ysf3325834249</p>
+									</a> -->
+									<div v-else @click="gtktvip" class="cpointer">
+										<img src="img/vipCont.jpg " >
+									</div>
 								</div>
 							</div>
 						</div>
@@ -315,18 +298,20 @@
 					<div class="qnhzRight_ct">
 						<div class="rTit_ct flex">
 							<img src="img/qnhz_bq.jpg" >
-							<span>{{isVip?'推荐项目':'推荐工作'}}</span>
+							<span>{{hz_type==1?'推荐项目':'推荐服务'}}</span>
 						</div>
-						<div class="tjgzLists_ct flex ju_b" v-for="item in 3">
+						<div class="tjgzLists_ct flex ju_b" v-for="item in datas_list" @click="jump_fuc(item)">
 							<div class="flex rlcoont_ct">
-								<span>搬砖工服务项目</span>
-								<span>朝阳区-大望路</span>
-								<span>面议</span>
+								<span>{{item.title}}</span>
+								<span>{{item.area}}{{item.province}}{{item.city}}{{item.district}}</span>
+								<span>{{item.work_time}}</span>
 							</div>
-							<div class="rrbox_ct">
+							<div v-if="item.mobile" class="rrbox_ct cpointer" @click.stop="opentel(item.mobile)">
 								<span>合作洽谈</span>
 							</div>
 						</div>
+						
+						<div class="w100" v-if="datas_list.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
 					</div>
 				</div>
 				
@@ -338,18 +323,178 @@
 		
 		
 		<script type="text/javascript">
+			$(function() {
+				app.id=getNowCanshu().id
+				if(getNowCanshu().hz_type==1){
+					app.hz_type=1
+					getdata()
+				}else{
+					app.hz_type=0
+					getdata()
+				}
+				
+				getdatalist()
+			})
+			var that
 			var app = new Vue({
 				el: '#qnhzCot_ct',
 				data: {
-					isVip: false
+					id:'',
+					hz_type:0,
+					isVip: false,
+					datas:'',
+					user_datas:'',
+					token:'',
+					datas_list:[],
+					mytype:''
+				},
+				created: function() {
+					console.log('h_header')
+					that=this
+					that.BaseConfig=JSON.parse(storage_fuc.getItem("BaseConfig"))
+					if(getNowCanshu().mytype){
+						that.mytype=getNowCanshu().mytype
+					}
+					if(storage_fuc.getItem("user")){
+						login_m(function(res){
+							that.user_datas=res.data
+							that.token=res.token
+						})
+						
+					}
 				},
 				methods:{
-					vip(){
+					gtktvip:function(){
+						if(storage_fuc.getItem("user")){
+							window.location = 'kthy.html?header_cur=2'
+						}else{
+							window.location.replace('login.html')
+							return
+						}
+					},
+					jump_fuc:function(item){
+						if(that.hz_type==0){
+							jump('qnhz_xq.html?header_cur=2&id='+item.article_service_id+'&hz_type='+that.hz_type)
+						}else{
+							jump('qnhz_xq.html?header_cur=2&id='+item.article_need_id+'&hz_type='+that.hz_type)
+						}
+					},
+					opentel:function(tel){
+						layer.confirm(tel, {
+							title:'联系电话',
+							btn: ['关闭'] //按钮
+						}, function() {
+							// layer.msg('操作成功');
+							layer.closeAll()
+						});
+					},
+					vip:function(){
 						this.isVip = !this.isVip
 						console.log(this.isVip)
-					}
+					},
+					collect:function(){
+						var datas={
+							object_id:that.id,
+							type:app.hz_type==0?2:3
+						}
+						jkurl='/Member.MemberCollect/collect'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								  getdata()
+							 }
+						})
+					},
+					deleteCollect:function(){
+						var datas={
+							object_id:app.id,
+							
+							type:app.hz_type==0?2:3
+						}
+						jkurl='/Member.MemberCollect/deleteCollect'
+						_post(jkurl,datas,function(res){
+							 if (res.status == 200){
+								 // console.log(res.data.list)
+								 // app.datas=res.data
+								 getdata()
+							 }
+						})
+					},
+					report_fuc:function(){
+						//prompt层
+						
+						layer.prompt({title: '请输入举报内容', formType: 2}, function(text, index){
+						  
+							var datas={
+								article_service_id:that.id,
+								report_content:text
+							}
+							var jkurl='/Article.ArticleService/report'
+							if(that.hz_type==1){
+								datas={
+									article_need_id:that.id,
+									report_content:text
+								}
+								jkurl='/Article.ArticleNeed/report'
+							}
+							
+							_post(jkurl,datas,function(res){
+								 if (res.status == 200){
+									 // console.log(res.data.list)
+									 // app.datas=res.data
+									 layer.close(index);
+									 layer.msg('提交成功');
+								 }
+							})
+						  // layer.msg('演示完毕！您的口令：'+ pass +'<br>您最后写下了：'+text);
+						});
+						
+					},
 				}
 			})
+			function getdata(){
+				var datas={
+					article_service_id:app.id
+				}
+				var jkurl='/Article.ArticleService/view'
+				if(app.hz_type==1){
+					datas={
+						article_need_id:app.id
+					}
+					jkurl='/Article.ArticleNeed/view'
+				}
+				if(getNowCanshu().mytype==1){
+					jkurl='/Article.ArticleService/memberView'
+					if(app.hz_type==1){
+						jkurl='/Article.ArticleNeed/memberView'
+					}
+				}
+				_get(jkurl,datas,function(res){
+					 if (res.status == 200){
+						 console.log(res.data.list)
+						 app.datas=res.data
+					 }
+				})
+			}
+			function getdatalist(){
+				var datas={
+					limit:10,
+					page:1,
+					is_recommend:1
+				}
+				var jkurl='/Article.ArticleService/index'
+				if(app.hz_type==1){
+					jkurl='/Article.ArticleNeed/index'
+				}
+				_get(jkurl,datas,function(res){
+					 if (res.status == 200){
+						 console.log(res.data.list)
+						 that.datas_list=res.data.list
+						
+					 }
+				})
+			}
 		</script>
 	</body>
 </html>

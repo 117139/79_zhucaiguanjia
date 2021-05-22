@@ -257,13 +257,6 @@
 				border: none;
 				margin-top: 87px;
 			}
-			
-			
-			
-			
-			
-			
-			
 		</style> 
 		
 	</head>
@@ -309,10 +302,10 @@
 					</div>
 				</div>
 				<div class="jstjyh_ct flex ju_b aife">
-					<span>交易号 : 2020121021021020202</span>
+					<span>交易号 : {{tempobj.order_code}}</span>
 					<div>
 						<span>应付金额 : </span>
-						<span>￥500</span>
+						<span>￥{{tempobj.pay_money}}</span>
 					</div>
 				</div>
 				<div class="zffs_ct">
@@ -337,14 +330,14 @@
 						<div class="zfxsnr_ct flex aic" v-show="zffs=='wx'">
 							<div class="zfnrl_ct flex aic">
 								<div class="flex aic ju_c">
-									<img src="img/jstewm.png" >
+									<img :src="wxewm.data" >
 								</div>
-								<span>请打开支付宝扫描上方二维码</span>
+								<span>请打开微信扫描上方二维码</span>
 							</div>
 							<div class="zfnrr_ct flex aic ju_c">
 								<span>应付金额</span>
 								<div>
-									<span>8500</span>元
+									<span>{{tempobj.pay_money}}</span>元
 								</div>
 							</div>
 						</div>
@@ -354,40 +347,50 @@
 								<table border="1" cellspacing="" cellpadding="">
 									<tr>
 										<td>户名</td>
-										<td>筑采商务有限公司</td>
+										<td>{{bank.bank_member_name}}</td>
 									</tr>
 									<tr>
 										<td>账户</td>
-										<td>265151285412</td>
+										<td>{{bank.bank_member}}</td>
 									</tr>
 									<tr>
-										<td>开行胡</td>
-										<td>中国银行北京分行</td>
+										<td>开户行</td>
+										<td>{{bank.bank_name}}</td>
 									</tr>
 									<tr>
 										<td>联行号</td>
-										<td>1521 1212  21212</td>
+										<td>{{bank.bank_code}}</td>
 									</tr>
 									<tr>
 										<td>订单编号：</td>
-										<td>21154632152</td>
+										<td>{{tempobj.order_code}}</td>
 									</tr>
 									<tr>
 										<td>联系方式</td>
-										<td>1878254584</td>
+										<td>{{bank.bank_member_mobile}}</td>
 									</tr>
 								</table>
 							</div>
 							<div class="uhkzfr_ct flex ">
 								<span>上传凭证：</span>
-								<div class="flex">
-									<input type="file" accept="image/*" @change="getzImg(this)" style="display:none" value="" id="img_z" ref="img_z"/>
-									<div class="flex aic ju_c cp_ct" @click="zhengmian()">
-										<img src="img/hstsczj.png" id="zmz">
+								<div style="width: 325px;">
+									<div style="display: flex;width: 100%;">
+										<div class="up_img bg_div" v-for="(item,index) in yjfk_img">
+											<img @click="up_img_del(index)" class="img_del" src="./img/img_del.png" alt="">
+											<div :style="'background-image: url('+getimg(item)+');'"></div>
+										</div>
+										<div class="up_img" v-if="yjfk_img.length<1">
+											<img src="./img/upimg_03.jpg" alt="">
+											<!-- <input id="scheaderimg" type="file" @change="getint_img"> -->
+											<!-- <input id="scheaderimg" type="file" @change="uploadImg($event)"> -->
+											<form id="form">
+												<input id="scheaderimg" type="file" name="file" @change="uploadImg($event)">
+											</form>
+										</div>
 									</div>
 								</div>
 								<span>注：上传银行转账还记录凭证</span>
-								<button class="cp_ct" @click="sub()">提交</button>
+								<button class="cp_ct" @click="sub">提交</button>
 							</div>
 						</div>
 					</div>
@@ -401,29 +404,172 @@
 		
 		<include src="./common/footer.html"></include>
 		<script type="text/javascript">
+			var that;
 			var app = new Vue({
 				el: '#jstCot_ct',
 				data: {
 					// 支付方式
 					zffs: 'wx',
+					// 获取参数
+					tempobj: {},
+					// 微信二维码
+					wxewm: {},
+					// 定时器
+					timer1: null,
+					yjfk_img:[],
+					bank: {}
+				},
+				created() {
+					that = this
+					
+					if(storage_fuc.getItem("user")){
+						login_m(function(res){
+							console.log(res)
+							that.user_datas=res.data
+							that.token=res.token
+						})
+						
+					}else{
+						window.location.replace('login.html')
+						return
+					}
+					
+					
+					that.bank = JSON.parse(localStorage.getItem('BaseConfig')).bank_info
+					console.log(that.bank)
+					
+					
+					
+					
+					this.tempobj = getNowCanshu()
+					if(getNowCanshu().type){
+						this.zffs = getNowCanshu().type
+					}
+					that.getwxcode()
+					// this.timer1 = setInterval(function(){
+					// 	that.getwxcode()
+					// },1000)
 				},
 				computed:{
 				},
 				methods: {
-					sub(){
-						layer.msg('提交成功')
+					getimg:function(img){
+						// if(!img){
+						// 	return
+						// }
+						return getimg(img)
 					},
-					zhengmian:function(){
-						$('#img_z').click();
+					uploadImg:function(file){
+						var  _this=this
+						$.ajax({
+							type: "POST",
+							url: IPurl+'/Base/upload',
+							headers:{
+								"Authorization":storage_fuc.getItem("token")||'',
+							},
+							// beforeSend: function(request) {      //使用beforeSend
+							// 	request.setRequestHeader("Authorization", storage_fuc.getItem("token"));
+							// },
+							
+							data: new FormData($('#form')[0]),
+							// async:false,
+							cache: false,
+							processData: false,
+							contentType: false,//不去设置Content-Type请求头
+							// enctype: 'multipart/form-data',    //需要正确设置此项
+							
+							success: function(res) {
+								// console.log(res);
+								if(typeof(res)=='string'){
+									res=JSON.parse(res)
+								}
+								if(res.status == 101){
+									parent.location.href="login.html?type=1"
+									return
+								}
+								if (res.status == 200) {
+								console.log(res)
+									layer.msg('上传成功')
+									 _this.yjfk_img.push(res.data)
+								} else {
+									if(res.msg){
+										layer.msg(res.msg)
+									}else{
+										layer.msg('操作失败')
+									}
+								}
+						
+							},
+							error: function(err) {
+								layer.msg('获取数据失败')
+								console.log(err)
+							}
+						})
+						
 					},
-					getzImg:function(){
-					    var file = this.$refs.img_z.files[0];
-					    var reader = new FileReader();
-					    reader.readAsDataURL(file);//将文件读取为Data URL小文件   这里的小文件通常是指图像与 html 等格式的文件
-					    reader.onload = function(e){
-					        $("#zmz").attr("src",e.target.result);
-					    }
-					}
+					up_img_del:function(index){
+						var _this=this
+						layer.confirm('是否删除该图片？', {
+						  btn: ['确定','取消'] //按钮
+						}, function(){
+						  layer.msg('操作成功');
+							_this.yjfk_img.splice(index, 1)
+						}, function(){
+						  
+						});
+						
+					},
+					sub:function(){
+						var that=this
+						var imgs=that.yjfk_img
+						if(imgs.length == 0){
+							layer.msg('请上传图片')
+							return
+						}
+						var datas = {
+							order_code: that.tempobj.order_code, //订单号
+							bank_pic:imgs,//银行转账凭证 单图
+						}
+						_post('Order.GoodsOrder/bankPay',datas,function(res){
+							if(res.status == 200){
+								layer.msg(res.msg)
+								setTimeout(function(){
+									window.location = 'grzx.html?my_cur=0'
+								},500)
+							}
+						})
+					},
+					getwxcode:function(){
+						$.ajax({
+							type: 'POST',
+							url: IPurl+'Order.GoodsOrder/wechatNativeQrcode',
+							data: {order_code:this.tempobj.order_code},
+							headers:{
+								"Authorization":storage_fuc.getItem("token")||'',
+							},
+							success: function(res){
+								if(res.status == 101){
+									parent.location.href="login.html?type=1"
+									return
+								}
+								if(res.status != 200){
+									if(res.msg){
+										layer.msg(res.msg)
+										if(res.msg = "订单已支付"){
+											clearInterval(that.timer1)
+											setTimeout(function(){
+												window.location = 'grzx.html?my_cur=0'
+											},500)
+										}
+									}else{
+										layer.msg('操作失败')
+									}
+								}else{
+									that.$set(that.wxewm,"data", res.data)
+								}
+							}
+						})
+					},
 				}
 			})
 		</script>

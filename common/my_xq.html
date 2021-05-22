@@ -6,19 +6,20 @@
 		<div class="fb_xuqiu_btn dis_flex aic ju_c" @click="open_tk(0)">发布需求</div>
 	</div>
 	<div class="my_fw_list">
-		<div class="my_fw_li dis_flex ju_b aic" v-for="(item,index) in my_fw_list">
+		<div class="my_fw_li dis_flex ju_b aic" v-for="(item,index) in datas">
 			<div class="flex_1">
-				<div class="my_fw_li_name">服务生</div>
-				<div class="my_fw_li_address">北京市丰台区卢沟桥街道</div>
-				<div v-if="index==0" class="my_fw_li_time">加急</div>
-				<div v-else class="my_fw_li_time">预发布</div>
+				<div class="my_fw_li_name">{{item.title}}</div>
+				<div class="my_fw_li_address">{{item.area}}{{item.province}}{{item.city}}{{item.district}}</div>
+				<div class="my_fw_li_time">{{item.work_time}}</div>
 			</div>
-			<div class="my_fw_see dis_flex aic ju_c">查看</div>
+			<div class="my_fw_see dis_flex aic ju_c" @click="jump('qnhz_xq.html?header_cur=2&id='+item.article_need_id+'&mytype=1&hz_type='+1)">查看</div>
 		</div>
-	</div>
-	<div class="list_page tac dis_flex">
 		
-		<div class="m-style M-box3"></div>
+		<div class="w100" v-if="datas.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
+	</div>
+	<div v-if="datas.length>0" class="list_page tac dis_flex">
+		
+		<div class="m-style M-box_xq"></div>
 	</div>
 </div>
 	
@@ -32,39 +33,58 @@
 		
 	})
 	var layer_pwd,layer_tel
-	var vm_myzhaq = new Vue({
+	var vm_myxq = new Vue({
 			el: '#myzhaq',
 			data: {
-				my_fw_list:[
-					{},
-					{},
-					{},
-				]
+				datas:[]
 			},
 			created: function() {
 				console.log('vm_myzhaq')
-				
 			},
 			mounted:function(){
-				$('.M-box3').pagination({
-						totalData:100,
-						showData:10,
-						coping: true,
-						// mode: 'fixed',
-						// homePage: '首页',
-						// endPage: '末页',
-						prevContent: '上页',
-						nextContent: '下页',
-						callback: function (api) {
-							//console.log(api.getCurrent())
-							var page=api.getCurrent()
-							// getdatalist(that,type,cityid,cityid1,page,pagesize)
-						}
-				});
 				
-				
+				this.getdatalist(1)
 			},
 			methods: {
+				jump(url){
+					jump(url)
+				},
+				getdatalist: function(page){
+					var datas={
+						limit:10,
+						page:page||1
+					}
+					var jkurl='/Article.ArticleNeed/memberList'
+					layer.load(1,{
+						shade: [0.2,'#000'] //0.1透明度的白色背景
+					});
+					setTimeout(function(){
+					  layer.closeAll('loading');
+					},500);
+					_get(jkurl,datas,function(res){
+						 if (res.status == 200){
+							 console.log(res.data.list)
+							 vm_myxq.datas=res.data.list
+							 if(page==1){
+								 $('.M-box_xq').pagination({
+								 	totalData: res.data.count,
+								 	showData: 10,
+								 	coping: true,
+								 	// mode: 'fixed',
+								 	// homePage: '首页',
+								 	// endPage: '末页',
+								 	prevContent: '上页',
+								 	nextContent: '下页',
+								 	callback: function(api) {
+								 		console.log(api.getCurrent())
+								 		var page = api.getCurrent()
+								 		vm_myxq.getdatalist(page)
+								 	}
+								 });
+							 }
+						 }
+					})
+				},
 				open_tk(num){
 					//页面层
 					if(num==0){
@@ -75,7 +95,10 @@
 							scrollbar: false,
 						  shade: 0.8,
 						  area: ['500px', '92%'],
-						  content: './fb_xq.html' //iframe的url
+						  content: './fb_xq.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}else{
 						layer_tel=layer.open({
@@ -84,7 +107,10 @@
 						  shadeClose: true,
 						  shade: 0.8,
 						  area: ['420px', '300px'],
-						  content: './set_tel.html' //iframe的url
+						  content: './set_tel.html' ,//iframe的url
+							end: function () { //最后执行reload
+							 window.location.replace('')
+							}
 						}); 
 					}
 					

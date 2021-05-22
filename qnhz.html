@@ -40,8 +40,10 @@
 						<div class="swiper-button-prev swiper-button-prev2"></div>
 						<div class="swiper-button-next swiper-button-next2"></div>
 						<div class="swiper-wrapper">
-							<div class="swiper-slide" v-for="(item,index) in banner">
-								<img src="img/qnhz_index_03.jpg" alt="">
+							<div class="swiper-slide" v-for="(item,index) in banner" style="width: 100%;height: 240px;display: block;">
+								<a :href="item.url_link?item.url_link:'###'" class="bg_div" style="width: 100%;height: 240px;display: block;">
+									<div  :style="'background-image: url('+getimg_fuc(item.pic)+');'"></div>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -53,7 +55,7 @@
 						<div class="dis_flex aic ju_b" style="background-image: url(img/images/qnhz_index_07.jpg);">
 							<div v-if="hz_type==0" class="qnhz_tip"><span>服务方</span>筑采管家，为您提供更多资源放心找人，找合作，找项目</div>
 							<div v-else class="qnhz_tip"><span>我是需求方</span>筑采管家，为您提供优质合作伙伴</div>
-							<div class="hz_li dis_flex aic ju_b cpointer">
+							<div class="hz_li dis_flex aic ju_b cpointer" @click="open_tk(0)">
 								<i class="iconfont icon-xiangmu"></i>
 								<span>发布</span>
 								<i class="iconfont icon-gengduo1"></i>
@@ -63,9 +65,9 @@
 					<div class="w1200 dis_flex ais">
 						<div class="main_L   flex_0" style="margin-right: 10px;">
 							<div class="main_L_z">
-								<div class="bg_div" :class="{'cur':banner_index==index}" v-for="(item,index) in banner"
+								<div  class="bg_div" :class="{'cur':banner_index==index}" v-for="(item,index) in banner1"
 									@click="setswiper(index)">
-									<div :style="'background-image: url('+item.fm+');'"></div>
+									<div class="cpointer" :style="'background-image: url('+getimg_fuc(item.pic)+');'"></div>
 								</div>
 							</div>
 						</div>
@@ -75,7 +77,7 @@
 									<tr style="height: 50px;">
 										<th>发布方</th>
 										<th>服务项目</th>
-										<th></th>
+										<!-- <th></th> -->
 										<th>项目分类</th>
 										<th>服务区域</th>
 										<th v-if="hz_type==0">合作时间</th>
@@ -87,38 +89,37 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr class="cpointer" v-for="(item,index) in 10" onclick="jump('qnhz_xq.html?header_cur=2&id='+1)" >
+									<tr class="cpointer" v-for="(item,index) in datas" @click="jump_fuc(item)" >
 										<td>
-											<div>四川服务</div>
+											<div>{{item.service_name}}</div>
 										</td>
 										<td>
-											<div class="oh2 table_hz_xm">四川省南充市四川香雪建筑项目（二期）</div>
+											<div class="oh2 table_hz_xm">{{item.title}}</div>
 										</td>
-										<td>
+										<!-- <td>
 											<div class="hz_table_bqs">
-												<div>经验丰富</div>
-												<div>靠谱团队</div>
-												<div>平台推荐</div>
-												<div>经验丰富</div>
+												<div v-for="(item1,index1) in item.tag">经验丰富</div>
 											</div>
 										</td>
+										-->
 										<td>
-											<div>施工建设</div>
+											<div>{{item.cate_name}}</div>
+										</td> 
+										<td>
+											<div>{{item.area}}{{item.province}}{{item.city}}{{item.district}}</div>
 										</td>
 										<td>
-											<div>电子电器通信</div>
+											<div v-if="hz_type==0" style="color: #FF1F1F;">{{item.work_time}}</div>
+											<div v-if="hz_type==1" style="color: #FF1F1F;">{{item.work_time}}</div>
 										</td>
 										<td>
-											<div v-if="hz_type==0" style="color: #FF1F1F;">随时</div>
-											<div v-if="hz_type==1" style="color: #FF1F1F;">加急</div>
-										</td>
-										<td>
-											<div>2020-12-18</div>
+											<div>{{gettime(item.create_time)}}</div>
 										</td>
 									</tr>
 								</tbody>
 
 							</table>
+							<div class="w100" v-if="datas.length==0" style="line-height: 100px;text-align: center;color: #999;">暂无数据</div>
 							<div class="list_page tac">
 								<div class="m-style M-box2"></div>
 							</div>
@@ -150,21 +151,13 @@
 						prevEl: '.swiper-button-prev2',
 					},
 				})
-				$('.M-box2').pagination({
-					totalData: 100,
-					showData: 10,
-					coping: true,
-					// mode: 'fixed',
-					// homePage: '首页',
-					// endPage: '末页',
-					prevContent: '上页',
-					nextContent: '下页',
-					callback: function(api) {
-						//console.log(api.getCurrent())
-						var page = api.getCurrent()
-						// getdatalist(that,type,cityid,cityid1,page,pagesize)
-					}
-				});
+				if(getNowCanshu().type==1){
+					vm.hz_type=1
+					getdatalist()
+				}else{
+					vm.hz_type=0
+					getdatalist()
+				}
 			})
 
 			var that
@@ -172,39 +165,105 @@
 				el: '#body',
 				data: {
 
-					banner: [{
-							fm: 'img/index_xbanner_06.jpg',
-							banner: 'img/index_banner_03.jpg'
-						},
-						{
-							fm: 'img/index_xbanner_09.jpg',
-							banner: 'img/index_xbanner_09.jpg',
-						},
-						{
-							fm: 'img/index_xbanner_11.jpg',
-							banner: 'img/index_xbanner_11.jpg',
-						},
-					],
+					banner: [],
+					banner1: [],
 					banner_index: 0,
 					hz_type: 0,
-					time_px:0
+					time_px:0,
+					datas:[]
 				},
 				created: function() {
 
 					that = this
+					
 					// if(getCookie('logintoken')){
 					// 	that.token = getCookie('logintoken')
 					// 	// userMsg = JSON.parse(getCookie('userMsg'))
 					// }
-
+					that.get_banner()
+					that.get_banner1()
 				},
 				methods: {
-					hz_xz(num) {
+					jump_fuc:function(item){
+						if(that.hz_type==0){
+							jump('qnhz_xq.html?header_cur=2&id='+item.article_service_id+'&hz_type='+that.hz_type)
+						}else{
+							jump('qnhz_xq.html?header_cur=2&id='+item.article_need_id+'&hz_type='+that.hz_type)
+						}
+					},
+					gettime:function(time){
+						return gettime(time,'-')
+					},
+					open_tk:function(num){
+						if(!storage_fuc.getItem("token")){
+							window.location.href="login.html?type=1"
+							return
+						}
+						//页面层
+						if(that.hz_type==0){
+							layer_pwd=layer.open({
+							  type: 2,
+							  title: '发布服务',
+							  shadeClose: true,
+							  shade: 0.8,
+							  area: ['600px', '660px'],
+							  content: './fb_fw.html' ,//iframe的url
+								end: function () { //最后执行reload
+								 window.location.replace('')
+								}
+							}); 
+						}else{
+							layer_pwd=layer.open({
+							  type: 2,
+							  title: '发布需求',
+							  shadeClose: true,
+								scrollbar: false,
+							  shade: 0.8,
+							  area: ['500px', '92%'],
+							  content: './fb_xq.html' ,//iframe的url
+								end: function () { //最后执行reload
+								 window.location.replace('')
+								}
+							}); 
+						}
+						
+					},
+					getimg_fuc:function(img){
+						return getimg(img)
+					},
+					get_banner:function(){
+						var datas={
+							place_type:2
+						}
+						_get('/Config.Banner/index',datas,function(res){
+							 if (res.status == 200){
+								 console.log(res.data.list)
+								 that.banner=res.data.list
+							 }
+						})
+					},
+					get_banner1:function(){
+						var datas={
+							place_type:3
+						}
+						_get('/Config.Banner/index',datas,function(res){
+							 if (res.status == 200){
+								 console.log(res.data.list)
+								 that.banner1=res.data.list
+							 }
+						})
+					},
+					hz_xz:function(num) {
 						that.hz_type = num
+						getdatalist()
 					},
 					setswiper: function(index) {
 						console.log(index)
 						that.banner_index = index
+						if(that.banner[that.banner_index].url_link){
+								window.location.href=that.banner[that.banner_index].url_link
+						}
+					
 						// mySwiper.swipeTo(index, 1000, false)
 					},
 					getgimg: function(img) {
@@ -212,39 +271,7 @@
 						// console.log(img1[0])
 						return img1[0]
 					},
-					//奢华甄选
-					getshdata: function() {
-						var that = this
-						var datas = {
-							apipage: 'travel',
-							op: 'travel_data_list',
-							type: 3,
-							keyword: 'shzx'
-						}
-						$.ajax({
-							type: "GET",
-							url: IPurl,
-							data: datas,
-							success: function(res) {
-								// console.log(res);
-								if (typeof(res) == 'string') {
-									res = JSON.parse(res)
-								}
-								if (res.error == 0) {
-									var resultd = res.list
-									that.shdata = resultd
-
-								} else {
-									layer.msg('获取数据失败')
-								}
-
-							},
-							error: function(err) {
-								layer.msg('获取数据失败')
-								console.log(err)
-							}
-						})
-					},
+					
 					formatter: function(value) {
 						if (!value) {
 							return value
@@ -259,6 +286,39 @@
 
 				}
 			})
+			function getdatalist(page){
+				var datas={
+					limit:10,
+					page:page||1
+				}
+				var jkurl='/Article.ArticleService/index'
+				if(vm.hz_type==1){
+					jkurl='/Article.ArticleNeed/index'
+				}
+				_get(jkurl,datas,function(res){
+					 if (res.status == 200){
+						 console.log(res.data.list)
+						 that.datas=res.data.list
+						 if(page==1){
+							 $('.M-box2').pagination({
+							 	totalData: res.data.count,
+							 	showData: 10,
+							 	coping: true,
+							 	// mode: 'fixed',
+							 	// homePage: '首页',
+							 	// endPage: '末页',
+							 	prevContent: '上页',
+							 	nextContent: '下页',
+							 	callback: function(api) {
+							 		console.log(api.getCurrent())
+							 		var page = api.getCurrent()
+							 		getdatalist(page)
+							 	}
+							 });
+						 }
+					 }
+				})
+			}
 			function time_px_fuc(){
 				if(vm.time_px){
 					vm.time_px=0

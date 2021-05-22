@@ -40,7 +40,7 @@
 						<div class="w1200"></div>
 					</div>
 				</div>
-				<div style="height: 300px;"></div>
+				<div class="w1200 p10" style="min-height: 300px;padding-top: 30px;"  class="fwb_box" v-html="datas.content"></div>
 			</div>
 			
 			
@@ -75,57 +75,7 @@
 			var vm = new Vue({
 				el: '#body',
 				data: {
-					h_main_m_key:[
-						'电线',
-						'电线版',
-						'户外砖',
-						'地砖',
-						'瓷片',
-						'大板',
-						'仿古砖'
-					],
-					search_key:'',
-					banner:[
-						{
-							fm:'img/index_xbanner_06.jpg',
-							banner:'img/index_banner_03.jpg'
-						},
-						{
-							fm:'img/index_xbanner_09.jpg',
-							banner:'img/index_xbanner_09.jpg',
-						},
-						{
-							fm:'img/index_xbanner_11.jpg',
-							banner:'img/index_xbanner_11.jpg',
-						},
-					],
-					banner_index:0,
-					cjcg:[
-						{
-							title:'空调通风',
-							img:'img/index_cjcg_18.jpg'
-						},
-						{
-							title:'土建',
-							img:'img/index_cjcg_20.jpg'
-						},
-						{
-							title:'消防',
-							img:'img/index_cjcg_22.jpg'
-						},
-						{
-							title:'市政园林',
-							img:'img/index_cjcg_24.jpg'
-						},
-						{
-							title:'装饰装修',
-							img:'img/index_cjcg_26.jpg'
-						},
-						{
-							title:'水电',
-							img:'img/index_cjcg_28.jpg'
-						},
-					]
+					datas:''
 				},
 				created: function() {
 					
@@ -134,9 +84,23 @@
 					// 	that.token = getCookie('logintoken')
 					// 	// userMsg = JSON.parse(getCookie('userMsg'))
 					// }
-					
+					that.getdata()
 				},
 				methods: {
+					getdata:function(){
+						//cshhr_pc
+						var datas = {
+							keyword: 'cshhr_pc'
+							
+						}
+						_get('/Config.Protocol/view', datas, function(res) {
+							if (res.status == 200) {
+								console.log(res.data.list)
+								that.datas= res.data
+								
+							}
+						})
+					},
 					search_fuc:function(item) {
 						console.log(item)
 						that.search_key=item

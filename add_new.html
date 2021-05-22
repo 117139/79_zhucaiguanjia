@@ -84,7 +84,7 @@
 					<div class="set_li_name"></div>
 					<div class="dx_xz_li dis_flex aic" @click="xz_fuc(0,item)">
 						<span class="dx_xz_li_box dis_flex aic ">
-							<i  v-if="moren==true" class="iconfont icon-duigou cEE0913" ></i>
+							<i  v-if="moren==1" class="iconfont icon-duigou cEE0913" ></i>
 						</span>
 						<div  style="width: 7em;">设置为默认地址</div>
 					</div>
@@ -112,6 +112,7 @@
 					el: '#myzhaq',
 					data: {
 						type:0,
+						id:'',
 						areaList:area_data,
 						area: '',
 						areaarr: ['','',''],
@@ -120,7 +121,7 @@
 					
 						xm_fbf: '',
 						tel:'',
-						moren:false
+						moren:0
 					
 					},
 					created: function() {
@@ -128,11 +129,42 @@
 					
 					},
 					mounted:function(){
-					this.type=getNowCanshu().type||0
+						this.type=getNowCanshu().type||0
+						this.id=getNowCanshu().id||''
+						if(getNowCanshu().id){
+							this.getdata()
+						}
 					},
 					methods: {
+						getdata:function(page){
+							var that=this
+							var datas={
+								member_address_id:that.id,
+							}
+							var jkurl='/Member.MemberAddress/view'
+							
+							_get(jkurl,datas,function(res){
+								 if (res.status == 200){
+									 that.datas=res.data
+									 that.xm_fbf=res.data.address_username
+									 that.tel=res.data.address_mobile
+									 that.areaarr[0]=res.data.province
+									 that.areaarr[1]=res.data.city
+									 that.areaarr[2]=res.data.district
+									 that.area=that.areaarr.join('')
+									 that.add_xq=res.data.address
+									 that.moren=res.data.is_default
+									 
+								 }
+							})
+						},
+						
 						xz_fuc:function(num,item) {
-							this.moren=!this.moren
+							if(this.moren){
+								this.moren=0
+							}else{
+								this.moren=1
+							}
 						},
 						onConfirm(e){
 							console.log(e)
@@ -202,16 +234,42 @@
 								province:that.areaarr[0],
 								city:that.areaarr[1],
 								district:that.areaarr[2],
-								add_xq: that.add_xq,
-								service_name: that.xm_fbf,
-								mobile:that.tel,
+								address: that.add_xq,
+								address_username: that.xm_fbf,
+								address_mobile:that.tel,
+								is_default:that.moren
 							}
-							console.log(datas)
-							layer.msg('操作成功')
+							var jkurl='/Member.MemberAddress/add'
+							if(that.id){
+								datas = {
+									member_address_id:that.id,
+									province:that.areaarr[0],
+									city:that.areaarr[1],
+									district:that.areaarr[2],
+									address: that.add_xq,
+									address_username: that.xm_fbf,
+									address_mobile:that.tel,
+									is_default:that.moren
+								}
+								jkurl='/Member.MemberAddress/update'
+							}
+							if(that.btnkg==1){
+								return
+							}
+							that.btnkg=1
 							setTimeout(function(){
-								// parent.layer.close('layer_pwd');
-								parent.layer.closeAll();
-							},1000)
+								that.btnkg=0
+							},1500)
+							_post(jkurl,datas,function(res){
+								 if (res.status == 200){
+									layer.msg('操作成功')
+									setTimeout(function(){
+										// parent.layer.close('layer_pwd');
+										parent.layer.closeAll();
+									},1000)
+								 }
+							})
+							
 						},
 						quxiao:function(){
 							parent.layer.closeAll();

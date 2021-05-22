@@ -129,8 +129,8 @@
 				margin-left: 18px; 
 			}
 			.lstspImg_ct{
-				width: 82px;
-				height: 82px;
+				width: 84px;
+				height: 84px;
 				border: 1px solid #dddddd;
 				margin: 0 12px 0 30px;
 			}
@@ -144,17 +144,23 @@
 			.listspxx_ct>div:last-of-type{
 				padding: 8px 0;
 			}
-			.listspxx_ct p:last-of-type{
-				margin-top: 10px;
-				color: #a9a9a9;
+			.listspxx_ct p{
 				text-align: left;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				max-width: 275px;
+				margin-top: 10px;
 			}
-			.spslNum_ct button,.spslNum_ct p{
+			.listspxx_ct p:last-of-type{
+				color: #a9a9a9;
+			}
+			.spslNum_ct button,.spslNum_ct input{
 				width: 23px;
 				height: 23px;
 				border: 1px solid #e4e4e4;
 			}
-			.spslNum_ct p{
+			.spslNum_ct input{
 				width: 48px;
 				text-align: center;
 				border-color: #c7c7c7;
@@ -173,7 +179,8 @@
 			}
 			.both_ct{
 				width: 1200px;
-				height: 56px;				margin: 27px auto 34px;
+				height: 56px;
+				margin: 27px auto 34px;
 				background-color: #e5e5e5;
 				font-size: 12px;
 			}
@@ -299,6 +306,9 @@
 						操作
 					</div>
 				</div>
+				<div class="lstgods_ct flex aic ju_c" v-show="lists.length == 0" style="font-weight: bold;font-size: 18px;color: #616161;">
+					暂无商品~~
+				</div>
 				<div class="lstgods_ct flex aic" v-for="item,index in lists">
 					<div @click="dxbtn(index)">
 						<label class="flex aic cp_ct">
@@ -307,31 +317,31 @@
 							</div>
 							<div class="listspxx_ct flex">
 								<div class="lstspImg_ct flex aic ju_c">
-									<img :src="item.img" alt="">
+									<img :src="IPurl1+item.goods_pic[0].url" alt="">
 								</div>
 								<div>
-									<p>{{item.p1}}</p>
-									<p>{{item.p2}}</p>
+									<p>{{item.goods_name}}</p>
+									<p>规格 : {{item.goods_sku}}</p>
 								</div>
 							</div>
 						</label>
 					</div>
 					<div>
-						￥{{item.jg}}.00
+						￥{{item.goods_price}}
 					</div>
 					<div class="spslNum_ct flex">
-						<button @click="item.num<=1?item.num=1:item.num--">-</button>
-						<p>{{item.num}}</p>
-						<button @click="item.num++">+</button>
+						<button class="cp_ct" @click="jian(index)">-</button>
+						<input type="number" autocomplete="off" @input="setsum(index)" id="input1" v-model="item.goods_sum"></input>
+						<button class="cp_ct" @click="jia(index)">+</button>
 					</div>
 					<div class="eb5f33">
-						10天
+						{{item.goods_ship_day}}天
 					</div>
 					<div class="eb5f33">
-						￥{{item.jg * item.num}}.00
+						￥{{item.goods_price * item.goods_sum}}
 					</div>
 					<div class="spcz_ct flex ju_b">
-						<p class="cp_ct">移入收藏夹</p>
+						<p class="cp_ct" @click="yrsc(index)">移入收藏夹</p>
 						<p class="cp_ct" @click="delbtn(index)">删除</p>
 					</div>
 				</div>
@@ -344,37 +354,39 @@
 							<span class="labspn cp_ct">全选</span>
 						</div>
 						<div class="cp_ct" @click="istruedel">多选删除</div>
-						<div class="cp_ct">移入收藏夹</div>
+						<div class="cp_ct" @click="yrscdx">移入收藏夹</div>
 					</div>
 					<div class="bothR_ct flex aic">
 						<div>已选商品<span class="eb5f33 f14">{{xznum}}</span>件</div>
 						<div>合计 : <span class="eb5f33 f14">{{hjnum}}.00</span></div>
-						<div @click="aaa" id="test2">合同签署</div>
-						<div>导出采购单</div>
-						<div>结算</div>
+						<div @click="aaa">合同签署</div>
+						<div @click="jiesuan(2)">加入询价单</div>
+						<div @click="jiesuan(1)">结算</div>
 					</div>
 				</div>
 			</div>
-			
-			
-			
 		</div>
 			<include src="./common/footer.html"></include>
 		<script type="text/javascript">
+			var that;
 			var app = new Vue({
 				el: '#gwcCot_ct',
 				data: {
 					qx: false,
-					lists: [
-						{xz:false,img:'img/gwcgoods.jpg',p1:'绥化不锈钢阀门厂家-din15不锈钢',p2:'规格 : 3A/0.45KW',jg:'677',num:1,day:10},
-						{xz:false,img:'img/gwcgoods.jpg',p1:'2222222',p2:'规格 : 3A/0.45KW',jg:'677',num:1,day:10},
-						{xz:false,img:'img/gwcgoods.jpg',p1:'33333333-din15不锈钢',p2:'规格 : 3A/0.45KW',jg:'677',num:1,day:10},
-						{xz:false,img:'img/gwcgoods.jpg',p1:'44444444-din15不锈钢',p2:'规格 : 3A/0.45KW',jg:'677',num:1,day:10},
-						{xz:false,img:'img/gwcgoods.jpg',p1:'55555555-din15不锈钢',p2:'规格 : 3A/0.45KW',jg:'677',num:1,day:10}
-					]
+					lists: []
+				},
+				created() {
+					that = this
+					
+					if(!storage_fuc.getItem("user")){
+						window.location.replace('login.html')
+						return
+					}
+					
+					this.getlists()
 				},
 				computed:{
-					xznum(){
+					xznum:function(){
 						let num = 0
 						for (let i = 0; i < this.lists.length; i++) {
 							if(this.lists[i].xz){
@@ -383,23 +395,66 @@
 						}
 						return num
 					},
-					hjnum(){
+					hjnum:function(){
 						let num = 0
 						for (let i = 0; i < this.lists.length; i++) {
 							if(this.lists[i].xz){
-								num += this.lists[i].jg * this.lists[i].num
+								num += this.lists[i].goods_price * this.lists[i].goods_sum
 							}
 						}
 						return num
 					}
 				},
 				methods: {
+					// 获取列表数据
+					getlists:function(){
+						var datas = {
+							limit: 20,
+							page: 1
+						}
+						_post('/Member.MemberCart/index',datas,function(res){
+							if(res.data.list){
+								let newArr = []
+								res.data.list.map((item) => {
+								  newArr.push(
+									Object.assign(item, { xz: false} )
+								  ) 
+								})
+								that.lists = newArr
+								// 继续添加询价单
+								if(localStorage.xjarr){
+									var tjxjd = JSON.parse(localStorage.getItem('xjarr'))
+									for (var i = 0; i < newArr.length; i++) {
+										for (var t = 0; t < tjxjd.length; t++) {
+											if(newArr[i].member_cart_id ==tjxjd[t]){
+												newArr[i].xz = true
+											}
+										}
+									}
+									localStorage.removeItem('xjarr')
+								}
+							}
+						})
+					},
 					// 单选
-					dxbtn(index){
+					dxbtn:function(index){
+						localStorage.removeItem('qsgwht')
 						this.lists[index].xz = !this.lists[index].xz
+						var t = 0
+						for (var i = 0; i < this.lists.length; i++) {
+							if(this.lists[i].xz){
+								t += 1
+							}
+						}
+						if(t == this.lists.length){
+							this.qx = true
+						}else{
+							this.qx = false
+						}
 					},
 					// 全选
-					qxbtn(){
+					qxbtn:function(){
+						localStorage.removeItem('qsgwht')
 						this.qx = !this.qx
 						if(this.qx){
 							for (let i = 0; i < this.lists.length; i++) {
@@ -411,25 +466,69 @@
 							}
 						}
 					},
-					// 删除
-					delbtn(index){
-						for (let i = 0; i < this.lists.length; i++) {
-							if(index == i){
-								this.lists.splice(i,1)
+					// 移入收藏
+					yrsc:function(index){
+						var datas = {
+							type: 1,
+							object_id: this.lists[index].goods_id
+						}
+						_post('Member.MemberCollect/collect',datas,function(res){
+								layer.msg(res.msg)
+						})
+					},
+					// 移入收藏  多选
+					yrscdx:function(){
+						for (let t = 0; t < this.lists.length; t++) {
+							if(this.lists[t].xz){
+								_post('Member.MemberCollect/collect',{type: 1,object_id: that.lists[t].goods_id},function(res){})
 							}
 						}
 					},
-					// 删除选中
-					istruedel(){
-						// for (let t = 0; t < this.lists.length; t++) {
-						// 	if(this.lists[t].xz){
-						// 		this.lists.splice(t,1)
-						// 	}
-						// }
+					// 删除
+					delbtn:function(index){
+						var datas = {
+							member_cart_ids: this.lists[index].member_cart_id,
+						}
+						_post('Member.MemberCart/delete',datas,function(res){
+							layer.msg(res.msg)
+							that.getlists()
+						})
 					},
-					aaa(){
+					// 删除选中
+					istruedel:function(){
+						var arr=[]
+						for (let t = 0; t < this.lists.length; t++) {
+							if(this.lists[t].xz){
+								arr.push(this.lists[t].member_cart_id)
+							}
+						}
+						var datas = {
+							member_cart_ids: arr
+						}
+						_post('Member.MemberCart/delete',datas,function(res){
+							layer.msg(res.msg)
+							that.getlists()
+						})
+					},
+					aaa:function(){
+						var xzarr = []
+						for (var i = 0; i < that.lists.length; i++) {
+							if(that.lists[i].xz){
+								xzarr.push(that.lists[i])
+							}
+						}
+						if(xzarr.length == 0){
+							layer.msg('请选择商品')
+							return
+						}else{
+							for (var i = 0; i < xzarr.length; i++) {
+								if(xzarr[i].goods_sum<1){
+									layer.msg('请选择正确的数量')
+									return
+								}
+							}
+						}
 					   //iframe层
-					   
 					   layer.open({
 					     type: 2,
 					     title: '合同签署',
@@ -438,6 +537,77 @@
 					     area: ['980px', '90%'],
 					     content: 'gwht.html' //iframe的url
 					   }); 
+					},
+					// 数量加
+					jia:function(index){
+						if(that.lists[index].goods_sum<1){
+							layer.msg('请输入正确数量')
+							return
+						}
+						var datas = {
+							member_cart_id: this.lists[index].member_cart_id,
+						}
+						_post('Member.MemberCart/sumUp',datas,function(res){
+							that.lists[index].goods_sum++
+							layer.msg(res.msg)
+						})
+						console.log(that.lists[index].goods_sum)
+					},
+					// 数量减
+					jian:function(index){
+						if(that.lists[index].goods_sum<1){
+							layer.msg('请输入正确数量')
+							return
+						}
+						var datas = {
+							member_cart_id: this.lists[index].member_cart_id,
+						}
+						_post('Member.MemberCart/sumDown',datas,function(res){
+							if(that.lists[index].goods_sum<=1){
+								that.lists[index].goods_sum = 1
+							}else{
+								that.lists[index].goods_sum--
+							}
+							layer.msg(res.msg)
+						})
+					},
+					// 设定数量
+					setsum:function(index){
+						var datas = {
+							member_cart_id: that.lists[index].member_cart_id,
+							goods_sum: that.lists[index].goods_sum
+						}
+						_post('Member.MemberCart/setSum',datas,function(res){
+							layer.msg(res.msg)
+						})
+					},
+					// 结算   加入询价单
+					jiesuan:function(kind){
+						var aaaaaaa = [];
+						for (var i = 0; i < this.lists.length; i++) {
+							if(this.lists[i].xz){
+								aaaaaaa.push(this.lists[i].member_cart_id)
+							}
+						}
+						var datas = {
+							member_cart_id: aaaaaaa,
+						}
+						_get('Member.MemberCart/OrderGoodsList',datas,function(res){
+							localStorage.setItem('goodslist_ct',JSON.stringify(res.data))
+							if(res.data.length<1){
+								return layer.msg('请选择商品')
+							}
+							if(kind==1){
+								var qsgwht = localStorage.getItem('qsgwht')
+								if(!qsgwht){
+									return layer.msg('请签署购物合同')
+								}
+								window.location = './tjdd.html'
+								localStorage.removeItem('qsgwht')
+							}else if(kind==2){
+								window.location = './zncg.html'
+							}
+						})
 					}
 				}
 			})

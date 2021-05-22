@@ -63,14 +63,15 @@
 							</div>
 						</label>
 						<div class="inputBox2 flex" id="show2">
-							<input type="password" placeholder="请输入短信验证码" id="verificationNum" v-model="loginCodes.verificationNum">
+							<input type="text" placeholder="请输入短信验证码" id="verificationNum" v-model="loginCodes.verificationNum">
 							<button onclick="getCode(this)">获取验证码</button>
 						</div>
 						<div class="lock flex">
-							<label class="jzw flex">
+							<label class="jzw flex" v-if="loginNum==1">
 								<input id="rememberPsd" type="checkbox" />
 								<span>记住我</span>
 							</label>
+							<div v-else></div>
 							<span class="cpointer" @click="forget">忘记密码</span>
 						</div>
 						<button  type="button" class="loginBtn cpointer" onclick="login()">登录</button>
@@ -78,7 +79,7 @@
 					</div>
 					
 					<div class="register" v-show="showLoginPortion == 2">
-						<div class="toLogin flex"><a href=""><span @click="goLogin">去登录</span><img src="img/img_ct/in.jpg"></a></div>
+						<div class="toLogin flex"><a href="javascript:;"><span @click="goLogin">去登录</span><img src="img/img_ct/in.jpg"></a></div>
 						<div class="registerTxt"><span>{{registerOrForge=='register'? '立即注册':'修改密码'}}</span></div>
 						<div class="inputs">
 							<label>
@@ -104,10 +105,10 @@
 							<label>
 								<div class="inputBox flex inputBox3">
 									<div>
-										<img src="./img/img_ct/user.png" alt="" v-show="registerOrForge == 'register'">
+										<img src="./img/img_ct/password.png" alt="" v-show="registerOrForge == 'register'">
 										<img src="./img/img_ct/password.png" alt="" v-show="registerOrForge == 'forge'">
 									</div>
-									<input type="password" placeholder="请输入密码" id="RpasswordNum" v-model="registerCodes.passwordNum">
+									<input type="password" placeholder="请输入密码" id="RpasswordNum" v-model="registerCodes.passwordNum" maxlength="46">
 								</div>
 							</label>
 							<label>
@@ -115,11 +116,13 @@
 									<div>
 										<img src="./img/img_ct/password.png" alt="">
 									</div>
-									<input type="password" placeholder="请再次输入密码" id="RpasswordNum2" v-model="registerCodes.passwordNum2">
+									<input type="password" placeholder="请再次输入密码" id="RpasswordNum2" v-model="registerCodes.passwordNum2" maxlength="46">
 								</div>
 							</label>
-							<button type="button" class="registerBtn cpointer" disabled ref="btnnn" @click="okk(this)">{{registerOrForge=='register'? '注册':'确定'}}</button>
-							<label class="jzw agreement" @click="agreement">
+							<!-- <button v-if="registerOrForge=='register'" type="button" class="registerBtn cpointer" disabled ref="btnnn" @click="okk(this)">{{registerOrForge=='register'? '注册':'确定'}}</button> -->
+							<button v-if="registerOrForge=='register'" type="button" class="registerBtn cpointer" disabled ref="btnnn" @click="okk(this)">注册</button>
+							<button v-else type="button" class="registerBtn cpointer" ref="btnnn" style="background: rgb(255, 80, 0);" @click="okk(this)">确定</button>
+							<label v-if="registerOrForge=='register'" class="jzw agreement" @click="agreement">
 								<input ref="agreement" type="checkbox" name="" id="" value="" />
 								<span> 我已阅读并同意 《筑采管家服务协议》</span>
 							</label>
@@ -131,6 +134,7 @@
 			<include src="./common/footer.html"></include>
 		</div>
 		<script>
+			var that
 			var app = new Vue({
 			  el: '#app',
 			  data: {
@@ -150,13 +154,23 @@
 				// 1显示登录 2显示注册/忘记密码
 				showLoginPortion: 1,
 				// 区分  注册 与 忘记密码
-				registerOrForge: ''
+				registerOrForge: '',
+				verify_id:'',
+				
+				
+				loginNum:1
 			  },
 			  created() {
+					that=this
 					var h_type=getNowCanshu().type||1
 					if(h_type){
 						this.showLoginPortion=h_type
 					}
+					if(this.showLoginPortion==-1){
+						this.showLoginPortion = 2
+						this.registerOrForge = 'register'
+					}
+					
 			  	// 如果本地有账号密码
 			  	if(localStorage.psd){
 					// 获取
@@ -175,6 +189,13 @@
 				  goRegister:function(){
 					  this.showLoginPortion = 2
 					  this.registerOrForge = 'register'
+						this.verify_id=''
+						this.registerCodes= {
+							phoneNum: '',
+							verificationNum: '',
+							passwordNum: '',
+							passwordNum2: ''
+						}
 				  },
 				  // 点击去登录
 				  goLogin:function(){
@@ -182,22 +203,82 @@
 				  },
 				  // 点击忘记密码
 				  forget:function(){
+						this.registerCodes= {
+							phoneNum: '',
+							verificationNum: '',
+							passwordNum: '',
+							passwordNum2: ''
+						}
 					  this.showLoginPortion = 2
 					  this.registerOrForge = 'forge'
+						this.verify_id=''
 				  },
 				  // 点击注册/或完成按钮
 				  okk:function(btn){
 					  if(!checkMobile(this.registerCodes.phoneNum)){
-						return alert("请输入正确手机号")
+						return layer.msg("请输入正确手机号")
 					  }else if(this.registerCodes.verificationNum==''){
-						  return alert('请输入验证码')
-					  }else if(!checkPassword(this.registerCodes.passwordNum)){
-						  return alert('请输入8-16个字符,不包含空格,必须包含数字,字母或字符至少两种格式的密码')
-					  }else if(this.registerCodes.passwordNum2==''){
-						  return alert('请输再次输入8-16个字符,不包含空格,必须包含数字,字母或字符至少两种格式的密码')
-					  }else if(this.registerCodes.passwordNum != this.registerCodes.passwordNum2){
-						  return alert('请保持密码一致')
-					  }
+						  return layer.msg('请输入验证码')
+						 // }else if(!checkPassword(this.registerCodes.passwordNum)){
+						 //   return layer.msg('请输入6-46个字符,不包含空格,必须包含数字,字母或字符至少一种格式的密码')
+						 // }else if(this.registerCodes.passwordNum2==''){
+						 //   return layer.msg('请输再次输入6-46个字符,不包含空格,必须包含数字,字母或字符至少一种格式的密码')
+						 // }else if(this.registerCodes.passwordNum != this.registerCodes.passwordNum2){
+						 //   return layer.msg('请保持密码一致')
+						 // }
+					 }else if(this.registerCodes.passwordNum<6){
+					   return layer.msg('请输入6-46个字符的密码')
+					 }else if(this.registerCodes.passwordNum2==''){
+					   return layer.msg('请输再次输入密码')
+					 }else if(this.registerCodes.passwordNum != this.registerCodes.passwordNum2){
+					   return layer.msg('请保持密码一致')
+					 }
+						var jkurl=''
+						if(that.registerOrForge == 'register'){
+							jkurl='/Member.Member/register'
+						}
+						if(that.registerOrForge == 'forge'){
+							jkurl='/Member.Member/uppass'
+						}
+						
+							$.ajax({
+								type: "post",
+								url: IPurl+jkurl,
+								data: {
+									password:that.registerCodes.passwordNum,	//string	 新密码(必填)
+									
+									re_password:that.registerCodes.passwordNum2,	//string	 重复密码(必填)
+									
+									mobile:that.registerCodes.phoneNum,	//string	 短信验证手机号
+									
+									verify_id:that.verify_id,	//string 短信验证ID
+									
+									verify:that.registerCodes.verificationNum,	//string 短信验证码
+								},
+								success: function(res) {
+									// console.log(res);
+									if(typeof(res)=='string'){
+										res=JSON.parse(res)
+									}
+									if (res.status == 200) {
+										layer.msg('操作成功')
+										that.showLoginPortion = 1
+										
+									} else {
+										if(res.msg){
+											layer.msg(res.msg)
+										}else{
+											layer.msg('操作失败')
+										}
+									}
+							
+								},
+								error: function(err) {
+									layer.msg('请求失败')
+									console.log(err)
+								}
+							})
+						
 				  },
 				  // 筑采管家服务协议  按钮
 				  agreement:function(){
@@ -213,26 +294,30 @@
 			})
 			
 			// loginNum 登录方式参数
-			var loginNum = 1;
+			// var loginNum = 1;
 			// 切换登录方式  密码/验证码
 			function loginWay(way){
 				let login1 = document.getElementById('login1')
 				let login2 = document.getElementById('login2')
 				let show1 = document.getElementById('show1')
 				let show2 = document.getElementById('show2')
+				this.verify_id=''
+				
 				if(way == 1){
 					login1.style.color = "#ff5000"
 					login2.style.color = "#666666"
 					show1.style.display = 'block'
 					show2.style.display = 'none'
-					loginNum = 1
+					app.loginNum = 1
 				}else if(way == 2){
 					login1.style.color = "#666666"
 					login2.style.color = "#ff5000"
 					show1.style.display = 'none'
 					show2.style.display = 'block'
-					loginNum = 2
+					app.loginNum = 2
+					
 				}
+				
 			}
 			
 			
@@ -243,24 +328,71 @@
 				let verificationNum = document.getElementById('verificationNum')
 				// 获取是否记住密码状态
 				var rememberPsd = document.getElementById('rememberPsd')
-				if(loginNum == 1){
+				var jkurl='/Member.Member/login'
+				var datas={
+						password:that.loginCodes.passwordNum,	//string	 新密码(必填)
+						mobile:that.loginCodes.phoneNum,	//string	 短信验证手机号
+					}
+				if(app.loginNum == 1){
 					if(!checkMobile(phoneNum.value)){
 						return alert("请输入正确手机号")
-					}else if(!checkPassword(passwordNum.value)){
-						return alert('请输入8-16个字符,不包含空格,必须包含数字,字母或字符至少两种格式的密码')
+					// }else if(!checkPassword(passwordNum.value)){
+					// 	return alert('请输入6-46个字符,不包含空格,必须包含数字,字母或字符至少一种格式的密码')
+					// }
+					}else if(passwordNum.value.length<6){
+						return alert('请输入6-46个字符的密码')
 					}
-					alert('success')
+					// alert('success')
 					if(rememberPsd.checked){
 						let newPsd = {phone: phoneNum.value,psd: passwordNum.value}
 						localStorage.setItem('psd',JSON.stringify(newPsd))
 					}
-				}else if(loginNum ==2){
+				}else if(app.loginNum ==2){
 					if(!checkMobile(phoneNum.value)){
 						return alert("请输入正确手机号")
 					}else if(verificationNum.value == ''){
 						return alert('请输入验证码')
 					}
+					jkurl='/Member.Member/smsLogin'
+					datas={
+						verify_id:app.verify_id,	//string 短信验证ID
+						mobile:that.loginCodes.phoneNum,	//string 登录手机号
+						verify:that.loginCodes.verificationNum,	//string 短信验证码
+					}
 				}
+				
+				$.ajax({
+					type: "post",
+					url: IPurl+jkurl,
+					data:datas,
+					success: function(res) {
+						// console.log(res);
+						if(typeof(res)=='string'){
+							res=JSON.parse(res)
+						}
+						if (res.status == 200) {
+							layer.msg('登录成功')
+							// var storage_fuc = window.localStorage;
+							storage_fuc.setItem("user",JSON.stringify(res.data))
+							storage_fuc.setItem("token",res.token)
+							setTimeout(function(){
+								window.location.replace('index.html')
+							},1000)
+							
+						} else {
+							if(res.msg){
+								layer.msg(res.msg)
+							}else{
+								layer.msg('操作失败')
+							}
+						}
+				
+					},
+					error: function(err) {
+						layer.msg('请求失败')
+						console.log(err)
+					}
+				})
 				
 			}
 			
@@ -270,7 +402,7 @@
 			    if (!re.test(str)) {return false}else{return true}
 			}
 			function checkPassword(str){
-				let re = /(?!.*\s)(?!^[\u4e00-\u9fa5]+$)(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{8,16}$/
+				let re = /(?!.*\s)(?!^[\u4e00-\u9fa5]+$)(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,46}$/
 				if (!re.test(str)) {return false}else{return true}
 			}
 			
@@ -280,7 +412,7 @@
 				if(!checkMobile(phoneNum.value)){
 					return alert("请输入正确手机号")
 				}else{
-					countDown(btn)
+					countDown(btn,1)
 				}
 			}
 			
@@ -290,29 +422,66 @@
 				if(!checkMobile(phoneNum2.value)){
 					return alert("请输入正确手机号")
 				}else{
+					
 					countDown(btn)
 				}
 			}
 			
 			
 			// 封装验证码倒计时
-			function countDown(btn){
-				let getCodeSpan = document.getElementsByClassName('getCodeSpan')
-				let times = 60
-				let timer = null
-				btn.disabled = true
-				timer = setInterval(function () {
-					times--;
-					if (times <= 0) {
-						btn.innerHTML = '获取验证码';
-						clearInterval(timer);
-						btn.disabled = false;
-					} else {
-						getCodeSpan[0].style.color = '#999999'
-						btn.innerHTML = times + '秒后重试'
-						btn.disabled = true;
+			function countDown(btn,num){
+				app.verify_id=''
+				var tel=''
+				if(num==1){
+					tel=app.loginCodes.phoneNum
+				}else{
+					tel=app.registerCodes.phoneNum
+				}
+				$.ajax({
+					type: "post",
+					url: IPurl+'/Member.Member/sendSms',
+					data: {
+						mobile: tel
+					},
+					success: function(res) {
+						// console.log(res);
+						if(typeof(res)=='string'){
+							res=JSON.parse(res)
+						}
+						if (res.status == 200) {
+							app.verify_id=res.key
+							layer.msg('发送成功')
+							let getCodeSpan = document.getElementsByClassName('getCodeSpan')
+							let times = 60
+							let timer = null
+							btn.disabled = true
+							timer = setInterval(function () {
+								times--;
+								if (times <= 0) {
+									btn.innerHTML = '获取验证码';
+									clearInterval(timer);
+									btn.disabled = false;
+								} else {
+									getCodeSpan[0].style.color = '#999999'
+									btn.innerHTML = times + '秒后重试'
+									btn.disabled = true;
+								}
+							}, 1000);
+						} else {
+							if(res.msg){
+								layer.msg(res.msg)
+							}else{
+								layer.msg('操作失败')
+							}
+						}
+				
+					},
+					error: function(err) {
+						layer.msg('请求失败')
+						console.log(err)
 					}
-				}, 1000);
+				})
+				
 			}
 		</script>
 		<!-- <script src="js/home_login_ct.js" type="text/javascript" charset="utf-8"></script> -->
